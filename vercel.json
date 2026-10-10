@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm ci --prefix ecossistema",
+  "buildCommand": "npm run build --prefix ecossistema && rm -rf .site && mkdir -p .site && cp index.html .site/ && cp -r ecossistema/dist .site/ecossistema",
+  "outputDirectory": ".site",
+  "framework": null,
+  "trailingSlash": true
+}
