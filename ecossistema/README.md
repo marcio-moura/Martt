@@ -19,7 +19,8 @@ Sem `.env.local`, o app abre em **modo demonstração**. Os dados de exemplo fic
 1. Crie um projeto em [supabase.com](https://supabase.com).
 2. No **SQL Editor**, rode `supabase/migrations/0001_esquema.sql` e depois `supabase/seed.sql`.
 3. Copie `.env.example` para `.env.local` e preencha `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (em Project Settings > API).
-4. `npm run dev` para testar. Para publicar, rode `npm run build` e suba a pasta `dist`. Na Vercel, aponte o *Root Directory* para `ecossistema` e cadastre as duas variáveis.
+4. `npm run dev` para testar.
+5. **Publicação:** o `vercel.json` da raiz já publica o site em `/` e o app em `/ecossistema/` no mesmo projeto da Vercel. Basta cadastrar `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em Settings > Environment Variables do projeto e fazer um novo deploy. Sem as variáveis, o app publicado abre em modo demonstração.
 
 ### Primeiro usuário
 
