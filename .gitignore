@@ -2,3 +2,4 @@
 video/projetos/*/
 !video/projetos/.gitkeep
 video/entrada/
+__pycache__/
