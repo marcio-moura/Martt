@@ -23,6 +23,9 @@ def main(caminho):
     if faltando:
         sys.exit("Faltam campos no JSON: " + ", ".join(faltando))
 
+    # notas internas ficam só no JSON; o relatório vai para o cliente
+    dados.pop("faltou", None)
+
     logo = "data:image/jpeg;base64," + base64.b64encode(LOGO.read_bytes()).decode()
     # "</" fechado dentro do <script> quebraria a página
     bloco = json.dumps(dados, ensure_ascii=False, indent=1).replace("</", "<\\/")

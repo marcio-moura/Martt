@@ -18,7 +18,7 @@ Arquivos:
 
 1. **Identificar cliente e mês.** Pasta em kebab-case (`infinity-celulares`). O mês do arquivo é o mês em que a análise é feita.
 2. **Ler o histórico.** Se existir JSON do mês anterior na pasta do cliente, abra. Compare as metas dele com o resultado atual e diga quais bateram. Isso vira a primeira linha do veredito.
-3. **Extrair os dados dos prints.** Use só o que aparece nos prints. Nunca invente número. Se algo não veio, deixe fora e liste em `faltou`.
+3. **Extrair os dados dos prints.** Use só o que aparece nos prints. Nunca invente número. Se algo não veio, deixe fora e liste em `faltou`. Esse campo é interno: não aparece no relatório (que vai para o cliente), só no resumo do chat.
    - Visão geral: visualizações, seguidores líquidos, interações, contas alcançadas (visualizadores), views e interações por formato, visitas ao perfil, toques no link.
    - Conteúdo: lista ordenada por visualizações, com curtidas, comentários, reposts, envios e respostas.
    - Público: seguidores, novos seguidores, gênero, idade, países e cidades, horários de pico, conteúdos que trouxeram seguidores.
@@ -41,7 +41,7 @@ Arquivos:
 9. **Gerar**: salve o JSON e rode `python3 analises-instagram/gerar.py analises-instagram/clientes/<cliente>/<AAAA-MM>.json`.
 10. **Publicar** o `.html` gerado com a ferramenta Artifact. Na primeira publicação use o ícone `chart`. Para atualizar o mesmo relatório, publique de novo pelo mesmo caminho.
 11. **Salvar no repositório**: commit do JSON e do HTML na pasta do cliente, para o próximo mês ter histórico.
-12. **Responder no chat** em até 8 linhas: o veredito, os 3 ajustes principais, as metas e o link. Diga quais prints faltaram.
+12. **Responder no chat** em até 8 linhas: o veredito, os 3 ajustes principais, as metas e o link. Diga quais prints faltaram (só no chat, nunca no relatório).
 
 ## Estrutura do JSON
 

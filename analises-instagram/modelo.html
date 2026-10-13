@@ -153,11 +153,6 @@ td .mini i { position: absolute; inset: 0 auto 0 0; background: var(--accent); b
 /* metas */
 .metas td:nth-child(3) { color: var(--accent-ink); font-weight: 700 }
 
-/* faltou */
-.faltou { background: var(--surface); border: 1px dashed var(--line); border-radius: 3px; padding: 16px 18px; display: grid; gap: 8px }
-.faltou li { font-size: .88rem; color: var(--muted); padding-left: 16px; position: relative }
-.faltou li::before { content: "–"; position: absolute; left: 0; color: var(--faint) }
-
 footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; color: var(--faint) }
 
 @media (max-width: 44rem) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
@@ -279,12 +274,6 @@ footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line);
   h += sec('metas', 'Metas', 'Números para acompanhar', 'Na próxima análise, cada meta é comparada com o resultado real.',
     '<div class="tabela-wrap metas"><table><thead><tr><th>Métrica</th><th>Este mês</th><th>Meta</th><th>Variação</th></tr></thead><tbody>' +
     D.metas.map(function (m) { return '<tr><td><strong>' + esc(m.metrica) + '</strong></td><td>' + esc(m.atual) + '</td><td>' + esc(m.meta) + '</td><td>' + esc(m.variacao || '') + '</td></tr>' }).join('') + '</tbody></table></div>');
-
-  // 10. o que faltou
-  if (D.faltou && D.faltou.length) {
-    h += sec('faltou', 'Para a próxima análise', 'Dados que faltaram', 'Com estes prints a análise fica mais completa.',
-      '<ul class="faltou">' + D.faltou.map(function (f) { return '<li>' + esc(f) + '</li>' }).join('') + '</ul>');
-  }
 
   h += '<footer><span>MARTT · Consultoria em Marketing</span><span>' + esc(D.gerado_em || '') + '</span></footer>';
   app.innerHTML = h;
