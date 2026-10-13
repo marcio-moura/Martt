@@ -1,0 +1,292 @@
+<title>Análise Instagram MARTT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Manrope:wght@300;400;500;600;700&display=swap">
+<style>
+/* Relatório MARTT: capa preta com a marca, depois uma coluna de leitura com seções em sequência fixa (resumo → dados → leitura → plano). */
+:root {
+  --bg: #0F100F; --surface: #171917; --sunken: #0B0C0B; --line: #2A2D2A;
+  --fg: #F1EDE6; --muted: #A19E95; --faint: #6E6C66;
+  --accent: #8FB5A3; --accent-ink: #A9CBBB; --accent-soft: #1E2924; --track: #232623;
+  --good: #8FC7A0; --warn: #E0B565; --bad: #E58F80;
+  --brand-black: #010101; --brand-white: #F1EDE6;
+  --font-d: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-b: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F6F4EE; --surface: #FFFFFF; --sunken: #EFEDE5; --line: #E1DDD1;
+    --fg: #1E1F1C; --muted: #66645C; --faint: #8D8B82;
+    --accent: #8FB5A3; --accent-ink: #3D6A56; --accent-soft: #E3EDE7; --track: #ECE9E0;
+    --good: #2F7A4C; --warn: #9A6A12; --bad: #A2483A;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #F6F4EE; --surface: #FFFFFF; --sunken: #EFEDE5; --line: #E1DDD1;
+  --fg: #1E1F1C; --muted: #66645C; --faint: #8D8B82;
+  --accent: #8FB5A3; --accent-ink: #3D6A56; --accent-soft: #E3EDE7; --track: #ECE9E0;
+  --good: #2F7A4C; --warn: #9A6A12; --bad: #A2483A;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-b); font-size: 15px; line-height: 1.55; -webkit-text-size-adjust: 100% }
+h1, h2, h3 { font-family: var(--font-d); margin: 0; text-wrap: balance }
+p { margin: 0 }
+ul, ol { margin: 0; padding: 0; list-style: none }
+.num { font-variant-numeric: tabular-nums }
+
+/* capa: sempre preta, como a marca */
+.capa { background: var(--brand-black); color: var(--brand-white); padding-inline: 16px; padding-block: 36px 40px }
+.capa-in { max-width: 56rem; margin-inline: auto; display: grid; gap: 28px }
+.logo { width: min(300px, 70vw); height: auto; display: block }
+.capa-txt { display: grid; gap: 8px; border-top: 1px solid rgba(143,181,163,.35); padding-top: 22px }
+.capa .tag { font-weight: 300; font-size: .72rem; letter-spacing: .32em; text-transform: uppercase; color: #8FB5A3 }
+.capa h1 { font-weight: 800; font-size: clamp(1.7rem, 5vw, 2.6rem); letter-spacing: -.02em; line-height: 1.1 }
+.capa .meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: .88rem; color: rgba(241,237,230,.66) }
+
+main { padding-inline: 16px; padding-block: 8px 56px }
+.wrap { max-width: 56rem; margin-inline: auto }
+section { padding-block: 40px 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px }
+section > * { min-width: 0 }
+.eyebrow { font-weight: 500; font-size: .7rem; letter-spacing: .28em; text-transform: uppercase; color: var(--accent-ink) }
+h2 { font-weight: 800; font-size: 1.45rem; letter-spacing: -.02em; line-height: 1.2 }
+.sec-head { display: grid; gap: 6px }
+.lead { color: var(--muted); max-width: 42rem }
+
+/* veredito */
+.veredito { font-family: var(--font-d); font-weight: 500; font-size: clamp(1.1rem, 2.6vw, 1.32rem); line-height: 1.45; max-width: 46rem; border-left: 3px solid var(--accent); padding-left: 16px }
+
+/* indicadores */
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 3px; overflow: hidden }
+.kpi { background: var(--surface); padding: 16px; display: grid; gap: 4px; align-content: start; min-width: 0 }
+.kpi .r { font-size: .74rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted) }
+.kpi .v { font-family: var(--font-d); font-weight: 800; font-size: 1.7rem; letter-spacing: -.02em; line-height: 1.15 }
+.kpi .d { font-size: .82rem; color: var(--muted) }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: .72rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; width: fit-content }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor }
+.chip.bom { color: var(--good) } .chip.atencao { color: var(--warn) } .chip.alerta { color: var(--bad) }
+
+/* comparativo */
+.comp { display: grid; gap: 0; border-top: 1px solid var(--line) }
+.comp-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: baseline; padding-block: 11px; border-bottom: 1px solid var(--line) }
+.comp-row .v { font-weight: 700; text-align: right }
+.comp-row .x { font-weight: 700; font-size: .85rem; min-width: 4.5rem; text-align: right }
+.up { color: var(--good) } .down { color: var(--bad) } .flat { color: var(--muted) }
+
+/* funil */
+.funil { display: grid; gap: 8px }
+.etapa { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 4px 14px; align-items: center }
+.etapa .n { font-weight: 600; font-size: .9rem }
+.etapa .n small { display: block; font-weight: 400; color: var(--muted); font-size: .78rem }
+.barra { position: relative; height: 30px; background: var(--track); border-radius: 0 3px 3px 0 }
+.barra i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 0 4px 4px 0; min-width: 3px }
+.barra b { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-weight: 700; font-size: .85rem; color: var(--fg); white-space: nowrap }
+.barra.cheia b { color: #14201A }
+.conv { grid-column: 2; font-size: .78rem; color: var(--accent-ink); font-weight: 600 }
+
+/* formatos */
+.tabela-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 3px; background: var(--surface) }
+table { width: 100%; border-collapse: collapse; font-size: .88rem; min-width: 34rem }
+th, td { padding: 11px 14px; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap }
+th { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; background: var(--sunken) }
+th:first-child, td:first-child { text-align: left }
+tr:last-child td { border-bottom: 0 }
+td .mini { display: inline-block; vertical-align: middle; width: 70px; height: 8px; background: var(--track); border-radius: 0 2px 2px 0; margin-right: 8px; position: relative; overflow: hidden }
+td .mini i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 0 2px 2px 0 }
+.nota { font-size: .8rem; color: var(--faint) }
+
+/* top conteúdos */
+.top { display: grid; gap: 0; border-top: 1px solid var(--line) }
+.top li { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; gap: 4px 12px; padding-block: 13px; border-bottom: 1px solid var(--line); align-items: baseline }
+.top .pos { font-family: var(--font-d); font-weight: 800; color: var(--faint) }
+.top .t { font-weight: 600; min-width: 0 }
+.top .f { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); font-weight: 700; margin-right: 6px }
+.top .s { grid-column: 2 / 4; font-size: .82rem; color: var(--muted) }
+.top .vw { font-family: var(--font-d); font-weight: 800; text-align: right }
+
+/* público */
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 28px }
+.bloco { display: grid; gap: 10px; align-content: start; min-width: 0 }
+.bloco h3 { font-size: .98rem; font-weight: 700 }
+.hb { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr) 3.4rem; gap: 10px; align-items: center; font-size: .85rem }
+.hb .l { color: var(--muted) }
+.hb .t { height: 12px; background: var(--track); border-radius: 0 3px 3px 0; position: relative }
+.hb .t i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 0 4px 4px 0 }
+.hb.dest .t i { background: var(--accent-ink) }
+.hb .p { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums }
+.split { display: flex; height: 14px; gap: 2px }
+.split i { display: block; height: 100% }
+.split i:first-child { background: var(--accent-ink); border-radius: 3px 0 0 3px }
+.split i:last-child { background: var(--accent); border-radius: 0 3px 3px 0 }
+.split-leg { display: flex; justify-content: space-between; font-size: .85rem }
+.split-leg span:first-child::before, .split-leg span:last-child::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 6px; vertical-align: 1px; border-radius: 2px }
+.split-leg span:first-child::before { background: var(--accent-ink) }
+.split-leg span:last-child::before { background: var(--accent) }
+.pico { background: var(--accent-soft); border-radius: 3px; padding: 14px 16px; display: grid; gap: 2px }
+.pico strong { font-family: var(--font-d); font-size: 1.25rem; font-weight: 800 }
+
+/* leitura */
+.leitura { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 28px }
+.lista { display: grid; gap: 14px; align-content: start; min-width: 0 }
+.lista ul { display: grid; gap: 14px }
+.lista h3 { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; display: flex; gap: 8px; align-items: center }
+.lista li { display: grid; gap: 3px; padding-left: 14px; border-left: 2px solid var(--line) }
+.lista.pos li { border-left-color: var(--good) }
+.lista.neg li { border-left-color: var(--bad) }
+.lista li strong { font-weight: 700 }
+.lista li span { color: var(--muted); font-size: .9rem }
+
+/* plano */
+.plano { display: grid; gap: 22px }
+.frente { display: grid; gap: 10px }
+.frente h3 { font-size: 1.02rem; font-weight: 700; display: flex; align-items: baseline; gap: 10px }
+.frente h3 small { font-family: var(--font-b); font-weight: 500; font-size: .78rem; color: var(--muted) }
+.acoes { display: grid; gap: 0; border-top: 1px solid var(--line) }
+.acoes li { display: grid; grid-template-columns: 1.4rem minmax(0, 1fr); gap: 2px 10px; padding-block: 11px; border-bottom: 1px solid var(--line) }
+.acoes li::before { content: ""; width: 14px; height: 14px; border: 1.5px solid var(--accent); border-radius: 2px; margin-top: 4px }
+.acoes li strong { font-weight: 600 }
+.acoes li span { grid-column: 2; color: var(--muted); font-size: .86rem }
+
+/* metas */
+.metas td:nth-child(3) { color: var(--accent-ink); font-weight: 700 }
+
+/* faltou */
+.faltou { background: var(--surface); border: 1px dashed var(--line); border-radius: 3px; padding: 16px 18px; display: grid; gap: 8px }
+.faltou li { font-size: .88rem; color: var(--muted); padding-left: 16px; position: relative }
+.faltou li::before { content: "–"; position: absolute; left: 0; color: var(--faint) }
+
+footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font-size: .74rem; letter-spacing: .24em; text-transform: uppercase; color: var(--faint) }
+
+@media (max-width: 44rem) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+@media (max-width: 30rem) {
+  .kpi .v { font-size: 1.45rem }
+  .etapa { grid-template-columns: minmax(0, 1fr) }
+  .conv { grid-column: 1 }
+  .hb { grid-template-columns: 3.6rem minmax(0, 1fr) 3rem }
+}
+</style>
+
+<header class="capa">
+  <div class="capa-in">
+    <img class="logo" src="__LOGO__" alt="MARTT Consultoria em Marketing" width="600" height="219">
+    <div class="capa-txt">
+      <p class="tag">Análise mensal · Instagram</p>
+      <h1 id="cliente"></h1>
+      <p class="meta" id="capa-meta"></p>
+    </div>
+  </div>
+</header>
+
+<main><div class="wrap" id="app"></div></main>
+
+<script id="dados" type="application/json">__DADOS__</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById('dados').textContent);
+  var app = document.getElementById('app');
+  var fmt = new Intl.NumberFormat('pt-BR');
+  function n(v) { return typeof v === 'number' ? fmt.format(v) : (v == null ? '–' : v) }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] }) }
+  function pct(a, b) { return b ? (a / b * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + '%' : '–' }
+  function sec(id, eyebrow, titulo, lead, corpo) {
+    return '<section id="' + id + '"><div class="sec-head"><p class="eyebrow">' + esc(eyebrow) + '</p><h2>' + esc(titulo) + '</h2>' + (lead ? '<p class="lead">' + esc(lead) + '</p>' : '') + '</div>' + corpo + '</section>';
+  }
+  var STATUS = { bom: 'Bom', atencao: 'Atenção', alerta: 'Alerta' };
+
+  document.getElementById('cliente').textContent = D.cliente + (D.perfil ? ' · ' + D.perfil : '');
+  document.getElementById('capa-meta').innerHTML = ['Período: ' + D.periodo, D.segmento, 'Objetivo: ' + D.objetivo].filter(Boolean).map(function (t) { return '<span>' + esc(t) + '</span>' }).join('');
+
+  var h = '';
+
+  // 1. resumo
+  h += sec('resumo', 'Resumo do mês', 'Como o perfil foi', null,
+    '<p class="veredito">' + esc(D.veredito) + '</p>' +
+    '<div class="kpis">' + D.kpis.map(function (k) {
+      return '<div class="kpi"><span class="r">' + esc(k.rotulo) + '</span><span class="v num">' + esc(k.valor) + '</span>' +
+        (k.detalhe ? '<span class="d">' + esc(k.detalhe) + '</span>' : '') +
+        (k.status ? '<span class="chip ' + k.status + '">' + STATUS[k.status] + '</span>' : '') + '</div>';
+    }).join('') + '</div>');
+
+  // 2. comparativo
+  if (D.comparativo && D.comparativo.length) {
+    h += sec('comparativo', 'Evolução', 'Comparado ao mês anterior', D.comparativo_nota || null,
+      '<div class="comp">' + D.comparativo.map(function (c) {
+        var cls = c.direcao === 'sobe' ? 'up' : c.direcao === 'cai' ? 'down' : 'flat';
+        return '<div class="comp-row"><span>' + esc(c.rotulo) + '</span><span class="v num">' + esc(c.valor) + '</span><span class="x num ' + cls + '">' + esc(c.variacao) + '</span></div>';
+      }).join('') + '</div>');
+  }
+
+  // 3. funil (escala raiz quadrada para etapas de ordens de grandeza diferentes; taxa entre etapas em texto)
+  if (D.funil && D.funil.length) {
+    var max = Math.sqrt(D.funil[0].valor);
+    h += sec('funil', 'Funil do perfil', 'Do conteúdo ao contato', 'Barras em escala comprimida para caber etapas muito diferentes. A taxa de passagem entre etapas é o número que importa.',
+      '<div class="funil">' + D.funil.map(function (e, i) {
+        var w = Math.sqrt(e.valor) / max * 100;
+        var conv = i > 0 ? '<span class="conv">' + pct(e.valor, D.funil[i - 1].valor) + ' de ' + esc(D.funil[i - 1].rotulo.toLowerCase()) + '</span>' : '';
+        return '<div class="etapa"><span class="n">' + esc(e.rotulo) + (e.sub ? '<small>' + esc(e.sub) + '</small>' : '') + '</span>' +
+          '<div class="barra' + (w > 40 ? ' cheia' : '') + '" title="' + esc(e.rotulo) + ': ' + n(e.valor) + '"><i style="width:' + w.toFixed(1) + '%"></i><b class="num">' + n(e.valor) + '</b></div>' + conv + '</div>';
+      }).join('') + '</div>');
+  }
+
+  // 4. formatos
+  if (D.formatos && D.formatos.length) {
+    var totV = D.formatos.reduce(function (s, f) { return s + f.views }, 0);
+    h += sec('formatos', 'Formatos', 'Onde estão as visualizações', null,
+      '<div class="tabela-wrap"><table><thead><tr><th>Formato</th><th>Visualizações</th><th>% do total</th><th>Publicações</th><th>Média por publicação</th><th>Interações</th><th>Taxa de interação</th></tr></thead><tbody>' +
+      D.formatos.map(function (f) {
+        var share = totV ? f.views / totV * 100 : 0;
+        return '<tr><td><strong>' + esc(f.formato) + '</strong></td><td>' + n(f.views) + '</td><td><span class="mini"><i style="width:' + share.toFixed(1) + '%"></i></span>' + share.toLocaleString('pt-BR', { maximumFractionDigits: 0 }) + '%</td><td>' + n(f.publicacoes) + '</td><td>' + (f.publicacoes ? n(Math.round(f.views / f.publicacoes)) : '–') + '</td><td>' + n(f.interacoes) + '</td><td>' + pct(f.interacoes, f.views) + '</td></tr>';
+      }).join('') + '</tbody></table></div>' + (D.formatos_nota ? '<p class="nota">' + esc(D.formatos_nota) + '</p>' : ''));
+  }
+
+  // 5. top conteúdos
+  if (D.top && D.top.length) {
+    h += sec('top', 'Conteúdos', 'O que mais foi visto', D.top_nota || null,
+      '<ol class="top">' + D.top.map(function (t, i) {
+        return '<li><span class="pos num">' + (i + 1) + '</span><span class="t"><span class="f">' + esc(t.formato) + '</span>' + esc(t.titulo) + '</span><span class="vw num">' + esc(t.views) + '</span><span class="s">' + esc(t.sinais) + (t.leitura ? ' · ' + esc(t.leitura) : '') + '</span></li>';
+      }).join('') + '</ol>');
+  }
+
+  // 6. público
+  if (D.publico) {
+    var P = D.publico, maxI = Math.max.apply(null, P.idade.map(function (a) { return a.p }));
+    var g = P.genero;
+    h += sec('publico', 'Público', 'Quem está assistindo', P.resumo || null,
+      '<div class="duas"><div class="bloco"><h3>Faixa etária</h3>' + P.idade.map(function (a) {
+        return '<div class="hb' + (a.destaque ? ' dest' : '') + '" title="' + esc(a.faixa) + ': ' + esc(a.p) + '%"><span class="l">' + esc(a.faixa) + '</span><span class="t"><i style="width:' + (a.p / maxI * 100).toFixed(1) + '%"></i></span><span class="p">' + a.p.toLocaleString('pt-BR') + '%</span></div>';
+      }).join('') + '</div><div class="bloco"><h3>Gênero</h3><div class="split" title="' + esc(g[0].rotulo) + ' ' + g[0].p + '% · ' + esc(g[1].rotulo) + ' ' + g[1].p + '%"><i style="width:' + g[0].p + '%"></i><i style="width:' + g[1].p + '%"></i></div>' +
+      '<div class="split-leg"><span>' + esc(g[0].rotulo) + ' ' + g[0].p.toLocaleString('pt-BR') + '%</span><span>' + esc(g[1].rotulo) + ' ' + g[1].p.toLocaleString('pt-BR') + '%</span></div>' +
+      '<div class="pico"><span class="eyebrow">Horário de pico</span><strong>' + esc(P.pico) + '</strong><span class="d">' + esc(P.pico_detalhe || '') + '</span></div>' +
+      (P.local ? '<p class="nota">' + esc(P.local) + '</p>' : '') + '</div></div>');
+  }
+
+  // 7. leitura
+  h += sec('leitura', 'Leitura', 'O que funcionou e o que travou', null,
+    '<div class="leitura"><div class="lista pos"><h3><span class="chip bom">Funcionou</span></h3><ul>' + D.funcionou.map(function (x) { return '<li><strong>' + esc(x.titulo) + '</strong><span>' + esc(x.texto) + '</span></li>' }).join('') + '</ul></div>' +
+    '<div class="lista neg"><h3><span class="chip alerta">Travou</span></h3><ul>' + D.travou.map(function (x) { return '<li><strong>' + esc(x.titulo) + '</strong><span>' + esc(x.texto) + '</span></li>' }).join('') + '</ul></div></div>');
+
+  // 8. plano
+  h += sec('plano', 'Próximo mês · ' + D.proximo_periodo, 'Ajustes para o próximo mês', D.plano_nota || null,
+    '<div class="plano">' + D.ajustes.map(function (f) {
+      return '<div class="frente"><h3>' + esc(f.frente) + (f.resumo ? '<small>' + esc(f.resumo) + '</small>' : '') + '</h3><ul class="acoes">' +
+        f.acoes.map(function (a) { return '<li><strong>' + esc(a.acao) + '</strong>' + (a.porque ? '<span>' + esc(a.porque) + '</span>' : '') + '</li>' }).join('') + '</ul></div>';
+    }).join('') + '</div>');
+
+  // 9. metas
+  h += sec('metas', 'Metas', 'Números para acompanhar', 'Na próxima análise, cada meta é comparada com o resultado real.',
+    '<div class="tabela-wrap metas"><table><thead><tr><th>Métrica</th><th>Este mês</th><th>Meta</th><th>Variação</th></tr></thead><tbody>' +
+    D.metas.map(function (m) { return '<tr><td><strong>' + esc(m.metrica) + '</strong></td><td>' + esc(m.atual) + '</td><td>' + esc(m.meta) + '</td><td>' + esc(m.variacao || '') + '</td></tr>' }).join('') + '</tbody></table></div>');
+
+  // 10. o que faltou
+  if (D.faltou && D.faltou.length) {
+    h += sec('faltou', 'Para a próxima análise', 'Dados que faltaram', 'Com estes prints a análise fica mais completa.',
+      '<ul class="faltou">' + D.faltou.map(function (f) { return '<li>' + esc(f) + '</li>' }).join('') + '</ul>');
+  }
+
+  h += '<footer><span>MARTT · Consultoria em Marketing</span><span>' + esc(D.gerado_em || '') + '</span></footer>';
+  app.innerHTML = h;
+})();
+</script>

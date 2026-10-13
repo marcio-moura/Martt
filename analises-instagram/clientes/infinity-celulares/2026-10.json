@@ -1,0 +1,130 @@
+{
+ "cliente": "Infinity Celulares",
+ "perfil": null,
+ "mes": "Out 2026",
+ "periodo": "13 set a 12 out 2026 (30 dias)",
+ "proximo_periodo": "13 out a 12 nov 2026",
+ "segmento": "Loja de celulares e eletrônicos · Trindade",
+ "objetivo": "vender pelo WhatsApp e na loja",
+ "gerado_em": "Análise de 13 out 2026",
+
+ "veredito": "O perfil cresceu em visualizações (+39% sobre agosto) e converte bem quem chega até ele: 4 em cada 10 pessoas que veem o conteúdo visitam o perfil, e 1 em cada 5 visitas toca no link. O ponto fraco é o alcance novo. 91% das visualizações vêm dos stories, que falam com quem já segue, e só 14% das visualizações são de não seguidores. No próximo mês, o foco é usar reels e collabs para trazer gente nova, sem perder a força de venda dos stories.",
+
+ "kpis": [
+  {"rotulo": "Visualizações", "valor": "115,2 mil", "detalhe": "+39% sobre agosto (mês fechado)", "status": "bom"},
+  {"rotulo": "Contas alcançadas", "valor": "3.522", "detalhe": "cada pessoa viu cerca de 33 conteúdos", "status": "atencao"},
+  {"rotulo": "Seguidores", "valor": "5.132", "detalhe": "+119 novos, cerca de 76 saíram: líquido +43", "status": "atencao"},
+  {"rotulo": "Interações", "valor": "350", "detalhe": "0,30% das visualizações", "status": "alerta"},
+  {"rotulo": "Visitas ao perfil", "valor": "1,4 mil", "detalhe": "40% das contas alcançadas", "status": "bom"},
+  {"rotulo": "Toques no link da bio", "valor": "290", "detalhe": "21% das visitas ao perfil", "status": "bom"}
+ ],
+
+ "comparativo_nota": "Resumo mensal do Instagram para setembro fechado (1 a 30 set), comparado com agosto.",
+ "comparativo": [
+  {"rotulo": "Visualizações em setembro", "valor": "123 mil", "variacao": "+39%", "direcao": "sobe"},
+  {"rotulo": "Visualizações de não seguidores", "valor": "14%", "variacao": "+77%", "direcao": "sobe"},
+  {"rotulo": "Seguidores no fim do mês", "valor": "5,1 mil", "variacao": "+36", "direcao": "sobe"}
+ ],
+
+ "funil": [
+  {"rotulo": "Visualizações", "valor": 115192},
+  {"rotulo": "Contas alcançadas", "sub": "pessoas diferentes", "valor": 3522},
+  {"rotulo": "Visitas ao perfil", "valor": 1400},
+  {"rotulo": "Toques no link", "sub": "WhatsApp / site", "valor": 290}
+ ],
+
+ "formatos": [
+  {"formato": "Stories", "views": 105000, "publicacoes": 206, "interacoes": 279},
+  {"formato": "Reels", "views": 6800, "publicacoes": 8, "interacoes": 48},
+  {"formato": "Posts", "views": 3700, "publicacoes": 2, "interacoes": 23},
+  {"formato": "Lives", "views": 0, "publicacoes": 0, "interacoes": 0}
+ ],
+ "formatos_nota": "Publicações = contagem de setembro do resumo mensal. A média de posts inclui visualizações de posts antigos, por isso fica inflada.",
+
+ "top_nota": "Ordenado por visualizações nos últimos 30 dias. Stories de preço e de loja cheia aparecem no topo, ao lado dos melhores reels.",
+ "top": [
+  {"formato": "Story", "titulo": "Sábado na melhor (loja cheia)", "views": "1,6 mil", "sinais": "2 envios", "leitura": "prova social"},
+  {"formato": "Reel", "titulo": "Qual JBL faz mais sentido para você", "views": "1,6 mil", "sinais": "11 curtidas · 1 envio", "leitura": "melhor reel do mês, conteúdo de decisão"},
+  {"formato": "Feed", "titulo": "O nível de vício em tecnologia (meme)", "views": "1,5 mil", "sinais": "7 curtidas · 3 envios", "leitura": "humor gera envio"},
+  {"formato": "Story", "titulo": "18 Pro Max 256 GB bordô disponível", "views": "1,5 mil", "sinais": "2 envios", "leitura": "lançamento + disponibilidade"},
+  {"formato": "Story", "titulo": "R$ 9.990,00 · 18 Pro Max 256", "views": "1,2 mil", "sinais": "1 curtida · 6 envios", "leitura": "preço claro é o mais encaminhado"},
+  {"formato": "Story", "titulo": "Apresentadora com o 18 Pro Max", "views": "1,2 mil", "sinais": "1 envio · 2 respostas", "leitura": "rosto gera conversa"},
+  {"formato": "Story", "titulo": "iPhones na bancada", "views": "1,2 mil", "sinais": "2 curtidas · 1 envio · 2 respostas", "leitura": null},
+  {"formato": "Story", "titulo": "Pré-venda com @deiseallves", "views": "1,1 mil", "sinais": "1 curtida · 2 envios · 1 resposta", "leitura": "parceria"},
+  {"formato": "Reel", "titulo": "E você acha que a Infinity só vende...", "views": "1,1 mil", "sinais": "5 curtidas · 1 envio", "leitura": "quebra de objeção"}
+ ],
+
+ "publico": {
+  "resumo": "Público adulto, de 25 a 44 anos (67%), um pouco mais masculino, quase todo no Brasil. Os dois conteúdos que mais trouxeram seguidores têm uma pessoa da loja apresentando produto (tablet e caixa de som Aiwa).",
+  "idade": [
+   {"faixa": "13-17", "p": 1.8},
+   {"faixa": "18-24", "p": 13.9},
+   {"faixa": "25-34", "p": 35.3, "destaque": true},
+   {"faixa": "35-44", "p": 31.6, "destaque": true},
+   {"faixa": "45-54", "p": 13.2},
+   {"faixa": "55-64", "p": 3.2},
+   {"faixa": "65+", "p": 1.0}
+  ],
+  "genero": [{"rotulo": "Mulheres", "p": 43.8}, {"rotulo": "Homens", "p": 56.2}],
+  "pico": "18h às 21h",
+  "pico_detalhe": "Segundas, terças e quintas são os dias mais fortes. Das 9h às 21h o público se mantém ativo.",
+  "local": "Brasil 97%. Cidades não vieram nos prints."
+ },
+
+ "funcionou": [
+  {"titulo": "Preço e disponibilidade", "texto": "Stories com produto, preço e \"disponível\" estão no topo. O story de R$ 9.990 foi o mais encaminhado (6 envios): as pessoas mandam para quem quer comprar."},
+  {"titulo": "Rosto da loja", "texto": "Os conteúdos que mais trouxeram seguidores têm uma apresentadora mostrando o produto. Stories com pessoa também geraram respostas."},
+  {"titulo": "Conteúdo de decisão", "texto": "\"Qual JBL faz mais sentido para você\" foi o reel mais visto e mais curtido. Ajudar a escolher funciona melhor que só mostrar."},
+  {"titulo": "Humor de tecnologia", "texto": "O meme do vício em tecnologia teve 3 envios, o segundo conteúdo mais compartilhado."},
+  {"titulo": "Conversão do perfil", "texto": "40% de quem é alcançado visita o perfil e 21% das visitas tocam no link. A vitrine e a bio estão fazendo o trabalho delas."}
+ ],
+ "travou": [
+  {"titulo": "Dependência dos stories", "texto": "91% das visualizações vêm de stories. São cerca de 3,5 mil pessoas fiéis vendo muito conteúdo, mas pouca gente nova chegando (14% de não seguidores)."},
+  {"titulo": "Poucos reels", "texto": "8 reels no mês, com média de cerca de 850 visualizações. É o formato que mais leva a loja para quem ainda não segue."},
+  {"titulo": "Saída de seguidores", "texto": "Entraram 119 e saíram cerca de 76. Sequências longas de ofertas parecidas costumam cansar quem segue."},
+  {"titulo": "Pouca interação", "texto": "350 interações em 115 mil visualizações (0,30%). Os stories quase não têm enquete, caixinha ou pergunta."},
+  {"titulo": "Ritmo irregular", "texto": "O gráfico diário cai para perto de zero em vários dias entre os picos. Falta constância de publicação."}
+ ],
+
+ "plano_nota": "Este período termina duas semanas antes da Black Friday (27 nov). O plano já prepara a lista de clientes para ela.",
+ "ajustes": [
+  {"frente": "Reels", "resumo": "8 → 12 no mês", "acoes": [
+   {"acao": "Publicar 3 reels por semana, às 18h, de segunda, terça e quinta", "porque": "É o horário de pico e o formato que traz não seguidores."},
+   {"acao": "Série \"Qual faz mais sentido para você?\" comparando 2 ou 3 produtos (iPhones, JBL, smartwatch)", "porque": "Repete o formato do melhor reel do mês."},
+   {"acao": "Apresentadora mostrando 1 produto em até 30 segundos, com preço no final", "porque": "Rosto + produto foi o que mais trouxe seguidores."},
+   {"acao": "Transformar o story de R$ 9.990 do 18 Pro Max em reel", "porque": "Já provou que gera envio. Em reel, chega em quem não segue."}
+  ]},
+  {"frente": "Stories", "resumo": "manter volume, mudar a estrutura", "acoes": [
+   {"acao": "Organizar o dia em sequência: bastidor → produto → prova social → oferta → chamada para o WhatsApp", "porque": "Reduz a sensação de \"só oferta\" que pode estar gerando saídas."},
+   {"acao": "No máximo 3 ofertas seguidas; intercalar com loja cheia, cliente retirando, bastidor", "porque": "\"Sábado na melhor\" (loja cheia) foi o conteúdo mais visto."},
+   {"acao": "1 interação por dia: enquete \"qual você levaria?\", caixinha de dúvidas, quiz de preço", "porque": "Aumenta respostas e sinaliza ao Instagram que o conteúdo é relevante."},
+   {"acao": "Padronizar o story de oferta: foto real + preço + parcelamento + figurinha de link do WhatsApp", "porque": "Preço claro é o que mais se encaminha."}
+  ]},
+  {"frente": "Feed e alcance", "resumo": "trazer gente nova", "acoes": [
+   {"acao": "1 carrossel por semana: guia de compra (ex.: \"iPhone 17 ou 18: vale trocar?\") ou meme de tecnologia", "porque": "Conteúdo salvável e compartilhável alcança fora da base."},
+   {"acao": "2 posts em collab no mês com @deiseallves ou clientes conhecidos", "porque": "Aparece para o público do parceiro também."},
+   {"acao": "Fixar 3 posts no topo: lançamento do mês, loja/prova social, como comprar e formas de pagamento", "porque": "40% visitam o perfil. Os fixados são a vitrine dessa visita."}
+  ]},
+  {"frente": "Black Friday", "resumo": "aquecer a partir de 1 nov", "acoes": [
+   {"acao": "Criar lista VIP de Black Friday pelo link da bio (grupo ou lista de transmissão no WhatsApp)", "porque": "O link já converte 21% das visitas. Dá para capturar contatos antes da data."},
+   {"acao": "Destaque \"Black Friday\" e caixinha \"qual produto você quer na Black?\"", "porque": "Mostra a demanda e ajuda a definir as ofertas."}
+  ]}
+ ],
+
+ "metas": [
+  {"metrica": "Visualizações de não seguidores", "atual": "14%", "meta": "20%", "variacao": "+6 p.p."},
+  {"metrica": "Visualizações em reels", "atual": "6,8 mil", "meta": "12 mil", "variacao": "+76%"},
+  {"metrica": "Reels publicados", "atual": "8", "meta": "12", "variacao": "+4"},
+  {"metrica": "Interações", "atual": "350", "meta": "500", "variacao": "+43%"},
+  {"metrica": "Seguidores líquidos", "atual": "+43", "meta": "+80", "variacao": "quase o dobro"},
+  {"metrica": "Toques no link da bio", "atual": "290", "meta": "350", "variacao": "+21%"}
+ ],
+
+ "faltou": [
+  "Print da tela principal do perfil (bio, destaques e posts fixados), para avaliar a vitrine",
+  "Cidades do público (aba Público → Principais localizações → Cidades)",
+  "Detalhe de seguidores ganhos e perdidos por dia (aba Público → Seguidores / Deixaram de seguir)",
+  "Salvamentos por conteúdo (abrir o reel ou post → Ver insights)",
+  "Confirmação do @ do perfil e do objetivo principal do mês"
+ ]
+}
