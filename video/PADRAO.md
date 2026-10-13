@@ -8,7 +8,7 @@ Definido a partir do vídeo de referência enviado pelo cliente (46 s, vertical 
 |---|---|---|
 | Fonte | Poppins (SemiBold nas palavras soltas e linhas pequenas, Bold nas grandes) | `fontes/Poppins-*.ttf` (licença OFL) |
 | Palavra solta | Uma palavra por vez, no instante da fala, em minúsculas como foi dita e com a pontuação | `palavra_em` 0,051 da largura (55 px em 1080), centro em 67,5% da altura |
-| Cor | Branco puro e sombra preta suave, sem contorno | Sombra desfocada. Com fundo claro, um contorno escuro quase transparente é ligado automaticamente |
+| Cor | Branco puro | **Sem sombra e sem contorno**, por decisão do cliente. A sombra (`padrao.sombra`: auto, suave ou forte) só entra se for pedida |
 | Destaque | Amarelo `#F5D968` | `cor_destaque` |
 
 ## Frases de impacto (blocos)

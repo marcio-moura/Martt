@@ -1,7 +1,7 @@
 """Padrão Martt de edição, modelado a partir do vídeo de referência do cliente.
 
 - Legenda palavra por palavra: Poppins SemiBold branca, pequena, na altura do peito,
-  sem contorno, com sombra suave.
+  sem sombra e sem contorno (decisão do cliente).
 - Frases de impacto em bloco: linha grande, linha pequena logo abaixo (entrelinha
   apertada) e a palavra final em amarelo, surgindo letra por letra com um "tic"
   a cada letra. As palavras brancas entram com desfoque no instante em que são ditas.
@@ -29,7 +29,7 @@ PADRAO = {
     "bloco_em_grande": 0.110,
     "bloco_em_pequeno": 0.051,
     "letra_ms": 45,
-    "sombra": "auto",           # auto | suave | forte (fundo claro pede sombra forte)
+    "sombra": "nenhuma",        # nenhuma (padrão do cliente) | auto | suave | forte
 }
 ZOOM_PADRAO = {"ativo": True, "niveis": [1.22, 1.0], "plano_min": 3.0, "plano_max": 8.0}
 SFX_PADRAO = {"ticks": True, "impacto": True, "volume_tick_db": -21, "volume_impacto_db": -9}
@@ -164,6 +164,7 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         for p in b["palavras"]:
             em_bloco[p["i"]] = b
     linhas, tics, faixas = [], [], []
+    sem_sombra = cfg.get("sombra") == "nenhuma"
     forte = cfg.get("sombra") == "forte"
     sombra_alfa = "&H38&" if forte else "&H90&"
     sombra_blur = 10 if forte else 7
@@ -207,8 +208,9 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         pos = f"\\an5\\pos({w / 2:.0f},{cfg['palavra_y'] * h:.0f})"
         pos_s = f"\\an5\\pos({w / 2:.0f},{cfg['palavra_y'] * h + em_p * 0.06:.0f})"
         fonte = f"\\fn{FONTE_PALAVRA[0]}\\b0\\fs{fs_p:.1f}"
-        linhas.append(f"Dialogue: 0,{ts(ini)},{ts(fim)},Base,,0,0,0,,"
-                      f"{{{pos_s}{fonte}\\1c&H000000&\\alpha{sombra_alfa}\\blur{sombra_blur}{pop}}}{txt}")
+        if not sem_sombra:
+            linhas.append(f"Dialogue: 0,{ts(ini)},{ts(fim)},Base,,0,0,0,,"
+                          f"{{{pos_s}{fonte}\\1c&H000000&\\alpha{sombra_alfa}\\blur{sombra_blur}{pop}}}{txt}")
         linhas.append(f"Dialogue: 1,{ts(ini)},{ts(fim)},Base,,0,0,0,,"
                       f"{{{pos}{fonte}\\1c{cor}{reforco.format(b=em_p * 0.035)}{pop}}}{txt}")
 
@@ -266,7 +268,7 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
             fs = pt["em"] / k
             y_ass = pt["base"] + desloc_y - base * fs
             fonte = f"\\fn{pt['fonte'][0]}\\b{pt['fonte'][2]}\\fs{fs:.1f}"
-            for sombra in (True, False):
+            for sombra in ((False,) if sem_sombra else (True, False)):
                 cab = (f"\\an7\\pos({pt['x']:.0f},{y_ass + (pt['em'] * 0.05 if sombra else 0):.0f})"
                        f"{fonte}\\fad(0,120)")
                 if sombra:

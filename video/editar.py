@@ -262,7 +262,7 @@ def renderizar(args):
     extra_v, brolls, sfx = [], [], None
     if estilo["modo"] == "padrao":
         cfg = {**padrao.PADRAO, **ed.get("padrao", {})}
-        if cfg["sombra"] == "auto":
+        if cfg["sombra"] == "auto":  # sombra só quando pedida: o padrão do cliente é sem
             amostras = [padrao.novo_para_original(dur_final * f, trechos) for f in (.1, .3, .5, .7, .9)]
             luz = padrao.claridade(video, amostras, info, cfg["palavra_y"])
             cfg["sombra"] = "forte" if luz > 115 else "suave"
