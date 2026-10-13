@@ -279,24 +279,29 @@ def renderizar(args):
         zcfg = {**padrao.ZOOM_PADRAO, **ed.get("zoom", {})}
         scfg = {**padrao.SFX_PADRAO, **ed.get("sfx", {})}
         ccfg = {**padrao.COR_PADRAO, **ed.get("cor", {})}
+        # Primeira passada só para saber onde caem os blocos (o fim do gancho decide o corte).
+        _, _, faixas = padrao.eventos(mantidas, ed.get("blocos", []), info, cfg, dur_final)
+        extra_v += padrao.filtro_cor(ccfg)
+        if zcfg["ativo"]:
+            # Gancho em plano fechado e corte seco para o aberto logo depois dele.
+            forcados = [faixas[0][1]] if faixas and faixas[0][0] < 3 else []
+            planos = padrao.planejar_planos(trechos, mantidas, dur_final, zcfg, forcados)
+        else:
+            planos = [(0.0, dur_final, 1.0)]
+        rostos = [padrao.rosto(video, [padrao.novo_para_original(a + (b - a) * f, trechos)
+                                       for f in (0.2, 0.5, 0.8)], info_orig)
+                  for a, b, _ in planos]
+        rostos = [tuple(v * fator for v in r) for r in rostos]
+        if zcfg["ativo"]:
+            extra_v.append(padrao.filtro_zoom(planos, rostos, info))
+        cfg["queixos"] = padrao.queixos(planos, rostos, info)
         linhas, tics, faixas = padrao.eventos(mantidas, ed.get("blocos", []), info, cfg, dur_final)
         estilos, linhas_el = estilos_e_elementos(
             [e for e in elementos if e.get("tipo") != "broll"], por_indice, remap, info,
             {**estilo, "fonte": "Poppins", "cor_destaque": cfg["cor_destaque"]}, dur_final)
         ass.write_text(padrao.ass_completo(info, linhas + linhas_el, estilos))
-        extra_v += padrao.filtro_cor(ccfg)
-        planos = []
-        if zcfg["ativo"]:
-            # Gancho em plano fechado e corte seco para o aberto logo depois dele.
-            forcados = [faixas[0][1]] if faixas and faixas[0][0] < 3 else []
-            planos = padrao.planejar_planos(trechos, mantidas, dur_final, zcfg, forcados)
-            centros = [padrao.rosto(video, [padrao.novo_para_original(a + (b - a) * f, trechos)
-                                            for f in (0.2, 0.5, 0.8)], info_orig)
-                       for a, b, _ in planos]
-            centros = [(x * fator, y * fator) for x, y in centros]
-            extra_v.append(padrao.filtro_zoom(planos, centros, info))
         impactos = [remap(por_indice[int(i)]["ini"]) for i in scfg.get("impactos_palavras", [])]
-        if not scfg.get("impactos_palavras") and faixas and planos:
+        if not scfg.get("impactos_palavras") and faixas and len(planos) > 1:
             depois = [a for a, _, _ in planos if a >= faixas[0][1] - 0.3]
             if depois and faixas[0][0] < 8:
                 impactos = [depois[0]]

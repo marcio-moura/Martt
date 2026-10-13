@@ -7,7 +7,7 @@ Definido a partir do vídeo de referência enviado pelo cliente (46 s, vertical 
 | Elemento | Referência | Implementação |
 |---|---|---|
 | Fonte | Poppins (SemiBold nas palavras soltas e linhas pequenas, Bold nas grandes) | `fontes/Poppins-*.ttf` (licença OFL) |
-| Palavra solta | Uma palavra por vez, no instante da fala, em minúsculas como foi dita e com a pontuação | `palavra_em` 0,051 da largura (55 px em 1080), centro em 67,5% da altura |
+| Palavra solta | Uma palavra por vez, no instante da fala, em minúsculas como foi dita e com a pontuação | `palavra_em` 0,051 da largura (55 px em 1080), **logo abaixo do queixo** (decisão do cliente: embaixo, o Instagram corta ou cobre). O editor detecta o rosto em cada plano e acompanha o zoom (`queixo_palavra`, `queixo_bloco`) |
 | Cor | Branco puro | **Sem sombra e sem contorno**, por decisão do cliente. A sombra (`padrao.sombra`: auto, suave ou forte) só entra se for pedida |
 | Destaque | Amarelo `#F5D968` | `cor_destaque` |
 
@@ -21,7 +21,7 @@ Cerca de 1 a cada 8 s, nas frases que carregam a mensagem: o gancho, a virada e 
   3. palavra final em **destaque amarelo**, Bold, até 0,11 da largura, alinhada à direita da primeira linha.
 - **Animação**: cada palavra branca entra com desfoque e fade (160 ms) no instante em que é dita. O destaque surge **letra por letra, a cada 45 ms**, com o espaçamento entre letras se fechando.
 - **Aspas** quando a fala reproduz o que outra pessoa diz (ex.: "Doutora, eu quero colocar aparelho…").
-- O bloco fica no centro, a 62% da altura, e some com um fade de 120 ms quando a fala seguinte começa.
+- O bloco começa logo abaixo do queixo, e some com um fade de 120 ms quando a fala seguinte começa.
 
 ## Câmera
 

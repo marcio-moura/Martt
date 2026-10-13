@@ -24,8 +24,11 @@ PADRAO = {
     "cor_texto": "#FFFFFF",
     "cor_destaque": "#F5D968",
     "palavra_em": 0.051,        # tamanho da palavra solta, em fração da largura
-    "palavra_y": 0.675,         # centro vertical da palavra solta
-    "bloco_y": 0.62,            # centro vertical dos blocos de impacto
+    "ancorar_queixo": True,     # legenda logo abaixo do queixo, acompanhando cada plano
+    "queixo_palavra": 0.05,     # distância do queixo ao centro da palavra solta (fração da altura)
+    "queixo_bloco": 0.025,      # distância do queixo ao topo do bloco
+    "palavra_y": 0.675,         # posição fixa, sem rosto detectado ou com ancorar_queixo falso
+    "bloco_y": 0.62,
     "bloco_em_grande": 0.110,
     "bloco_em_pequeno": 0.051,
     "letra_ms": 45,
@@ -164,6 +167,19 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         for p in b["palavras"]:
             em_bloco[p["i"]] = b
     linhas, tics, faixas = [], [], []
+
+    def queixo(t):
+        if not cfg.get("ancorar_queixo") or not cfg.get("queixos"):
+            return None
+        for a, b, y in cfg["queixos"]:
+            if a <= t < b:
+                return y
+        return cfg["queixos"][-1][2]
+
+    def y_palavra(t):
+        q = queixo(t)
+        y = cfg["palavra_y"] if q is None else q + cfg["queixo_palavra"]
+        return min(max(y, 0.35), 0.80) * h
     sem_sombra = cfg.get("sombra") == "nenhuma"
     forte = cfg.get("sombra") == "forte"
     sombra_alfa = "&H38&" if forte else "&H90&"
@@ -205,8 +221,8 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         txt = esc(p["t"])
         cor = branco
         pop = "\\fscx112\\fscy112\\t(0,120,\\fscx100\\fscy100)" if p.get("chave") else ""
-        pos = f"\\an5\\pos({w / 2:.0f},{cfg['palavra_y'] * h:.0f})"
-        pos_s = f"\\an5\\pos({w / 2:.0f},{cfg['palavra_y'] * h + em_p * 0.06:.0f})"
+        pos = f"\\an5\\pos({w / 2:.0f},{y_palavra(ini):.0f})"
+        pos_s = f"\\an5\\pos({w / 2:.0f},{y_palavra(ini) + em_p * 0.06:.0f})"
         fonte = f"\\fn{FONTE_PALAVRA[0]}\\b0\\fs{fs_p:.1f}"
         if not sem_sombra:
             linhas.append(f"Dialogue: 0,{ts(ini)},{ts(fim)},Base,,0,0,0,,"
@@ -245,7 +261,12 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
             pt["base"] = y
         topo = partes[0]["base"] - 0.74 * partes[0]["em"]
         fundo = partes[-1]["base"] + 0.12 * partes[-1]["em"]
-        desloc_y = cfg["bloco_y"] * h - (topo + fundo) / 2
+        q = queixo(b["ini"])
+        if q is None:
+            desloc_y = cfg["bloco_y"] * h - (topo + fundo) / 2
+        else:
+            alvo = min(max(q + cfg["queixo_bloco"], 0.30), 0.86 - (fundo - topo) / h)
+            desloc_y = alvo * h - topo
         # Escada: pequena levemente recuada, destaque alinhado à direita da primeira linha.
         x = 0.0
         for n, pt in enumerate(partes):
@@ -319,12 +340,13 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
 # ---------- punch-in ----------
 
 def rosto(video, instantes, info):
-    """Centro do rosto (mediana de algumas amostras) ou o centro alto do quadro."""
+    """(x, y, altura) do rosto: mediana de algumas amostras, ou um palpite no alto do quadro."""
+    palpite = (info["largura"] / 2, info["altura"] * 0.33, info["altura"] * 0.10)
     try:
         import cv2
         cc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     except Exception:
-        return info["largura"] / 2, info["altura"] * 0.33
+        return palpite
     cap = cv2.VideoCapture(str(video))
     achados = []
     for t in instantes:
@@ -337,11 +359,29 @@ def rosto(video, instantes, info):
         f = cc.detectMultiScale(g, 1.1, 6, minSize=(40, 40))
         if len(f):
             x, y, fw, fh = max(f, key=lambda r: r[2])
-            achados.append(((x + fw / 2) / esc_, (y + fh / 2) / esc_))
+            achados.append(((x + fw / 2) / esc_, (y + fh / 2) / esc_, fh / esc_))
     cap.release()
     if not achados:
-        return info["largura"] / 2, info["altura"] * 0.33
-    return float(np.median([a[0] for a in achados])), float(np.median([a[1] for a in achados]))
+        return palpite
+    return tuple(float(np.median([a[k] for a in achados])) for k in range(3))
+
+
+def recorte(fx, fy, z, info):
+    """Canto superior esquerdo do recorte do punch-in (o rosto mantém a altura relativa)."""
+    w, h = info["largura"], info["altura"]
+    zw, zh = w / z, h / z
+    return min(max(fx - zw / 2, 0), w - zw), min(max(fy * (1 - 1 / z), 0), h - zh)
+
+
+def queixos(planos, rostos, info):
+    """Altura do queixo (fração da altura) em cada plano, já com o zoom aplicado."""
+    h = info["altura"]
+    saida = []
+    for (a, b, z), (fx, fy, fh) in zip(planos, rostos):
+        _, y0 = recorte(fx, fy, z, info)
+        queixo = fy + 0.55 * fh
+        saida.append((a, b, (queixo - y0) * z / h))
+    return saida
 
 
 def planejar_planos(trechos, mantidas, dur_final, zcfg, forcados=()):
@@ -398,10 +438,8 @@ def claridade(video, instantes, info, y_frac):
 def filtro_zoom(planos, centros, info):
     w, h = info["largura"], info["altura"]
     zs, xs, ys = [], [], []
-    for (a, b, z), (fx, fy) in zip(planos, centros):
-        zw, zh = w / z, h / z
-        x0 = min(max(fx - zw / 2, 0), w - zw)
-        y0 = min(max(fy * (1 - 1 / z), 0), h - zh)
+    for (a, b, z), (fx, fy, *_) in zip(planos, centros):
+        x0, y0 = recorte(fx, fy, z, info)
         zs.append((b, z))
         xs.append((b, x0))
         ys.append((b, y0))
