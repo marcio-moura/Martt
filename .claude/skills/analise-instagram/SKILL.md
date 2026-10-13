@@ -39,8 +39,11 @@ Arquivos:
 7. **Montar o plano** (`ajustes`) agrupado por frente (Reels, Stories, Feed e alcance, Conversão, datas sazonais). Cada ação é concreta (quantidade, horário, formato, exemplo de tema) e traz o `porque` ligado a um dado do mês. Verifique as datas comerciais do próximo período (Black Friday, Dia das Mães, Natal etc.).
 8. **Metas**: de 4 a 6 números com atual → meta. As metas devem ser possíveis em um mês (+20% a +80%, no geral).
 9. **Gerar**: salve o JSON e rode `python3 analises-instagram/gerar.py analises-instagram/clientes/<cliente>/<AAAA-MM>.json`.
-10. **Publicar** o `.html` gerado com a ferramenta Artifact. Na primeira publicação use o ícone `chart`. Para atualizar o mesmo relatório, publique de novo pelo mesmo caminho.
-11. **Salvar no repositório**: commit do JSON e do HTML na pasta do cliente, para o próximo mês ter histórico.
+10. **Publicar no site da MARTT** (link que vai para o cliente): faça commit do JSON e do HTML na pasta do cliente e leve para a `main`. A Vercel publica sozinha (`publicar-site.sh`):
+    - `/analise/<cliente>/` → sempre o relatório mais recente
+    - `/analise/<cliente>/<AAAA-MM>/` → o relatório daquele mês
+    As páginas têm `noindex` e não aparecem no menu do site; só abre quem tiver o link.
+11. **Prévia** (opcional, antes de enviar ao cliente): publique o `.html` com a ferramenta Artifact, ícone `chart`.
 12. **Responder no chat** em até 8 linhas: o veredito, os 3 ajustes principais, as metas e o link. Diga quais prints faltaram (só no chat, nunca no relatório).
 
 ## Estrutura do JSON
