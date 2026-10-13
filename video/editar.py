@@ -219,6 +219,13 @@ def renderizar(args):
     audio_cfg = {**AUDIO_PADRAO, **ed.get("audio", {})}
     video = Path(args.video or trans["video"])
     info = sondar(video)
+    # 4K e afins descem para no máximo 1920 no lado maior logo na entrada: as redes
+    # entregam nessa resolução e o zoom e as legendas ficam muito mais rápidos.
+    info_orig, fator = dict(info), 1.0
+    if max(info["largura"], info["altura"]) > 1920:
+        fator = 1920 / max(info["largura"], info["altura"])
+        info["largura"] = round(info["largura"] * fator / 2) * 2
+        info["altura"] = round(info["altura"] * fator / 2) * 2
 
     palavras = [dict(p) for p in trans["palavras"]]
     for i, txt in ed.get("correcoes", {}).items():
@@ -260,6 +267,8 @@ def renderizar(args):
     elementos = ed.get("elementos", [])
     ass = pasta / "legendas.ass"
     extra_v, brolls, sfx = [], [], None
+    if fator != 1.0:
+        extra_v.append(f"scale={info['largura']}:{info['altura']}:flags=lanczos")
     if estilo["modo"] == "padrao":
         cfg = {**padrao.PADRAO, **ed.get("padrao", {})}
         if cfg["sombra"] == "auto":  # sombra só quando pedida: o padrão do cliente é sem
@@ -282,8 +291,9 @@ def renderizar(args):
             forcados = [faixas[0][1]] if faixas and faixas[0][0] < 3 else []
             planos = padrao.planejar_planos(trechos, mantidas, dur_final, zcfg, forcados)
             centros = [padrao.rosto(video, [padrao.novo_para_original(a + (b - a) * f, trechos)
-                                            for f in (0.2, 0.5, 0.8)], info)
+                                            for f in (0.2, 0.5, 0.8)], info_orig)
                        for a, b, _ in planos]
+            centros = [(x * fator, y * fator) for x, y in centros]
             extra_v.append(padrao.filtro_zoom(planos, centros, info))
         impactos = [remap(por_indice[int(i)]["ini"]) for i in scfg.get("impactos_palavras", [])]
         if not scfg.get("impactos_palavras") and faixas and planos:
