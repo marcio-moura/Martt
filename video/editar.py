@@ -19,8 +19,9 @@ O edicao.json aceita:
   palavras_chave_indices  [índice, ...] o mesmo, para uma ocorrência específica
   elementos          [{"tipo": "titulo"|"destaque"|"nome", "palavra": índice,
                        "duracao": s, "texto": "...", "subtexto": "..."}]
-  estilo             cor_destaque, cor_texto, fonte, maiusculas, posicao (auto|baixo|meio)
-  corte              pausa_max, margem_antes, margem_depois (segundos)
+  estilo             cor_destaque, cor_texto, fonte, maiusculas, posicao (auto|baixo|meio),
+                     altura_legenda (fração da altura, medida de baixo; ex. 0.22)
+  corte              pausa_max, margem_antes, margem_depois (segundos), limiar_voz (0-1)
   audio              normalizar (bool), reduzir_ruido (bool)
 """
 
@@ -49,7 +50,8 @@ ESTILO_PADRAO = {
     "max_palavras": 5,
     "max_caracteres": 30,
 }
-CORTE_PADRAO = {"pausa_max": 0.30, "margem_antes": 0.06, "margem_depois": 0.12}
+CORTE_PADRAO = {"pausa_max": 0.30, "margem_antes": 0.06, "margem_depois": 0.12,
+                "limiar_voz": 0.30}
 AUDIO_PADRAO = {"normalizar": True, "reduzir_ruido": True}
 
 FADE_MS = 280
@@ -121,8 +123,13 @@ def transcrever(args):
         sys.exit("Instale o transcritor: pip install faster-whisper")
     print(f"Transcrevendo com o modelo '{args.modelo}' (pode levar alguns minutos)...")
     modelo = WhisperModel(args.modelo, device="cpu", compute_type="int8")
+    # Passa as amostras prontas: o decodificador interno quebra com algumas versões do PyAV.
+    import numpy as np
+    import wave
+    with wave.open(str(audio)) as wav:
+        amostras = np.frombuffer(wav.readframes(wav.getnframes()), np.int16).astype(np.float32) / 32768
     segmentos, _ = modelo.transcribe(
-        str(audio), language=args.idioma, word_timestamps=True, vad_filter=True,
+        amostras, language=args.idioma, word_timestamps=True, vad_filter=True,
         beam_size=5, condition_on_previous_text=False,
         initial_prompt=args.contexto or None)
 
@@ -205,6 +212,8 @@ def renderizar(args):
     if not mantidas:
         sys.exit("Nenhuma palavra restou depois dos cortes.")
 
+    if info["tem_audio"]:
+        refinar_pela_voz(mantidas, energia(video), corte)
     trechos = montar_trechos(mantidas, corte, info)
     dur_final = sum(b - a for a, b in trechos)
 
@@ -248,12 +257,61 @@ def renderizar(args):
     print(f"Pronto: {saida}")
 
 
+def energia(video):
+    """Volume em dB a cada 10 ms."""
+    import numpy as np
+    bruto = subprocess.run(["ffmpeg", "-v", "error", "-i", str(video), "-vn", "-ac", "1",
+                            "-ar", "16000", "-f", "s16le", "-"], capture_output=True).stdout
+    a = np.frombuffer(bruto, np.int16).astype(np.float32) / 32768
+    n = len(a) // 160
+    return 20 * np.log10(np.sqrt((a[:n * 160].reshape(n, 160) ** 2).mean(1)) + 1e-6)
+
+
+def refinar_pela_voz(palavras, e, corte):
+    """O transcritor estica palavras sobre pausas e vogais arrastadas ("ééé").
+    Mantém só os pedaços com voz dentro de cada palavra e encurta o arraste
+    de palavras de uma ou duas letras."""
+    import numpy as np
+    piso, fala = np.percentile(e, 10), np.percentile(e, 95)
+    voz = e > piso + corte["limiar_voz"] * (fala - piso)
+    for p in palavras:
+        a, b = int(p["ini"] * 100), max(int(p["fim"] * 100), int(p["ini"] * 100) + 1)
+        m = voz[a:b].copy()
+        # Junta buracos curtos (consoantes surdas) e descarta estalos isolados.
+        partes, k = [], 0
+        while k < len(m):
+            if m[k]:
+                j = k
+                while j < len(m) and m[j]:
+                    j += 1
+                partes.append([k, j])
+                k = j
+            else:
+                k += 1
+        juntas = []
+        for x, y in partes:
+            if juntas and x - juntas[-1][1] <= 12:
+                juntas[-1][1] = y
+            else:
+                juntas.append([x, y])
+        juntas = [q for q in juntas if q[1] - q[0] >= 5]
+        if not juntas:
+            p["partes"] = [(p["ini"], p["fim"])]
+            continue
+        curta = len(re.sub(r"\W", "", p["t"])) <= 2
+        if curta and sum(y - x for x, y in juntas) > 45:
+            juntas = [[juntas[0][0], juntas[0][0] + 28]]
+        p["partes"] = [((a + x) / 100, (a + y) / 100) for x, y in juntas]
+        p["ini"], p["fim"] = p["partes"][0][0], p["partes"][-1][1]
+
+
 def montar_trechos(mantidas, corte, info):
     quadro = 1.0 / info["fps"]
     trechos = []
-    for p in mantidas:
-        a = max(0.0, p["ini"] - corte["margem_antes"])
-        b = min(info["duracao"], p["fim"] + corte["margem_depois"])
+    pedacos = [q for p in mantidas for q in p.get("partes", [(p["ini"], p["fim"])])]
+    for ini, fim in sorted(pedacos):
+        a = max(0.0, ini - corte["margem_antes"])
+        b = min(info["duracao"], fim + corte["margem_depois"])
         if trechos and a - trechos[-1][1] <= corte["pausa_max"]:
             trechos[-1][1] = max(trechos[-1][1], b)
         elif trechos and a < trechos[-1][1]:
@@ -273,31 +331,20 @@ def montar_trechos(mantidas, corte, info):
 
 
 def filtro(trechos, ass, info, audio_cfg):
-    partes, rotulos = [], []
+    # Um fluxo só, com select: cortar em N ramos de trim obriga o ffmpeg a guardar
+    # quadros de todos os ramos na memória e estoura em vídeos longos ou 4K.
     caminho_ass = str(ass).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
-    for n, (a, b) in enumerate(trechos):
-        partes.append(f"[0:v]trim=start={a}:end={b},setpts=PTS-STARTPTS[v{n}];")
-        rotulos.append(f"[v{n}]")
-        if info["tem_audio"]:
-            d = b - a
-            f = min(0.012, d / 4)
-            partes.append(
-                f"[0:a]atrim=start={a}:end={b},asetpts=PTS-STARTPTS,"
-                f"afade=t=in:d={f:.4f},afade=t=out:st={d - f:.4f}:d={f:.4f}[a{n}];")
-            rotulos.append(f"[a{n}]")
-    a_flag = 1 if info["tem_audio"] else 0
-    partes.append(f"{''.join(rotulos)}concat=n={len(trechos)}:v=1:a={a_flag}[vc]" +
-                  ("[ac];" if a_flag else ";"))
-    partes.append(f"[vc]ass='{caminho_ass}'[vout]" + (";" if a_flag else ""))
-    if a_flag:
-        cadeia = []
+    expr = "+".join(f"between(t\\,{a:.6f}\\,{b - 0.0005:.6f})" for a, b in trechos)
+    partes = [f"[0:v]select='{expr}',setpts=N/FRAME_RATE/TB,ass='{caminho_ass}'[vout]"]
+    if info["tem_audio"]:
+        cadeia = ["asetnsamples=n=64:p=0", f"aselect='{expr}'", "asetpts=N/SR/TB"]
         if audio_cfg["reduzir_ruido"]:
             cadeia.append("highpass=f=70,afftdn=nf=-28")
         if audio_cfg["normalizar"]:
             cadeia.append("loudnorm=I=-14:TP=-1.5:LRA=11")
         cadeia.append("aresample=48000")
-        partes.append(f"[ac]{','.join(cadeia)}[aout]")
-    return "\n".join(partes)
+        partes.append(f"[0:a]{','.join(cadeia)}[aout]")
+    return ";\n".join(partes)
 
 
 # ---------- legendas ----------
@@ -344,7 +391,8 @@ def gerar_ass(frases, elementos, por_indice, remap, info, estilo, dur_final):
     if pos == "auto":
         pos = "meio" if vertical else "baixo"
     fs = round(base * (0.068 if vertical else 0.058))
-    margem_v = round(h * (0.30 if pos == "meio" else 0.08))
+    margem_v = round(h * float(estilo.get("altura_legenda") or (0.30 if pos == "meio" else 0.08)))
+    margem_nome = round(margem_v + fs * 2.0)
     contorno = max(2, round(fs * 0.075))
     branco, destaque = cor_ass(estilo["cor_texto"]), cor_ass(estilo["cor_destaque"])
     fonte = estilo["fonte"]
@@ -360,8 +408,8 @@ Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour,
 Style: Legenda,{fonte},{fs},{branco},{branco},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{contorno},{max(1, contorno // 2)},2,{round(w * 0.08)},{round(w * 0.08)},{margem_v},1
 Style: Titulo,{fonte},{round(fs * 1.15)},{branco},{branco},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{contorno},{max(1, contorno // 2)},8,{round(w * 0.08)},{round(w * 0.08)},{round(h * 0.09)},1
 Style: Destaque,{fonte},{round(fs * 2.1)},{destaque},{destaque},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{round(contorno * 1.4)},{contorno},5,{round(w * 0.06)},{round(w * 0.06)},0,1
-Style: Nome,{fonte},{round(fs * 0.8)},{branco},{branco},&H00000000,&H96000000,-1,0,0,0,100,100,0,0,3,{round(fs * 0.25)},0,1,{round(w * 0.06)},{round(w * 0.06)},{round(h * (0.18 if vertical else 0.20))},1
-Style: Cargo,{fonte},{round(fs * 0.55)},{destaque},{destaque},&H00000000,&H96000000,0,0,0,0,100,100,0,0,3,{round(fs * 0.2)},0,1,{round(w * 0.06)},{round(w * 0.06)},{round(h * (0.18 if vertical else 0.20) - fs * 0.85)},1
+Style: Nome,{fonte},{round(fs * 0.8)},{branco},{branco},&H00000000,&H96000000,-1,0,0,0,100,100,0,0,3,{round(fs * 0.25)},0,1,{round(w * 0.06)},{round(w * 0.06)},{margem_nome},1
+Style: Cargo,{fonte},{round(fs * 0.55)},{destaque},{destaque},&H00000000,&H96000000,0,0,0,0,100,100,0,0,3,{round(fs * 0.2)},0,1,{round(w * 0.06)},{round(w * 0.06)},{round(margem_nome + fs * 0.85)},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text

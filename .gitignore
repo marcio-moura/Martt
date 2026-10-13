@@ -1,3 +1,4 @@
 .site
 video/projetos/*/
 !video/projetos/.gitkeep
+video/entrada/
