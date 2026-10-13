@@ -7,17 +7,22 @@ description: Edita vídeos enviados pelo usuário de forma profissional - corta 
 
 Ferramenta: `video/editar.py` (detalhes dos campos no cabeçalho do arquivo). Saída em `video/projetos/<nome>/`.
 
+**O padrão do cliente está em `video/PADRAO.md`, e nenhum vídeo sai abaixo dele.** Leia esse arquivo antes de editar. O modo `padrao` (o padrão do editor) já aplica legenda palavra por palavra, punch-in no rosto, efeitos sonoros e cor; o trabalho editorial é escolher os blocos.
+
 ## Passos
 
-1. **Receber.** Vídeos chegam por link do Google Drive: `pip install gdown` e `gdown <id-do-arquivo> -O video/entrada/<nome>.mp4`.
-2. **Preparar.** `pip install faster-whisper` se faltar. Se o download do modelo falhar com 403 em `huggingface.co`, avise o usuário que o domínio precisa ser liberado na rede do ambiente; não invente transcrição.
-3. **Transcrever.** `python video/editar.py transcrever <video> --nome <slug> --contexto "<nomes e termos>"`. Use `--modelo medium` em vídeos curtos (até ~3 min) para mais precisão; `small` nos longos.
-4. **Ler `transcricao.txt` inteiro e editar `edicao.json`** como um editor faria:
+1. **Dependências.** `pip install faster-whisper gdown "opencv-python-headless<5" pillow numpy` (o OpenCV 5 não tem o detector de rosto usado no punch-in).
+2. **Receber.** Vídeos chegam por link do Google Drive: `gdown <id-do-arquivo> -O video/entrada/<nome>.mp4`.
+3. **Rede.** Se o download do modelo falhar com 403 em `huggingface.co`, avise o usuário que os domínios `huggingface.co` e `*.hf.co` precisam ser liberados na rede do ambiente (o Drive pede `drive.google.com`, `drive.usercontent.google.com` e `*.googleusercontent.com`); não invente transcrição.
+4. **Transcrever.** `python video/editar.py transcrever <video> --nome <slug> --contexto "<nomes e termos>"`. Use `--modelo medium` em vídeos curtos (até ~3 min) para mais precisão; `small` nos longos.
+5. **Ler `transcricao.txt` inteiro e editar `edicao.json`** como um editor faria:
    - `correcoes`: conserte nomes, marcas e erros de transcrição pelo índice. Pontuação no fim da palavra ajuda a quebrar as legendas no lugar certo.
    - `remover`: corte retakes (quando a pessoa repete a frase, fique com a última versão completa), frases abandonadas, repetições ("isso isso"), muletas sem sentido ("né", "tipo", "então" soltos) e despedidas ou aberturas confusas. O vídeo precisa contar uma ideia clara do início ao fim.
-   - `palavras_chave`: 1 a 2 por frase no máximo - números, resultados, a promessa central, nomes de produto. Se tudo é destaque, nada é.
-   - `elementos`: só quando reforçam a mensagem. `titulo` na abertura com o tema; `destaque` para números ou frases de impacto (curto, até 3 palavras); `nome` com nome e cargo de quem fala, nos primeiros segundos.
+   - `blocos`: as frases de impacto, cerca de uma a cada 8 s. Sempre o gancho (primeiros segundos), a virada e a conclusão; perguntas que estruturam o vídeo também. A última palavra (ou as duas últimas) é a que vai em amarelo: escolha a que carrega o sentido e ajuste com `linhas`/`tipos` ou `destaque` quando a divisão automática não ficar boa. Use `aspas` quando a fala cita outra pessoa.
+   - `palavras_chave`: no modo padrão só dão um leve "pop" na palavra solta; o destaque de verdade é o bloco.
+   - `elementos`: `broll` quando o cliente mandar cenas de apoio (na referência elas cobrem ~8 s no meio do vídeo). Títulos e nome na tela não fazem parte do padrão; use só se pedirem.
+   - `elementos` (modo frases): `titulo` na abertura com o tema; `destaque` para números ou frases de impacto (curto, até 3 palavras); `nome` com nome e cargo de quem fala, nos primeiros segundos.
    - `estilo.maiusculas: true` combina com vídeos curtos e enérgicos; `cor_destaque` pode seguir a marca do cliente.
-5. **Renderizar.** `python video/editar.py renderizar <slug>`.
-6. **Conferir.** Extraia 3 ou 4 quadros com `ffmpeg -ss <t> -i final.mp4 -frames:v 1` e olhe: legenda legível, sem cobrir o rosto, o microfone ou o produto (ajuste `estilo.altura_legenda`), elementos no lugar. Confira a duração antes e depois. Ajuste e renderize de novo se preciso.
-7. **Entregar.** O envio para o usuário aceita até 30 MB. Se `final.mp4` passar disso, gere uma cópia para redes sociais em dois passes (30 fps, cerca de 3,9 Mbps de vídeo e AAC 128k, ajustando o bitrate à duração) e entregue essa cópia e `legendas.srt` com SendUserFile, e diga em poucas linhas o que foi cortado (tempo antes → depois, retakes removidos) e quais destaques entraram.
+6. **Renderizar.** `python video/editar.py renderizar <slug>`.
+7. **Conferir.** Extraia 3 ou 4 quadros com `ffmpeg -ss <t> -i final.mp4 -frames:v 1` e olhe: legenda legível (o editor reforça a sombra sozinho em fundo claro; force com `padrao.sombra`), blocos sem cobrir o rosto (ajuste `padrao.bloco_y`), zoom centrado no rosto, elementos no lugar. Confira a duração antes e depois. Ajuste e renderize de novo se preciso.
+8. **Entregar.** O envio para o usuário aceita até 30 MB. Se `final.mp4` passar disso, gere uma cópia para redes sociais em dois passes (30 fps, cerca de 3,9 Mbps de vídeo e AAC 128k, ajustando o bitrate à duração) e entregue essa cópia e `legendas.srt` com SendUserFile, e diga em poucas linhas o que foi cortado (tempo antes → depois, retakes removidos) e quais destaques entraram.

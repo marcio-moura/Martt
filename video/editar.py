@@ -23,6 +23,19 @@ O edicao.json aceita:
                      altura_legenda (fração da altura, medida de baixo; ex. 0.22)
   corte              pausa_max, margem_antes, margem_depois (segundos), limiar_voz (0-1)
   audio              normalizar (bool), reduzir_ruido (bool)
+
+Modo "padrao" (estilo.modo, o padrão; ver padrao.py) acrescenta:
+  blocos             [{"de": i, "ate": j, "aspas": bool,
+                       "linhas": [[i, j], ...] e "tipos": ["grande"|"pequeno"|"destaque", ...]
+                       ou "destaque": [i, j]}]  frases de impacto; sem "linhas" o
+                     bloco é montado sozinho (última palavra em amarelo letra por letra)
+  padrao             ajustes visuais: cor_destaque, palavra_y, bloco_y, palavra_em...
+  zoom               ativo, niveis [1.22, 1.0], plano_min, plano_max (segundos)
+  sfx                ticks, impacto, volume_tick_db, volume_impacto_db,
+                     impactos_palavras [índices] (padrão: logo depois do primeiro bloco)
+  cor                ativo, contraste, saturacao, calor
+  elementos tipo "broll": {"arquivo": caminho, "palavra": i, "ate": j, "inicio_clip": s}
+                     cobre a imagem com outra cena entre as palavras i e j (voz continua)
 """
 
 import argparse
@@ -34,6 +47,8 @@ import sys
 import unicodedata
 from pathlib import Path
 
+import padrao
+
 RAIZ = Path(__file__).resolve().parent
 PROJETOS = RAIZ / "projetos"
 
@@ -42,6 +57,7 @@ PROJETOS = RAIZ / "projetos"
 HESITACOES = {"ah", "ãh", "ahn", "eh", "éh", "hã", "hum", "hm", "hmm", "mm", "uh", "uhm"}
 
 ESTILO_PADRAO = {
+    "modo": "padrao",
     "fonte": "Inter",
     "cor_texto": "#FFFFFF",
     "cor_destaque": "#FFD400",
@@ -154,10 +170,14 @@ def transcrever(args):
             "remover": [],
             "palavras_chave": sugerir_chaves(palavras),
             "palavras_chave_indices": [],
+            "blocos": [],
             "elementos": [],
             "estilo": ESTILO_PADRAO,
             "corte": CORTE_PADRAO,
             "audio": AUDIO_PADRAO,
+            "zoom": padrao.ZOOM_PADRAO,
+            "sfx": padrao.SFX_PADRAO,
+            "cor": padrao.COR_PADRAO,
         }, ensure_ascii=False, indent=2))
     print(f"Pronto: {pasta}\n{len(palavras)} palavras, {tempo(info['duracao'])} de vídeo, "
           f"{info['largura']}x{info['altura']} a {info['fps']:.2f} fps")
@@ -237,16 +257,64 @@ def renderizar(args):
 
     frases = agrupar_frases(mantidas, estilo)
     por_indice = {p["i"]: p for p in palavras}
+    elementos = ed.get("elementos", [])
     ass = pasta / "legendas.ass"
-    ass.write_text(gerar_ass(frases, ed.get("elementos", []), por_indice, remap,
-                             info, estilo, dur_final))
+    extra_v, brolls, sfx = [], [], None
+    if estilo["modo"] == "padrao":
+        cfg = {**padrao.PADRAO, **ed.get("padrao", {})}
+        if cfg["sombra"] == "auto":
+            amostras = [padrao.novo_para_original(dur_final * f, trechos) for f in (.1, .3, .5, .7, .9)]
+            luz = padrao.claridade(video, amostras, info, cfg["palavra_y"])
+            cfg["sombra"] = "forte" if luz > 115 else "suave"
+            print(f"Fundo da legenda: luminância {luz:.0f} -> sombra {cfg['sombra']}")
+        zcfg = {**padrao.ZOOM_PADRAO, **ed.get("zoom", {})}
+        scfg = {**padrao.SFX_PADRAO, **ed.get("sfx", {})}
+        ccfg = {**padrao.COR_PADRAO, **ed.get("cor", {})}
+        linhas, tics, faixas = padrao.eventos(mantidas, ed.get("blocos", []), info, cfg, dur_final)
+        estilos, linhas_el = estilos_e_elementos(
+            [e for e in elementos if e.get("tipo") != "broll"], por_indice, remap, info,
+            {**estilo, "fonte": "Poppins", "cor_destaque": cfg["cor_destaque"]}, dur_final)
+        ass.write_text(padrao.ass_completo(info, linhas + linhas_el, estilos))
+        extra_v += padrao.filtro_cor(ccfg)
+        planos = []
+        if zcfg["ativo"]:
+            # Gancho em plano fechado e corte seco para o aberto logo depois dele.
+            forcados = [faixas[0][1]] if faixas and faixas[0][0] < 3 else []
+            planos = padrao.planejar_planos(trechos, mantidas, dur_final, zcfg, forcados)
+            centros = [padrao.rosto(video, [padrao.novo_para_original(a + (b - a) * f, trechos)
+                                            for f in (0.2, 0.5, 0.8)], info)
+                       for a, b, _ in planos]
+            extra_v.append(padrao.filtro_zoom(planos, centros, info))
+        impactos = [remap(por_indice[int(i)]["ini"]) for i in scfg.get("impactos_palavras", [])]
+        if not scfg.get("impactos_palavras") and faixas and planos:
+            depois = [a for a, _, _ in planos if a >= faixas[0][1] - 0.3]
+            if depois and faixas[0][0] < 8:
+                impactos = [depois[0]]
+        if info["tem_audio"] and (tics or impactos):
+            sfx = pasta / "sfx.wav"
+            padrao.trilha_sfx(dur_final, tics, impactos, scfg, sfx)
+        for el in elementos:
+            if el.get("tipo") == "broll":
+                a = remap(por_indice[int(el["palavra"])]["ini"])
+                b = (remap(por_indice[int(el["ate"])]["fim"]) if "ate" in el
+                     else a + float(el.get("duracao", 3)))
+                brolls.append((Path(el["arquivo"]), float(el.get("inicio_clip", 0)), a, b))
+    else:
+        estilos, linhas_el = estilos_e_elementos(elementos, por_indice, remap, info, estilo,
+                                                 dur_final)
+        ass.write_text(padrao.ass_completo(info, linhas_frases(frases, estilo, dur_final)
+                                           + linhas_el, estilos))
     (pasta / "legendas.srt").write_text(gerar_srt(frases, estilo, dur_final))
 
     saida = pasta / ("final.mp4" if not args.saida else args.saida)
     script = pasta / "filtro.txt"
-    script.write_text(filtro(trechos, ass, info, audio_cfg))
-    cmd = ["ffmpeg", "-y", "-i", str(video), "-filter_complex_script", str(script),
-           "-map", "[vout]"]
+    script.write_text(filtro(trechos, ass, info, audio_cfg, extra_v, brolls, sfx is not None))
+    cmd = ["ffmpeg", "-y", "-i", str(video)]
+    if sfx:
+        cmd += ["-i", str(sfx)]
+    for arq, ini_clip, _, _ in brolls:
+        cmd += ["-ss", f"{ini_clip:.3f}", "-i", str(arq)]
+    cmd += ["-filter_complex_script", str(script), "-map", "[vout]"]
     if info["tem_audio"]:
         cmd += ["-map", "[aout]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
     cmd += ["-c:v", "libx264", "-preset", args.preset, "-crf", str(args.crf),
@@ -330,12 +398,23 @@ def montar_trechos(mantidas, corte, info):
     return alinhados
 
 
-def filtro(trechos, ass, info, audio_cfg):
+def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), com_sfx=False):
     # Um fluxo só, com select: cortar em N ramos de trim obriga o ffmpeg a guardar
     # quadros de todos os ramos na memória e estoura em vídeos longos ou 4K.
     caminho_ass = str(ass).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
     expr = "+".join(f"between(t\\,{a:.6f}\\,{b - 0.0005:.6f})" for a, b in trechos)
-    partes = [f"[0:v]select='{expr}',setpts=N/FRAME_RATE/TB,ass='{caminho_ass}'[vout]"]
+    cadeia_v = [f"select='{expr}'", "setpts=N/FRAME_RATE/TB", *extra_v]
+    partes = [f"[0:v]{','.join(cadeia_v)}[v0]"]
+    atual = "v0"
+    w, h = info["largura"], info["altura"]
+    for n, (_, _, a, b) in enumerate(brolls):
+        entrada = n + (2 if com_sfx else 1)
+        partes.append(f"[{entrada}:v]scale={w}:{h}:force_original_aspect_ratio=increase,"
+                      f"crop={w}:{h},fps={info['fps']:.5f},setpts=PTS-STARTPTS+{a:.3f}/TB[b{n}]")
+        partes.append(f"[{atual}][b{n}]overlay=enable='between(t,{a:.3f},{b:.3f})'"
+                      f":eof_action=pass[v{n + 1}]")
+        atual = f"v{n + 1}"
+    partes.append(f"[{atual}]ass='{caminho_ass}':fontsdir='{padrao.FONTES}'[vout]")
     if info["tem_audio"]:
         cadeia = ["asetnsamples=n=64:p=0", f"aselect='{expr}'", "asetpts=N/SR/TB"]
         if audio_cfg["reduzir_ruido"]:
@@ -343,7 +422,13 @@ def filtro(trechos, ass, info, audio_cfg):
         if audio_cfg["normalizar"]:
             cadeia.append("loudnorm=I=-14:TP=-1.5:LRA=11")
         cadeia.append("aresample=48000")
-        partes.append(f"[0:a]{','.join(cadeia)}[aout]")
+        if com_sfx:
+            partes.append(f"[0:a]{','.join(cadeia)}[voz]")
+            partes.append("[1:a]aresample=48000,aformat=channel_layouts=mono[fx]")
+            partes.append("[voz][fx]amix=inputs=2:duration=first:normalize=0,"
+                          "alimiter=limit=0.95:level=disabled[aout]")
+        else:
+            partes.append(f"[0:a]{','.join(cadeia)}[aout]")
     return ";\n".join(partes)
 
 
@@ -383,37 +468,55 @@ def esc(txt):
     return txt.replace("\\", "").replace("{", "(").replace("}", ")")
 
 
-def gerar_ass(frases, elementos, por_indice, remap, info, estilo, dur_final):
+def medidas(info, estilo):
     w, h = info["largura"], info["altura"]
-    base = min(w, h)
     vertical = h > w
     pos = estilo["posicao"]
     if pos == "auto":
         pos = "meio" if vertical else "baixo"
-    fs = round(base * (0.068 if vertical else 0.058))
+    fs = round(min(w, h) * (0.068 if vertical else 0.058))
     margem_v = round(h * float(estilo.get("altura_legenda") or (0.30 if pos == "meio" else 0.08)))
+    return fs, margem_v, max(2, round(fs * 0.075))
+
+
+def estilos_e_elementos(elementos, por_indice, remap, info, estilo, dur_final):
+    w, h = info["largura"], info["altura"]
+    fs, margem_v, contorno = medidas(info, estilo)
     margem_nome = round(margem_v + fs * 2.0)
-    contorno = max(2, round(fs * 0.075))
     branco, destaque = cor_ass(estilo["cor_texto"]), cor_ass(estilo["cor_destaque"])
     fonte = estilo["fonte"]
-    cab = f"""[Script Info]
-ScriptType: v4.00+
-PlayResX: {w}
-PlayResY: {h}
-WrapStyle: 0
-ScaledBorderAndShadow: yes
-
-[V4+ Styles]
-Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Legenda,{fonte},{fs},{branco},{branco},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{contorno},{max(1, contorno // 2)},2,{round(w * 0.08)},{round(w * 0.08)},{margem_v},1
+    estilos = f"""Style: Legenda,{fonte},{fs},{branco},{branco},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{contorno},{max(1, contorno // 2)},2,{round(w * 0.08)},{round(w * 0.08)},{margem_v},1
 Style: Titulo,{fonte},{round(fs * 1.15)},{branco},{branco},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{contorno},{max(1, contorno // 2)},8,{round(w * 0.08)},{round(w * 0.08)},{round(h * 0.09)},1
 Style: Destaque,{fonte},{round(fs * 2.1)},{destaque},{destaque},&H00000000,&H64000000,-1,0,0,0,100,100,0,0,1,{round(contorno * 1.4)},{contorno},5,{round(w * 0.06)},{round(w * 0.06)},0,1
 Style: Nome,{fonte},{round(fs * 0.8)},{branco},{branco},&H00000000,&H96000000,-1,0,0,0,100,100,0,0,3,{round(fs * 0.25)},0,1,{round(w * 0.06)},{round(w * 0.06)},{margem_nome},1
 Style: Cargo,{fonte},{round(fs * 0.55)},{destaque},{destaque},&H00000000,&H96000000,0,0,0,0,100,100,0,0,3,{round(fs * 0.2)},0,1,{round(w * 0.06)},{round(w * 0.06)},{round(margem_nome + fs * 0.85)},1
-
-[Events]
-Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 """
+    linhas = []
+    for el in elementos:
+        p = por_indice.get(int(el.get("palavra", 0)))
+        ini = remap(p["ini"]) if p else float(el.get("inicio", 0))
+        fim = min(dur_final, ini + float(el.get("duracao", 2.5)))
+        txt = esc(el.get("texto", ""))
+        sub = esc(el.get("subtexto", ""))
+        tipo = el.get("tipo", "titulo")
+        if tipo == "destaque":
+            linhas.append(f"Dialogue: 5,{ts_ass(ini)},{ts_ass(fim)},Destaque,,0,0,0,,"
+                          f"{{\\fad(220,220)\\fscx80\\fscy80\\t(0,260,\\fscx100\\fscy100)}}{txt}")
+        elif tipo == "nome":
+            linhas.append(f"Dialogue: 4,{ts_ass(ini)},{ts_ass(fim)},Nome,,0,0,0,,"
+                          f"{{\\fad(300,300)}}{txt}")
+            if sub:
+                linhas.append(f"Dialogue: 4,{ts_ass(ini + 0.15)},{ts_ass(fim)},Cargo,,0,0,0,,"
+                              f"{{\\fad(300,300)}}{sub}")
+        else:
+            corpo = txt + (f"\\N{{\\fs{round(fs * 0.7)}\\1c{destaque}}}{sub}" if sub else "")
+            linhas.append(f"Dialogue: 4,{ts_ass(ini)},{ts_ass(fim)},Titulo,,0,0,0,,"
+                          f"{{\\fad(350,300)}}{corpo}")
+    return estilos, linhas
+
+
+def linhas_frases(frases, estilo, dur_final):
+    destaque = cor_ass(estilo["cor_destaque"])
     linhas = []
     for n, fr in enumerate(frases):
         ini = fr[0]["ini2"]
@@ -432,28 +535,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 partes.append(txt)
         linhas.append(f"Dialogue: 1,{ts_ass(ini)},{ts_ass(fim)},Legenda,,0,0,0,,"
                       f"{{\\fad(90,60)}}{' '.join(partes)}")
-
-    for el in elementos:
-        p = por_indice.get(int(el.get("palavra", 0)))
-        ini = remap(p["ini"]) if p else float(el.get("inicio", 0))
-        fim = min(dur_final, ini + float(el.get("duracao", 2.5)))
-        txt = esc(el.get("texto", ""))
-        sub = esc(el.get("subtexto", ""))
-        tipo = el.get("tipo", "titulo")
-        if tipo == "destaque":
-            linhas.append(f"Dialogue: 3,{ts_ass(ini)},{ts_ass(fim)},Destaque,,0,0,0,,"
-                          f"{{\\fad(220,220)\\fscx80\\fscy80\\t(0,260,\\fscx100\\fscy100)}}{txt}")
-        elif tipo == "nome":
-            linhas.append(f"Dialogue: 2,{ts_ass(ini)},{ts_ass(fim)},Nome,,0,0,0,,"
-                          f"{{\\fad(300,300)}}{txt}")
-            if sub:
-                linhas.append(f"Dialogue: 2,{ts_ass(ini + 0.15)},{ts_ass(fim)},Cargo,,0,0,0,,"
-                              f"{{\\fad(300,300)}}{sub}")
-        else:
-            corpo = txt + (f"\\N{{\\fs{round(fs * 0.7)}\\1c{destaque}}}{sub}" if sub else "")
-            linhas.append(f"Dialogue: 2,{ts_ass(ini)},{ts_ass(fim)},Titulo,,0,0,0,,"
-                          f"{{\\fad(350,300)}}{corpo}")
-    return cab + "\n".join(linhas) + "\n"
+    return linhas
 
 
 def gerar_srt(frases, estilo, dur_final):
