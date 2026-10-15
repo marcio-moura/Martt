@@ -331,7 +331,7 @@ def renderizar(args):
         cmd += ["-ss", f"{ini_clip:.3f}", "-i", str(arq)]
     cmd += ["-filter_complex_script", str(script), "-map", "[vout]"]
     if info["tem_audio"]:
-        cmd += ["-map", "[aout]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+        cmd += ["-map", "[aout]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2"]
     cmd += ["-c:v", "libx264", "-preset", args.preset, "-crf", str(args.crf),
             "-pix_fmt", "yuv420p", "-r", f"{info['fps']:.5f}",
             "-movflags", "+faststart", str(saida)]
