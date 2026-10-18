@@ -329,6 +329,7 @@ def renderizar(args):
         fx = efeitos.montar([e for e in elementos if e.get("tipo") in especiais[1:]],
                             por_indice, remap, info, cfg, dur_final, rosto_em)
         cfg["y_fixo"], cfg["ocultar"] = fx["y_fixo"], fx["ocultar"]
+        cfg["queixo_fixo"] = fx["queixo_fixo"]
         divisoes = fx["divisoes"]
         pos_zoom, cenas = fx["pos_zoom"], fx["cenas"]
         linhas, tics, faixas = padrao.eventos(mantidas, ed.get("blocos", []), info, cfg, dur_final)

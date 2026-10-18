@@ -169,6 +169,9 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
     linhas, tics, faixas = [], [], []
 
     def queixo(t):
+        for a0, b0, q in cfg.get("queixo_fixo", []):
+            if a0 <= t < b0:
+                return q
         if not cfg.get("ancorar_queixo") or not cfg.get("queixos"):
             return None
         for a, b, y in cfg["queixos"]:

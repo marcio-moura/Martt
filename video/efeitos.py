@@ -60,7 +60,7 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
     k, base = calibrar()
     amarelo = cfg["cor_destaque"]
     saida = {"linhas": [], "tics": [], "impactos": [], "whooshes": [], "divisoes": [],
-             "y_fixo": [], "ocultar": [], "pos_zoom": [], "cenas": []}
+             "y_fixo": [], "ocultar": [], "pos_zoom": [], "cenas": [], "queixo_fixo": []}
 
     def t_ini(i):
         return remap(por_indice[int(i)]["ini"])
@@ -254,7 +254,7 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
             saida["cenas"].append((a, b, el["arquivo"], float(el.get("inicio_clip", 0)), desce))
             queixo = fy + 0.55 * fh + desce
             saida["y_fixo"].append((a, b, min(queixo / h + cfg.get("queixo_palavra", 0.05), 0.80)))
-            saida["whooshes"].append(a)
+            saida["queixo_fixo"].append((a, b, queixo / h))
     return saida
 
 
@@ -289,7 +289,10 @@ def filtro_clipe_topo(eh_imagem, a, b, info):
                   f"crop={w * 2}:{th * 2}",
                   f"zoompan=z='1+0.12*on/{quadros}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
                   f":d=1:s={w}x{th}:fps={fps:.5f}"]
+    # Entrada e saída suaves (fade da própria cena), sem clarão nem transição.
     passos += ["format=rgba",
                f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='255*min(1,(H-Y)/(H*0.32))'",
+               "fade=t=in:st=0:d=0.30:alpha=1",
+               f"fade=t=out:st={max(0.0, b - a - 0.30):.3f}:d=0.30:alpha=1",
                f"setpts=PTS-STARTPTS+{a:.3f}/TB"]
     return ",".join(passos)
