@@ -47,6 +47,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
+import efeitos
 import padrao
 
 RAIZ = Path(__file__).resolve().parent
@@ -230,6 +231,14 @@ def renderizar(args):
     palavras = [dict(p) for p in trans["palavras"]]
     for i, txt in ed.get("correcoes", {}).items():
         palavras[int(i)]["t"] = txt
+    # O transcritor parte palavras com hífen ("recém" + "-nascido"): junta numa só,
+    # mantendo o tempo inteiro para o áudio não ser cortado no meio.
+    for n in range(len(palavras) - 1, 0, -1):
+        p = palavras[n]
+        if p["t"].startswith("-") and len(p["t"]) > 1 and palavras[n - 1]["t"]:
+            palavras[n - 1]["t"] += p["t"]
+            palavras[n - 1]["fim"] = max(palavras[n - 1]["fim"], p["fim"])
+            p["t"] = ""
     removidos = set()
     for a, b in ed.get("remover", []):
         removidos.update(range(int(a), int(b) + 1))
@@ -242,7 +251,9 @@ def renderizar(args):
     if info["tem_audio"]:
         refinar_pela_voz(mantidas, energia(video), corte)
     trechos = montar_trechos(mantidas, corte, info)
-    dur_final = sum(b - a for a, b in trechos)
+    # Último quadro congelado por um instante: a animação final termina antes do corte.
+    congelar = float(corte.get("congelar_fim", 0.8))
+    dur_final = sum(b - a for a, b in trechos) + congelar
 
     def remap(t):
         acum = 0.0
@@ -266,7 +277,7 @@ def renderizar(args):
     por_indice = {p["i"]: p for p in palavras}
     elementos = ed.get("elementos", [])
     ass = pasta / "legendas.ass"
-    extra_v, brolls, sfx = [], [], None
+    extra_v, brolls, sfx, zoom, divisoes = [], [], None, None, []
     if fator != 1.0:
         extra_v.append(f"scale={info['largura']}:{info['altura']}:flags=lanczos")
     if estilo["modo"] == "padrao":
@@ -292,16 +303,29 @@ def renderizar(args):
                                        for f in (0.2, 0.5, 0.8)], info_orig)
                   for a, b, _ in planos]
         rostos = [tuple(v * fator for v in r) for r in rostos]
-        if zcfg["ativo"]:
-            extra_v.append(padrao.filtro_zoom(planos, rostos, info))
+        zoom = padrao.filtro_zoom(planos, rostos, info) if zcfg["ativo"] else None
         cfg["queixos"] = padrao.queixos(planos, rostos, info)
+
+        def rosto_em(t):
+            for (a, b, _), r in zip(planos, rostos):
+                if a <= t < b:
+                    return r
+            return rostos[-1]
+        especiais = ("broll", "lista", "alerta", "cartao")
+        fx = efeitos.montar([e for e in elementos if e.get("tipo") in especiais[1:]],
+                            por_indice, remap, info, cfg, dur_final, rosto_em)
+        cfg["y_fixo"], cfg["ocultar"] = fx["y_fixo"], fx["ocultar"]
+        divisoes = fx["divisoes"]
         linhas, tics, faixas = padrao.eventos(mantidas, ed.get("blocos", []), info, cfg, dur_final)
+        linhas += fx["linhas"]
+        tics += fx["tics"]
         estilos, linhas_el = estilos_e_elementos(
-            [e for e in elementos if e.get("tipo") != "broll"], por_indice, remap, info,
+            [e for e in elementos if e.get("tipo") not in especiais], por_indice, remap, info,
             {**estilo, "fonte": "Poppins", "cor_destaque": cfg["cor_destaque"]}, dur_final)
         ass.write_text(padrao.ass_completo(info, linhas + linhas_el, estilos))
         impactos = [remap(por_indice[int(i)]["ini"]) for i in scfg.get("impactos_palavras", [])]
-        if not scfg.get("impactos_palavras") and faixas and len(planos) > 1:
+        impactos += fx["impactos"]
+        if not scfg.get("impactos_palavras") and faixas and len(planos) > 1 and zoom:
             depois = [a for a, _, _ in planos if a >= faixas[0][1] - 0.3]
             if depois and faixas[0][0] < 8:
                 impactos = [depois[0]]
@@ -323,7 +347,8 @@ def renderizar(args):
 
     saida = pasta / ("final.mp4" if not args.saida else args.saida)
     script = pasta / "filtro.txt"
-    script.write_text(filtro(trechos, ass, info, audio_cfg, extra_v, brolls, sfx is not None))
+    script.write_text(filtro(trechos, ass, info, audio_cfg, extra_v, brolls, sfx is not None,
+                             zoom, divisoes, congelar))
     cmd = ["ffmpeg", "-y", "-i", str(video)]
     if sfx:
         cmd += ["-i", str(sfx)]
@@ -401,6 +426,9 @@ def montar_trechos(mantidas, corte, info):
             trechos[-1][1] = max(trechos[-1][1], b)
         else:
             trechos.append([a, b])
+    # Respiro no fim: a última animação (destaque letra por letra) precisa terminar na tela.
+    if trechos:
+        trechos[-1][1] = min(info["duracao"], trechos[-1][1] + corte.get("cauda", 0.3))
     # Alinha ao quadro para o áudio não escorregar em relação ao vídeo a cada corte.
     alinhados = []
     for a, b in trechos:
@@ -413,14 +441,27 @@ def montar_trechos(mantidas, corte, info):
     return alinhados
 
 
-def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), com_sfx=False):
+def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), com_sfx=False, zoom=None,
+           divisoes=(), congelar=0.0):
     # Um fluxo só, com select: cortar em N ramos de trim obriga o ffmpeg a guardar
     # quadros de todos os ramos na memória e estoura em vídeos longos ou 4K.
     caminho_ass = str(ass).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
     expr = "+".join(f"between(t\\,{a:.6f}\\,{b - 0.0005:.6f})" for a, b in trechos)
     cadeia_v = [f"select='{expr}'", "setpts=N/FRAME_RATE/TB", *extra_v]
-    partes = [f"[0:v]{','.join(cadeia_v)}[v0]"]
+    partes = [f"[0:v]{','.join(cadeia_v)}[pre]"]
+    # Tela dividida: ramos recortados do quadro sem zoom, sobrepostos só nos trechos dela.
+    ramos = efeitos.filtro_divisoes(divisoes, info)
+    saidas = "".join(f"[d{n}]" for n in range(len(ramos)))
+    if ramos:
+        partes.append(f"[pre]split={len(ramos) + 1}[base]{saidas}")
+    else:
+        partes.append("[pre]null[base]")
+    partes.append(f"[base]{zoom or 'null'}[v0]")
     atual = "v0"
+    for n, (ramo, (a, b, _)) in enumerate(zip(ramos, divisoes)):
+        partes.append(f"[d{n}]{ramo}[dv{n}]")
+        partes.append(f"[{atual}][dv{n}]overlay=enable='between(t,{a:.3f},{b:.3f})'[vd{n}]")
+        atual = f"vd{n}"
     w, h = info["largura"], info["altura"]
     for n, (_, _, a, b) in enumerate(brolls):
         entrada = n + (2 if com_sfx else 1)
@@ -429,6 +470,9 @@ def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), com_sfx=False):
         partes.append(f"[{atual}][b{n}]overlay=enable='between(t,{a:.3f},{b:.3f})'"
                       f":eof_action=pass[v{n + 1}]")
         atual = f"v{n + 1}"
+    if congelar:
+        partes.append(f"[{atual}]tpad=stop_mode=clone:stop_duration={congelar:.2f}[vt]")
+        atual = "vt"
     partes.append(f"[{atual}]ass='{caminho_ass}':fontsdir='{padrao.FONTES}'[vout]")
     if info["tem_audio"]:
         cadeia = ["asetnsamples=n=64:p=0", f"aselect='{expr}'", "asetpts=N/SR/TB"]
@@ -437,6 +481,8 @@ def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), com_sfx=False):
         if audio_cfg["normalizar"]:
             cadeia.append("loudnorm=I=-14:TP=-1.5:LRA=11")
         cadeia.append("aresample=48000")
+        if congelar:
+            cadeia.append(f"apad=pad_dur={congelar:.2f}")
         if com_sfx:
             partes.append(f"[0:a]{','.join(cadeia)}[voz]")
             partes.append("[1:a]aresample=48000,aformat=channel_layouts=mono[fx]")

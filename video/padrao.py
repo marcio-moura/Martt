@@ -177,6 +177,9 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         return cfg["queixos"][-1][2]
 
     def y_palavra(t):
+        for a0, b0, yf in cfg.get("y_fixo", []):
+            if a0 <= t < b0:
+                return yf * h
         q = queixo(t)
         y = cfg["palavra_y"] if q is None else q + cfg["queixo_palavra"]
         return min(max(y, 0.35), 0.80) * h
@@ -211,7 +214,7 @@ def eventos(mantidas, specs_blocos, info, cfg, dur_final):
         ini = p["ini2"] - 0.02
         prox = soltas[n + 1]["ini2"] - 0.02 if n + 1 < len(soltas) else dur_final
         fim = prox if prox - p["fim2"] < 0.7 else p["fim2"] + 0.25
-        for b0, b1 in faixas:
+        for b0, b1 in list(faixas) + list(cfg.get("ocultar", [])):
             if ini < b0 < fim:
                 fim = b0
             if b0 <= ini < b1:
