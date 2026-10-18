@@ -417,6 +417,23 @@ def planejar_planos(trechos, mantidas, dur_final, zcfg, forcados=()):
     return [(a, b, niveis[n % len(niveis)]) for n, (a, b) in enumerate(planos)]
 
 
+def sobrepor_planos(planos, forcados):
+    """Insere trechos com zoom fixo (capítulos) por cima do plano de cortes."""
+    for fa, fb, fz in sorted(forcados):
+        novos = []
+        for a, b, z in planos:
+            if b <= fa or a >= fb:
+                novos.append((a, b, z))
+                continue
+            if a < fa:
+                novos.append((a, fa, z))
+            if b > fb:
+                novos.append((fb, b, z))
+        novos.append((fa, fb, fz))
+        planos = sorted(novos)
+    return [p for p in planos if p[1] - p[0] > 0.04]
+
+
 def claridade(video, instantes, info, y_frac):
     """Luminância média (0-255) da faixa onde ficam as legendas."""
     try:
@@ -489,9 +506,32 @@ def _impacto():
     return np.concatenate([whoosh, grave]), pre
 
 
-def trilha_sfx(dur, tics, impactos, scfg, caminho):
+def _whoosh():
+    """Ruído com filtro varrendo do grave ao agudo e de volta, em ~0,45 s."""
+    n = int(0.45 * SR)
+    ruido = np.random.default_rng(11).standard_normal(n)
+    janelas, passo = [], 1024
+    saida = np.zeros(n)
+    for i in range(0, n, passo):
+        pedaco = ruido[i:i + passo]
+        f = np.fft.rfftfreq(len(pedaco), 1 / SR)
+        fase = i / n
+        centro = 300 + 3500 * np.sin(np.pi * fase)
+        filtro = np.exp(-((f - centro) / (centro * 0.6)) ** 2)
+        saida[i:i + passo] = np.fft.irfft(np.fft.rfft(pedaco) * filtro, len(pedaco))
+    env = np.sin(np.pi * np.linspace(0, 1, n)) ** 1.5
+    som = saida * env
+    return som / np.abs(som).max()
+
+
+def trilha_sfx(dur, tics, impactos, scfg, caminho, whooshes=()):
     import wave
     faixa = np.zeros(int((dur + 1.5) * SR))
+    if whooshes:
+        wh = _whoosh() * 10 ** (scfg.get("volume_whoosh_db", -16) / 20)
+        for t in whooshes:
+            i = max(0, int((t - 0.2) * SR))
+            faixa[i:i + len(wh)] += wh[: len(faixa) - i]
     if scfg["ticks"]:
         tic = _tic() * 10 ** (scfg["volume_tick_db"] / 20)
         for t in tics:

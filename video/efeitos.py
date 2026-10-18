@@ -13,9 +13,30 @@ Elementos aceitos no edicao.json (todos ancorados em índices de palavras):
 
   {"tipo": "cartao", "de": i, "ate": j, "texto": "Dra. Raquel", "subtexto": "Médica pediatra"}
       Cartão de apresentação que desliza da esquerda; esconde as palavras soltas no trecho.
+
+Estilo dinâmico (segunda referência do cliente):
+
+  {"tipo": "capitulo", "numero": "1", "texto": "o objetivo", "de": i, "ate": j}
+      Zoom bem fechado no rosto, imagem em preto e branco com granulação, número enorme
+      na cor de destaque com "º" e o título embaixo. Impacto grave na entrada.
+
+  {"tipo": "gigante", "palavra": i, "texto": "NÃO É UM", "duracao": 0.8, "cor": "#FFFFFF"}
+      Palavra que ocupa a largura da tela, entrando com escala e desfoque.
+
+  {"tipo": "flash", "palavra": i}
+      Clarão branco (explosão de luz) com whoosh: transição entre partes do vídeo.
+
+  {"tipo": "cena", "arquivo": "video/entrada/drone.mp4", "de": i, "ate": j, "inicio_clip": 0}
+      A cena (vídeo ou imagem, que ganha zoom lento) ocupa a metade de cima com degradê,
+      e quem fala desce na tela. Para ilustrar o que está sendo dito.
 """
 
-from padrao import FONTE_GRANDE, FONTE_PALAVRA, calibrar, cor_ass, esc, largura, ts
+from padrao import FONTES, FONTE_GRANDE, FONTE_PALAVRA, calibrar, cor_ass, esc, largura, ts
+
+FONTE_GIGANTE = ("Poppins ExtraBold", FONTES / "Poppins-ExtraBold.ttf", 0)
+ZOOM_CAPITULO = 1.6
+DESCIDA_CENA = 0.30           # quanto quem fala desce na tela durante uma cena no topo
+TOPO_CENA = 0.47              # altura da cena no topo (com o degradê)
 
 PAINEL = "0x0E0E10"
 TOPO_DIVIDIDO = 0.55          # fração da altura ocupada por quem fala na tela dividida
@@ -38,13 +59,19 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
     w, h = info["largura"], info["altura"]
     k, base = calibrar()
     amarelo = cfg["cor_destaque"]
-    saida = {"linhas": [], "tics": [], "impactos": [], "divisoes": [], "y_fixo": [], "ocultar": []}
+    saida = {"linhas": [], "tics": [], "impactos": [], "whooshes": [], "divisoes": [],
+             "y_fixo": [], "ocultar": [], "pos_zoom": [], "cenas": []}
 
     def t_ini(i):
         return remap(por_indice[int(i)]["ini"])
 
     def t_fim(i):
-        return min(dur_final, remap(por_indice[int(i)]["fim"]) + 0.35)
+        fim = min(dur_final, remap(por_indice[int(i)]["fim"]) + 0.35)
+        # Não invade a fala seguinte (evita dois capítulos ou cartões ao mesmo tempo).
+        prox = por_indice.get(int(i) + 1)
+        if prox and prox.get("t"):
+            fim = min(fim, max(remap(prox["ini"]) - 0.03, remap(por_indice[int(i)]["fim"])))
+        return fim
 
     for el in elementos:
         tipo = el.get("tipo")
@@ -154,6 +181,80 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
                 f"\\move({x + pad * 1.2 - 60:.0f},{ys - base * fs_s:.0f},{x + pad * 1.2:.0f},"
                 f"{ys - base * fs_s:.0f},0,300)\\fad(250,250)}}{sub}")
             saida["tics"].append(a + 0.1)
+        elif tipo == "capitulo":
+            a, b = t_ini(el["de"]) - 0.05, t_fim(el["ate"])
+            saida["ocultar"].append((a, b))
+            saida["pos_zoom"].append(f"hue=s=0:enable='between(t,{a:.3f},{b:.3f})'")
+            saida["pos_zoom"].append(f"noise=alls=14:allf=t:enable='between(t,{a:.3f},{b:.3f})'")
+            saida["impactos"].append(a + 0.05)
+            fx, fy, fh = rosto_em((a + b) / 2)
+            queixo = fy + 0.55 * fh * ZOOM_CAPITULO
+            em_n = 0.30 * w
+            em_o = em_n * 0.42
+            num = esc(str(el.get("numero", "1")))
+            larg_n = largura(num, FONTE_GIGANTE, em_n) + largura("º", FONTE_GIGANTE, em_o)
+            xn = (w - larg_n) / 2
+            yb_n = min(queixo + 0.03 * h + em_n * 0.72, 0.70 * h)
+            fs_n, fs_o = em_n / k, em_o / k
+            cor = cor_ass(el.get("cor", amarelo))
+            saida["linhas"].append(
+                f"Dialogue: 8,{ts(a)},{ts(b)},Base,,0,0,0,,{{\\an7\\pos({xn:.0f},{yb_n - base * fs_n:.0f})"
+                f"\\fn{FONTE_GIGANTE[0]}\\b0\\fs{fs_n:.1f}\\1c{cor}\\fscx160\\fscy160\\blur25"
+                f"\\t(0,220,0.5,\\fscx100\\fscy100\\blur0)\\fad(60,150)}}{num}")
+            # "º" como expoente: alinhado ao topo do número.
+            xo = xn + largura(num, FONTE_GIGANTE, em_n) + em_n * 0.03
+            topo_num = yb_n - em_n * 0.70
+            saida["linhas"].append(
+                f"Dialogue: 8,{ts(a + 0.12)},{ts(b)},Base,,0,0,0,,{{\\an7"
+                f"\\pos({xo:.0f},{topo_num - (base - 0.70) * fs_o * k / k * 0 - base * fs_o + em_o * 0.70:.0f})"
+                f"\\fn{FONTE_GIGANTE[0]}\\b0\\fs{fs_o:.1f}\\1c{cor}\\blur15\\t(0,160,\\blur0)"
+                f"\\fad(100,150)}}º")
+            titulo = esc(el.get("texto", ""))
+            em_t = min(0.10 * w, 0.86 * w / max(largura(titulo, FONTE_GRANDE, 1), 1e-6))
+            fs_t = em_t / k
+            xt = (w - largura(titulo, FONTE_GRANDE, em_t)) / 2
+            yt = yb_n + em_t * 1.05
+            saida["linhas"].append(
+                f"Dialogue: 8,{ts(a + 0.25)},{ts(b)},Base,,0,0,0,,{{\\an7\\pos({xt:.0f},{yt - base * fs_t:.0f})"
+                f"\\fn{FONTE_GRANDE[0]}\\b1\\fs{fs_t:.1f}\\1c&HFFFFFF&\\blur12\\t(0,180,\\blur0)"
+                f"\\fad(150,150)}}{titulo}")
+        elif tipo == "gigante":
+            a = t_ini(el["palavra"]) - 0.03
+            b = min(dur_final, a + float(el.get("duracao", 0.8)))
+            saida["ocultar"].append((a, b))
+            texto = esc(el.get("texto", "").upper())
+            em = min(0.30 * w, 0.92 * w / max(largura(texto, FONTE_GIGANTE, 1), 1e-6))
+            fs = em / k
+            fx, fy, fh = rosto_em(a)
+            yb = min(fy + 0.55 * fh + 0.05 * h + em * 0.72, 0.72 * h)
+            x = (w - largura(texto, FONTE_GIGANTE, em)) / 2
+            cor = cor_ass(el.get("cor", "#FFFFFF"))
+            saida["linhas"].append(
+                f"Dialogue: 8,{ts(a)},{ts(b)},Base,,0,0,0,,{{\\an7\\pos({x:.0f},{yb - base * fs:.0f})"
+                f"\\fn{FONTE_GIGANTE[0]}\\b0\\fs{fs:.1f}\\fsp-2\\1c{cor}\\fscx135\\fscy135\\blur22"
+                f"\\t(0,170,0.5,\\fscx100\\fscy100\\blur0)\\fad(0,140)}}{texto}")
+            saida["whooshes"].append(a)
+        elif tipo == "flash":
+            t = t_ini(el["palavra"])
+            a = max(0.0, t - 0.10)
+            r = 0.14 * w
+            saida["linhas"].append(
+                f"Dialogue: 9,{ts(a)},{ts(a + 0.55)},Base,,0,0,0,,{{\\an5\\p1\\pos({w / 2:.0f},{h * 0.45:.0f})"
+                f"\\1c&HFFFFFF&\\blur40\\fscx10\\fscy10\\t(0,260,\\fscx900\\fscy900)"
+                f"\\fad(40,260)}}{_circulo(r)}")
+            saida["linhas"].append(
+                f"Dialogue: 9,{ts(a + 0.08)},{ts(a + 0.55)},Base,,0,0,0,,{{\\an7\\p1\\pos(0,0)"
+                f"\\1c&HFFFFFF&\\alpha&HFF&\\t(0,90,\\alpha&H00&)\\t(110,450,\\alpha&HFF&)}}"
+                f"{_retangulo(0, 0, w, h)}")
+            saida["whooshes"].append(a)
+        elif tipo == "cena":
+            a, b = t_ini(el["de"]) - 0.05, t_fim(el["ate"])
+            fx, fy, fh = rosto_em((a + b) / 2)
+            desce = DESCIDA_CENA * h
+            saida["cenas"].append((a, b, el["arquivo"], float(el.get("inicio_clip", 0)), desce))
+            queixo = fy + 0.55 * fh + desce
+            saida["y_fixo"].append((a, b, min(queixo / h + cfg.get("queixo_palavra", 0.05), 0.80)))
+            saida["whooshes"].append(a)
     return saida
 
 
@@ -165,3 +266,30 @@ def filtro_divisoes(divisoes, info):
         ramos.append(f"crop={cw:.0f}:{ch:.0f}:{x0:.0f}:{y0:.0f},scale={w}:{topo_h}:flags=lanczos,"
                      f"pad={w}:{h}:0:0:color={PAINEL}")
     return ramos
+
+
+def filtro_cena(desce, info):
+    """Quem fala, deslocado para baixo (o alto vira fundo escuro para a cena)."""
+    w, h = info["largura"], info["altura"]
+    d = round(desce / 2) * 2
+    return f"crop={w}:{h - d}:0:0,pad={w}:{h}:0:{d}:color=0x101010"
+
+
+def filtro_clipe_topo(eh_imagem, a, b, info):
+    """A cena do topo: preenche a largura, ganha zoom lento se for foto e se dissolve
+    para baixo num degradê de transparência."""
+    w, h = info["largura"], info["altura"]
+    th = round(h * TOPO_CENA / 2) * 2
+    fps = info["fps"]
+    passos = [f"scale={w}:{th}:force_original_aspect_ratio=increase", f"crop={w}:{th}",
+              f"fps={fps:.5f}"]
+    if eh_imagem:
+        quadros = max(1, int((b - a) * fps))
+        passos = [f"scale={w * 2}:{th * 2}:force_original_aspect_ratio=increase",
+                  f"crop={w * 2}:{th * 2}",
+                  f"zoompan=z='1+0.12*on/{quadros}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+                  f":d=1:s={w}x{th}:fps={fps:.5f}"]
+    passos += ["format=rgba",
+               f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='255*min(1,(H-Y)/(H*0.32))'",
+               f"setpts=PTS-STARTPTS+{a:.3f}/TB"]
+    return ",".join(passos)

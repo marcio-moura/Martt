@@ -41,3 +41,18 @@ Cerca de 1 a cada 8 s, nas frases que carregam a mensagem: o gancho, a virada e 
 
 - Pausas e respirações cortadas, mantendo 0,1 a 0,3 s entre frases.
 - Cor natural, levemente mais quente e contrastada (`cor`: contraste 1,04, saturação 1,08).
+
+# Estilo dinâmico
+
+Segunda referência do cliente (vídeo institucional de produtora, 1 min 49 s), para usar quando ele pedir para **animar**. Soma-se ao padrão acima, e os elementos ficam em `efeitos.py`.
+
+| Recurso | Na referência | Elemento |
+|---|---|---|
+| Tipografia cinética | Palavras empilhadas em tamanhos diferentes, entrando com desfoque; destaque **laranja** | `blocos` com `padrao.cor_destaque: "#FF6A13"` |
+| Palavra gigante | "NÃO É UM", "$$$", "SÓ" ocupando a largura por menos de 1 s | `gigante` |
+| Capítulos | Zoom bem fechado, preto e branco com granulação, número laranja enorme ("1º o objetivo") | `capitulo` |
+| Cena ilustrando a fala | Cena na metade de cima com degradê, quem fala desce na tela | `cena` (vídeo ou foto, que ganha zoom lento) |
+| Transição | Clarão branco (explosão de luz) com whoosh | `flash` |
+| Trilha | Música baixa o vídeo todo (silêncios em -37 dB) | `trilha: {"arquivo": ..., "volume_db": -20}`, que abaixa sozinha quando a pessoa fala |
+
+Ainda não implementados: mosaico de vídeos em cartões sobre fundo gráfico, parede de palavras em laranja, transição de papel rasgado e texto atrás da pessoa (pede recorte do fundo).
