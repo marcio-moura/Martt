@@ -359,8 +359,10 @@ def filtro_clipe_topo(eh_imagem, a, b, info):
     w, h = info["largura"], info["altura"]
     th = round(h * TOPO_CENA / 2) * 2
     fps = info["fps"]
+    # Clipe mais curto que a fala: segura o último quadro em vez de deixar o topo vazio.
     passos = [f"scale={w}:{th}:force_original_aspect_ratio=increase", f"crop={w}:{th}",
-              f"fps={fps:.5f}"]
+              f"fps={fps:.5f}", f"tpad=stop_mode=clone:stop_duration={b - a + 1:.2f}",
+              f"trim=duration={b - a + 0.2:.3f}"]
     if eh_imagem:
         quadros = max(1, int((b - a) * fps))
         passos = [f"scale={w * 2}:{th * 2}:force_original_aspect_ratio=increase",
