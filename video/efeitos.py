@@ -349,6 +349,11 @@ def filtro_divisoes(divisoes, info):
     return ramos
 
 
+# O primeiro quadro do clipe chega um pouco antes da janela da cena: sem isso, no quadro
+# em que quem fala já desceu, o topo ainda aparece vazio (escuro).
+ANTECIPA_CENA = 0.15
+
+
 def filtro_cena(desce, info):
     """Quem fala, deslocado para baixo (o alto vira fundo escuro para a cena)."""
     w, h = info["largura"], info["altura"]
@@ -368,7 +373,7 @@ def filtro_clipe_topo(eh_imagem, a, b, info, enq=((0.5, 0.5), 1.0)):
     passos = [f"scale={round(w * z / 2) * 2}:{round(th * z / 2) * 2}:force_original_aspect_ratio=increase",
               f"crop={w}:{th}:'min(max(0,iw*{fx:.3f}-ow/2),iw-ow)':'min(max(0,ih*{fy:.3f}-oh*0.38),ih-oh)'",
               f"fps={fps:.5f}", f"tpad=stop_mode=clone:stop_duration={b - a + 1:.2f}",
-              f"trim=duration={b - a + 0.2:.3f}"]
+              f"trim=duration={b - a + ANTECIPA_CENA + 0.2:.3f}"]
     if eh_imagem:
         quadros = max(1, int((b - a) * fps))
         passos = [f"scale={w * 2}:{th * 2}:force_original_aspect_ratio=increase",
@@ -379,5 +384,5 @@ def filtro_clipe_topo(eh_imagem, a, b, info, enq=((0.5, 0.5), 1.0)):
     # que fica atrás da cena enquanto quem fala está deslocado para baixo.
     passos += ["format=rgba",
                f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='255*min(1,(H-Y)/(H*0.32))'",
-               f"setpts=PTS-STARTPTS+{a:.3f}/TB"]
+               f"setpts=PTS-STARTPTS+{a - ANTECIPA_CENA:.3f}/TB"]
     return ",".join(passos)
