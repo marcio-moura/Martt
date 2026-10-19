@@ -53,6 +53,77 @@ def _retangulo(x0, y0, x1, y1):
     return f"m {x0:.0f} {y0:.0f} l {x1:.0f} {y0:.0f} l {x1:.0f} {y1:.0f} l {x0:.0f} {y1:.0f}"
 
 
+def _ret_arredondado(lg, al, r):
+    r = min(r, al / 2, lg / 2)
+    k = 0.5523 * r
+    return (f"m {r:.0f} 0 l {lg - r:.0f} 0 b {lg - r + k:.0f} 0 {lg:.0f} {r - k:.0f} {lg:.0f} {r:.0f} "
+            f"l {lg:.0f} {al - r:.0f} b {lg:.0f} {al - r + k:.0f} {lg - r + k:.0f} {al:.0f} {lg - r:.0f} {al:.0f} "
+            f"l {r:.0f} {al:.0f} b {r - k:.0f} {al:.0f} 0 {al - r + k:.0f} 0 {al - r:.0f} "
+            f"l 0 {r:.0f} b 0 {r - k:.0f} {r - k:.0f} 0 {r:.0f} 0")
+
+
+def _lista_sobreposta(el, a, b, rosto_em, w, h, k, base, amarelo):
+    """Lista sobre o próprio vídeo, sem dividir a tela: título num cartão amarelo e
+    cada item num cartão escuro translúcido, entrando no instante em que é dito.
+    Fica abaixo da legenda (que segue logo abaixo do queixo), acima da área do Instagram."""
+    linhas = []
+    itens = el.get("itens", [])
+    fx, fy, fh = rosto_em((a + b) / 2)
+    queixo = fy + 0.55 * fh
+    topo = min(max(queixo + 0.11 * h, 0.42 * h), 0.55 * h)
+    limite = 0.80 * h
+    passo = min(0.078 * h, (limite - topo) / (len(itens) + 1.15))
+    em = min(0.048 * w, passo * 0.50)
+    maior = max([largura(it["texto"], FONTE_GRANDE, 1) for it in itens] or [1])
+    em = min(em, (0.80 * w) / (maior + 1.6))
+    fs = em / k
+    x = 0.07 * w
+    pad_x, alt = em * 0.55, em * 1.55
+    marca = cor_ass(el.get("cor", amarelo))
+    # Título: cartão amarelo com texto escuro.
+    titulo = esc(el.get("titulo", ""))
+    em_t = em * 1.05
+    fs_t = em_t / k
+    lg_t = largura(titulo, FONTE_GRANDE, em_t) + 2 * pad_x
+    alt_t = em_t * 1.55
+    mov = "\\move({x0:.0f},{y:.0f},{x1:.0f},{y:.0f},0,240)"
+    linhas.append(f"Dialogue: 6,{ts(a)},{ts(b)},Base,,0,0,0,,{{\\an7\\p1"
+                  + mov.format(x0=x - 40, x1=x, y=topo) +
+                  f"\\1c{cor_ass(amarelo)}\\fad(200,150)}}{_ret_arredondado(lg_t, alt_t, alt_t * 0.28)}")
+    yb = topo + alt_t / 2 + em_t * 0.36
+    linhas.append(f"Dialogue: 7,{ts(a)},{ts(b)},Base,,0,0,0,,{{\\an7"
+                  + mov.format(x0=x + pad_x - 40, x1=x + pad_x, y=yb - base * fs_t) +
+                  f"\\fn{FONTE_GRANDE[0]}\\b1\\fs{fs_t:.1f}\\1c&H141414&\\fad(200,150)}}{titulo}")
+    for n, it in enumerate(itens):
+        ti = it["_t"] if "_t" in it else None
+        ti = a + 0.2 + n * 0.3 if ti is None else ti
+        y = topo + alt_t + 0.018 * h + n * passo
+        r = em * 0.42
+        texto = esc(it["texto"])
+        lg = 2 * r + em * 0.45 + largura(texto, FONTE_GRANDE, em) + 2 * pad_x
+        linhas.append(f"Dialogue: 6,{ts(ti)},{ts(b)},Base,,0,0,0,,{{\\an7\\p1"
+                      + mov.format(x0=x - 40, x1=x, y=y) +
+                      f"\\1c&H101010&\\alpha&H58&\\fad(200,150)}}{_ret_arredondado(lg, alt, alt * 0.28)}")
+        cy = y + alt / 2
+        cx = x + pad_x
+        linhas.append(f"Dialogue: 7,{ts(ti)},{ts(b)},Base,,0,0,0,,{{\\an7\\p1"
+                      + mov.format(x0=cx - 40, x1=cx, y=cy - r) +
+                      f"\\1c{marca}\\fad(200,150)}}{_circulo(r)}")
+        num = str(n + 1)
+        em_n = em * 0.62
+        fs_n = em_n / k
+        nx = cx + r - largura(num, FONTE_GRANDE, em_n) / 2
+        linhas.append(f"Dialogue: 8,{ts(ti)},{ts(b)},Base,,0,0,0,,{{\\an7"
+                      + mov.format(x0=nx - 40, x1=nx, y=cy + 0.35 * em_n - base * fs_n) +
+                      f"\\fn{FONTE_GRANDE[0]}\\b1\\fs{fs_n:.1f}\\1c&H101010&\\fad(200,150)}}{num}")
+        tx = cx + 2 * r + em * 0.45
+        ybt = cy + em * 0.36
+        linhas.append(f"Dialogue: 8,{ts(ti)},{ts(b)},Base,,0,0,0,,{{\\an7"
+                      + mov.format(x0=tx - 40, x1=tx, y=ybt - base * fs) +
+                      f"\\fn{FONTE_GRANDE[0]}\\b1\\fs{fs:.1f}\\1c&HFFFFFF&\\fad(200,150)}}{texto}")
+    return linhas
+
+
 def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
     """Devolve dict com: linhas ASS, tics, impactos, divisoes [(a, b, crop)],
     y_fixo [(a, b, yfrac)] e ocultar [(a, b)] para as palavras soltas."""
@@ -75,7 +146,14 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
 
     for el in elementos:
         tipo = el.get("tipo")
-        if tipo == "lista":
+        if tipo == "lista" and el.get("modo", "sobreposta") == "sobreposta":
+            a, b = t_ini(el["de"]) - 0.05, t_fim(el["ate"])
+            for it in el.get("itens", []):
+                it["_t"] = t_ini(it["palavra"]) - 0.08
+            saida["linhas"] += _lista_sobreposta(el, a, b, rosto_em, w, h, k, base, amarelo)
+            for it in el.get("itens", []):
+                saida["tics"].append(t_ini(it["palavra"]) - 0.06)
+        elif tipo == "lista":
             a, b = t_ini(el["de"]) - 0.05, t_fim(el["ate"])
             # Recorte do alto: rosto centralizado, um pouco acima do meio.
             fx, fy, fh = rosto_em((a + b) / 2)
@@ -289,10 +367,9 @@ def filtro_clipe_topo(eh_imagem, a, b, info):
                   f"crop={w * 2}:{th * 2}",
                   f"zoompan=z='1+0.12*on/{quadros}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
                   f":d=1:s={w}x{th}:fps={fps:.5f}"]
-    # Entrada e saída suaves (fade da própria cena), sem clarão nem transição.
+    # Entrada e saída secas (corte tradicional): um fade deixaria ver o fundo escuro
+    # que fica atrás da cena enquanto quem fala está deslocado para baixo.
     passos += ["format=rgba",
                f"geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='255*min(1,(H-Y)/(H*0.32))'",
-               "fade=t=in:st=0:d=0.30:alpha=1",
-               f"fade=t=out:st={max(0.0, b - a - 0.30):.3f}:d=0.30:alpha=1",
                f"setpts=PTS-STARTPTS+{a:.3f}/TB"]
     return ",".join(passos)

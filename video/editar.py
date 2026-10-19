@@ -310,6 +310,11 @@ def renderizar(args):
         capitulos = [(remap(por_indice[int(e["de"])]["ini"]) - 0.05, fim_capitulo(int(e["ate"])),
                       efeitos.ZOOM_CAPITULO)
                      for e in elementos if e.get("tipo") == "capitulo"]
+        # Durante a lista sobreposta o plano fica aberto e parado: a lista e a legenda
+        # ficam estáveis, sem o zoom mudando a posição do queixo no meio dela.
+        capitulos += [(remap(por_indice[int(e["de"])]["ini"]) - 0.05, fim_capitulo(int(e["ate"])), 1.0)
+                      for e in elementos if e.get("tipo") == "lista"
+                      and e.get("modo", "sobreposta") == "sobreposta"]
         if capitulos:
             planos = padrao.sobrepor_planos(planos, capitulos)
             zcfg["ativo"] = True
