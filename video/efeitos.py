@@ -336,7 +336,22 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
             queixo = fy + 0.55 * fh + desce
             saida["y_fixo"].append((a, b, min(queixo / h + cfg.get("queixo_palavra", 0.05), 0.80)))
             saida["queixo_fixo"].append((a, b, queixo / h))
+    _emendar_cenas(saida)
     return saida
+
+
+def _emendar_cenas(saida, folga=0.5):
+    """Cenas quase coladas se emendam: sem isso quem fala aparece na posição normal por
+    poucos quadros entre uma cena e outra, um choque na tela."""
+    cenas = sorted(saida["cenas"], key=lambda c: c[0])
+    for n in range(len(cenas) - 1):
+        a, b, *resto = cenas[n]
+        prox = cenas[n + 1][0]
+        if b < prox < b + folga:
+            cenas[n] = (a, prox, *resto)
+            for chave in ("y_fixo", "queixo_fixo"):
+                saida[chave] = [(x, prox if (x, y) == (a, b) else y, v) for x, y, v in saida[chave]]
+    saida["cenas"] = cenas
 
 
 def filtro_divisoes(divisoes, info):
