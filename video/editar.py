@@ -381,7 +381,7 @@ def renderizar(args):
         idx_broll.append(proxima)
         proxima += 1
     idx_cenas = []
-    for a, b, arq, ini_clip, desce in cenas:
+    for a, b, arq, ini_clip, desce, _ in cenas:
         imagem = Path(arq).suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")
         if imagem:
             cmd += ["-loop", "1", "-t", f"{b - a + 0.5:.3f}", "-i", str(arq)]
@@ -502,7 +502,7 @@ def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), idx_sfx=None, z
     # Ramos tirados do quadro sem zoom: telas divididas e cenas no topo.
     ramos = efeitos.filtro_divisoes(divisoes, info)
     janelas = [(a, b) for a, b, _ in divisoes]
-    for (a, b, _, _, desce), _ in cenas:
+    for (a, b, _, _, desce, _), _ in cenas:
         ramos.append(efeitos.filtro_cena(desce, info))
         janelas.append((a, b))
     saidas = "".join(f"[d{n}]" for n in range(len(ramos)))
@@ -517,8 +517,8 @@ def filtro(trechos, ass, info, audio_cfg, extra_v=(), brolls=(), idx_sfx=None, z
         fonte = f"dv{n}"
         k = n - len(divisoes)
         if k >= 0:
-            (ca, cb, _, _, _), (entrada, imagem) = cenas[k]
-            partes.append(f"[{entrada}:v]{efeitos.filtro_clipe_topo(imagem, ca, cb, info)}[ct{k}]")
+            (ca, cb, _, _, _, enq), (entrada, imagem) = cenas[k]
+            partes.append(f"[{entrada}:v]{efeitos.filtro_clipe_topo(imagem, ca, cb, info, enq)}[ct{k}]")
             partes.append(f"[dv{n}][ct{k}]overlay=0:0:eof_action=pass[dc{n}]")
             fonte = f"dc{n}"
         partes.append(f"[{atual}][{fonte}]overlay=enable='between(t,{a:.3f},{b:.3f})'[vd{n}]")

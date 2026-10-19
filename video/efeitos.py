@@ -29,6 +29,8 @@ Estilo dinâmico (segunda referência do cliente):
   {"tipo": "cena", "arquivo": "video/entrada/drone.mp4", "de": i, "ate": j, "inicio_clip": 0}
       A cena (vídeo ou imagem, que ganha zoom lento) ocupa a metade de cima com degradê,
       e quem fala desce na tela. Para ilustrar o que está sendo dito.
+      Opcionais "foco": [x, y] (fração do clipe onde está o assunto, ex. o aparelho tocando
+      o rosto) e "zoom" (1 a 2): aproxima e centraliza o assunto na parte opaca da cena.
 """
 
 from padrao import FONTES, FONTE_GRANDE, FONTE_PALAVRA, calibrar, cor_ass, esc, largura, ts
@@ -329,7 +331,8 @@ def montar(elementos, por_indice, remap, info, cfg, dur_final, rosto_em):
             a, b = t_ini(el["de"]) - 0.05, t_fim(el["ate"])
             fx, fy, fh = rosto_em((a + b) / 2)
             desce = DESCIDA_CENA * h
-            saida["cenas"].append((a, b, el["arquivo"], float(el.get("inicio_clip", 0)), desce))
+            enq = (el.get("foco", [0.5, 0.5]), float(el.get("zoom", 1)))
+            saida["cenas"].append((a, b, el["arquivo"], float(el.get("inicio_clip", 0)), desce, enq))
             queixo = fy + 0.55 * fh + desce
             saida["y_fixo"].append((a, b, min(queixo / h + cfg.get("queixo_palavra", 0.05), 0.80)))
             saida["queixo_fixo"].append((a, b, queixo / h))
@@ -353,14 +356,17 @@ def filtro_cena(desce, info):
     return f"crop={w}:{h - d}:0:0,pad={w}:{h}:0:{d}:color=0x101010"
 
 
-def filtro_clipe_topo(eh_imagem, a, b, info):
+def filtro_clipe_topo(eh_imagem, a, b, info, enq=((0.5, 0.5), 1.0)):
     """A cena do topo: preenche a largura, ganha zoom lento se for foto e se dissolve
-    para baixo num degradê de transparência."""
+    para baixo num degradê de transparência. `enq` = (foco [x, y] em fração do clipe, zoom):
+    o ponto de foco fica no meio da parte opaca da faixa (o assunto principal, não a borda)."""
     w, h = info["largura"], info["altura"]
     th = round(h * TOPO_CENA / 2) * 2
     fps = info["fps"]
     # Clipe mais curto que a fala: segura o último quadro em vez de deixar o topo vazio.
-    passos = [f"scale={w}:{th}:force_original_aspect_ratio=increase", f"crop={w}:{th}",
+    (fx, fy), z = enq
+    passos = [f"scale={round(w * z / 2) * 2}:{round(th * z / 2) * 2}:force_original_aspect_ratio=increase",
+              f"crop={w}:{th}:'min(max(0,iw*{fx:.3f}-ow/2),iw-ow)':'min(max(0,ih*{fy:.3f}-oh*0.38),ih-oh)'",
               f"fps={fps:.5f}", f"tpad=stop_mode=clone:stop_duration={b - a + 1:.2f}",
               f"trim=duration={b - a + 0.2:.3f}"]
     if eh_imagem:
