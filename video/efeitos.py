@@ -86,7 +86,8 @@ def _lista_sobreposta(el, a, b, rosto_em, w, h, k, base, amarelo):
     titulo = esc(el.get("titulo", ""))
     em_t = em * 1.05
     fs_t = em_t / k
-    lg_t = largura(titulo, FONTE_GRANDE, em_t) + 2 * pad_x
+    # \b1 engrossa a fonte além da medida: folga para o texto não encostar na borda.
+    lg_t = largura(titulo, FONTE_GRANDE, em_t) * 1.08 + 2 * pad_x
     alt_t = em_t * 1.55
     mov = "\\move({x0:.0f},{y:.0f},{x1:.0f},{y:.0f},0,240)"
     linhas.append(f"Dialogue: 6,{ts(a)},{ts(b)},Base,,0,0,0,,{{\\an7\\p1"

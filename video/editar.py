@@ -231,6 +231,12 @@ def renderizar(args):
     palavras = [dict(p) for p in trans["palavras"]]
     for i, txt in ed.get("correcoes", {}).items():
         palavras[int(i)]["t"] = txt
+    # Palavra apagada da legenda ("") continua no áudio: o tempo dela vai para a anterior,
+    # senão o corte come o fim da fala ("indolor" transcrito como "em" + "dolor").
+    for i, txt in ed.get("correcoes", {}).items():
+        n = int(i)
+        if txt == "" and n > 0:
+            palavras[n - 1]["fim"] = max(palavras[n - 1]["fim"], palavras[n]["fim"])
     # O transcritor parte palavras com hífen ("recém" + "-nascido"): junta numa só,
     # mantendo o tempo inteiro para o áudio não ser cortado no meio.
     for n in range(len(palavras) - 1, 0, -1):
