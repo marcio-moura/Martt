@@ -2,7 +2,7 @@
 //
 // Cada item aparece na tela, fica um tempo e sai, na ordem da lista.
 //   foto: arquivo de fotos/ que fica ao fundo A PARTIR deste item (continua até outra
-//         foto ser indicada). foto: null = tela preta. "3d:logo" e "3d:maysa" = cenas 3D (cena3d.js).
+//         foto ser indicada). foto: null = tela preta. "3d:logo" = logo em 3D (cena3d.js).
 //   tom:  "antigo" (memória, levemente sépia) ou "cor" (presente). Acompanha a foto.
 //   tipo: "frase" (padrão), "ano", "titulo", "lista", "final", "respiro" (só a imagem, sem texto)
 //   dur:  segundos (opcional; se faltar, é calculado pelo tamanho da frase)
@@ -44,7 +44,6 @@ window.ROTEIRO = [
   { foto: null, tipo: "ano", t: "2020", dur: 3.5 },
   { t: "O mundo parou.", dur: 3 },
   { t: "Ela decidiu avançar.", dur: 3.2 },
-  r("3d:maysa", C, 2.4),
   { t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 5.2 },
 
   // FAMÍLIA E EQUIPE
