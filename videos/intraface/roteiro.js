@@ -10,7 +10,7 @@
 // As fotos de fotos/ são geradas por preparar-fotos.py a partir de fotos/originais/.
 
 window.LOGO = "";      // a logo do fechamento agora é a cena 3D
-window.TRILHA = "";    // música em trilha/ (vazio = sem som)
+window.TRILHA = "trilha.mp3";    // música em trilha/ (vazio = sem som)
 
 const A = "antigo", C = "cor";
 const r = (foto, tom = C, dur = 2) => ({ foto, tom, tipo: "respiro", dur });

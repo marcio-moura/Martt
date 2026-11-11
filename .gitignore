@@ -2,3 +2,4 @@
 videos/**/*.mp4
 videos/**/quadro-*.png
 videos/**/fotos/
+videos/**/trilha/*.wav
