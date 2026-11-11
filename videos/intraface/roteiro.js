@@ -1,127 +1,89 @@
-// Roteiro do vídeo "Intraface Radiologia — 20 anos".
+// Roteiro do vídeo "Intraface Radiologia — 20 anos" (versão curta, ~3 min).
 //
 // Cada item aparece na tela, fica um tempo e sai, na ordem da lista.
 //   foto: arquivo de fotos/ que fica ao fundo A PARTIR deste item (continua até outra
-//         foto ser indicada). foto: null = tela preta.
+//         foto ser indicada). foto: null = tela preta. "3d:logo" e "3d:maysa" = cenas 3D (cena3d.js).
 //   tom:  "antigo" (memória, levemente sépia) ou "cor" (presente). Acompanha a foto.
-//   tipo: "frase" (padrão), "capitulo", "ano", "titulo", "lista", "final", "respiro"
-//         ("respiro" = só a foto, sem texto)
+//   tipo: "frase" (padrão), "ano", "titulo", "lista", "final", "respiro" (só a imagem, sem texto)
 //   dur:  segundos (opcional; se faltar, é calculado pelo tamanho da frase)
 //
 // As fotos de fotos/ são geradas por preparar-fotos.py a partir de fotos/originais/.
 
-window.LOGO = "logo.png";      // logomarca em fotos/ (vazio = nome em texto)
+window.LOGO = "";      // a logo do fechamento agora é a cena 3D
 window.TRILHA = "";    // música em trilha/ (vazio = sem som)
 
 const A = "antigo", C = "cor";
+const r = (foto, tom = C, dur = 2) => ({ foto, tom, tipo: "respiro", dur });
 
 window.ROTEIRO = [
   // ABERTURA
-  { foto: null, t: "Toda grande história começa com um sonho.", dur: 5.5 },
-  { t: "Mas algumas vão além dos sonhos.", dur: 4.5 },
-  { t: "São construídas com coragem, renúncias<br>e amor pelo que se faz.", dur: 6 },
-  { tipo: "titulo", t: "INTRAFACE RADIOLOGIA", sub: "Uma história de sonhos, coragem, amor e superação", dur: 7 },
+  { foto: null, t: "Toda grande história começa com um sonho.", dur: 4.5 },
+  { tipo: "titulo", t: "INTRAFACE RADIOLOGIA", sub: "Uma história de sonhos, coragem, amor e superação", dur: 6 },
 
-  // I — ONDE TUDO COMEÇOU
-  { tipo: "capitulo", n: "I", t: "Onde tudo começou", dur: 4.5 },
-  { tipo: "ano", t: "2004", dur: 4 },
-  { foto: "22.jpg", tom: A, tipo: "respiro", dur: 3.5 },
-  { t: "Três sócias.<br>Um sonho compartilhado." },
-  { t: "Conhecimento, determinação e coragem<br>para trazer a Trindade algo que a cidade ainda não tinha." },
-  { foto: "19.jpg", tom: A, tipo: "respiro", dur: 3.5 },
-  { t: "Nascia a primeira clínica de radiologia<br>odontológica de Trindade." },
-  { t: "Pequena na estrutura.<br><em>Grande no propósito.</em>" },
+  // 2004
+  { tipo: "ano", t: "2004", dur: 3.5 },
+  r("22.jpg", A, 2.2),
+  { t: "Três sócias.<br>Um sonho compartilhado.", dur: 4 },
+  r("19.jpg", A),
+  { t: "Nascia a primeira clínica de radiologia<br>odontológica de Trindade.", dur: 4.8 },
+  r("14.jpg", A),
+  { t: "Sem secretária, sem técnico.<br>Elas mesmas recebiam, examinavam e laudavam.", dur: 5 },
+  r("07.jpg", A),
+  { t: "Mas nunca faltou a vontade de fazer dar certo.", dur: 4.2 },
 
-  // II — OS PRIMEIROS DESAFIOS
-  { tipo: "capitulo", n: "II", t: "Os primeiros desafios", dur: 4.5 },
-  { foto: "14.jpg", tom: A, tipo: "respiro", dur: 3 },
-  { t: "Não havia secretária.<br>Nem técnico em saúde bucal." },
-  { t: "Elas mesmas recebiam os pacientes,<br>faziam os exames e escreviam os laudos." },
-  { foto: "07.jpg", tom: A, tipo: "respiro", dur: 3 },
-  { t: "Eram muitos papéis.<br>Mas nunca faltou a vontade de fazer dar certo." },
-  { foto: "12.jpg", tom: A, tipo: "respiro", dur: 3 },
-  { t: "Ano após ano, a Intraface foi conquistando<br>espaço e a confiança da cidade." },
+  // A DRA. SIMONE SEGUE
+  r("13.jpg", A),
+  { t: "Quando a sociedade chegou ao fim,<br><em>a Dra. Simone seguiu sozinha.</em>", dur: 5 },
+  r("11.jpg", C),
+  { t: "Nova equipe. Nova estrutura.<br>Novas tecnologias.", dur: 4.2 },
+  r("18.jpg", C),
+  { t: "E o trabalho sério virou reconhecimento.", dur: 4 },
+  r("17.jpg", C, 2.6),
 
-  // III — UMA NOVA ETAPA
-  { foto: null, tipo: "capitulo", n: "III", t: "Uma nova etapa", dur: 4.5 },
-  { t: "O tempo passou, e a sociedade chegou ao fim." },
-  { foto: "13.jpg", tom: A, tipo: "respiro", dur: 2.5 },
-  { t: "A Dra. Simone assumiu, sozinha,<br>a missão de continuar aquele sonho." },
-  { foto: "11.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Novos colaboradores. Estrutura ampliada.<br>Novas tecnologias." },
-  { foto: "08.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Mais do que acompanhar o tempo,<br><em>a Intraface quis estar à frente dele.</em>" },
-  { foto: "18.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "E o trabalho sério<br>se transformou em reconhecimento." },
-  { foto: "17.jpg", tom: C, tipo: "respiro", dur: 4.5 },
+  // 2020
+  { foto: null, tipo: "ano", t: "2020", dur: 3.5 },
+  { t: "O mundo parou.", dur: 3 },
+  { t: "Ela decidiu avançar.", dur: 3.2 },
+  r("3d:maysa", C, 2.4),
+  { t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 5.2 },
 
-  // IV — CORAGEM EM TEMPOS DE INCERTEZA
-  { foto: null, tipo: "ano", t: "2020", dur: 4 },
-  { t: "O mundo parou.", dur: 3.5 },
-  { t: "Medo. Incerteza. Sonhos adiados.", dur: 4.5 },
-  { t: "Foi aí que ela decidiu avançar.", dur: 4.5 },
-  { foto: "23.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 6 },
-  { foto: null, t: "Acreditar em um sonho também é<br>ter coragem para seguir em frente.", dur: 6 },
+  // FAMÍLIA E EQUIPE
+  r("03.jpg", C),
+  { t: "Nenhuma grande história é construída sozinha.", dur: 4.2 },
+  r("05.jpg", C),
+  { t: "Por trás de uma mulher determinada,<br>existem abraços que fortalecem.", dur: 4.8 },
+  r("15.jpg", C),
+  { t: "Uma empresa não é feita de paredes.", dur: 3.8 },
+  r("06.jpg", C, 1.6),
+  { t: "<em>É feita de pessoas.</em>", dur: 3.4 },
+  r("09.jpg", C, 1.7),
+  r("16.jpg", C, 1.7),
+  r("21.jpg", C, 1.7),
 
-  // V — O AMOR QUE SUSTENTA OS SONHOS
-  { tipo: "capitulo", n: "IV", t: "O amor que sustenta os sonhos", dur: 4.5 },
-  { foto: "03.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Nenhuma grande história é construída sozinha." },
-  { foto: "04.jpg", tom: C, tipo: "respiro", dur: 2.5 },
-  { t: "Uma família que compreendeu as ausências,<br>apoiou nos dias difíceis e celebrou cada vitória." },
-  { foto: "05.jpg", tom: C, tipo: "respiro", dur: 2.5 },
-  { t: "Por trás de uma mulher determinada,<br>existem abraços que fortalecem." },
-
-  // VI — UMA EQUIPE, MUITAS HISTÓRIAS
-  { foto: null, tipo: "capitulo", n: "V", t: "Uma equipe, muitas histórias", dur: 4.5 },
-  { foto: "15.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Alguns estão aqui desde os primeiros capítulos." },
-  { foto: "09.jpg", tom: C, tipo: "respiro", dur: 2.5 },
-  { t: "Uma empresa não é feita de paredes<br>nem de equipamentos." },
-  { foto: "16.jpg", tom: C, tipo: "respiro", dur: 2.5 },
-  { t: "<em>É feita de pessoas.</em>", dur: 4 },
-  { foto: "06.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "De mãos que trabalham juntas<br>e corações que acreditam no mesmo propósito." },
-
-  // VII — MAIS DE DUAS DÉCADAS DE CONFIANÇA
-  { foto: "20.jpg", tom: C, tipo: "respiro", dur: 3.5 },
-  { t: "Mais de duas décadas de pioneirismo,<br>inovação e ética." },
-  { foto: "21.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "E algo que não se compra:", dur: 3.5 },
-  { tipo: "lista", linhas: ["Confiança.", "Credibilidade.", "Respeito.", "Relações verdadeiras."], dur: 7 },
-
-  // HOMENAGEM
-  { foto: null, t: "<em>Dra. Simone...</em>", dur: 4.5 },
-  { foto: "08.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Hoje é tempo de olhar para trás." },
-  { foto: "14.jpg", tom: A, tipo: "lista", linhas: ["O começo.", "As noites de preocupação.", "As decisões difíceis."], dur: 7 },
-  { foto: "12.jpg", tom: A, t: "E todas as conquistas<br>que um dia foram apenas sonhos." },
-  { foto: "01.jpg", tom: C, tipo: "respiro", dur: 3 },
-  { t: "Talvez o seu maior legado esteja<br>nas pessoas que você inspirou.", dur: 6.5 },
-
-  // GRATIDÃO
+  // HOJE E HOMENAGEM
+  r("20.jpg", C),
+  { t: "Mais de 20 anos de confiança,<br>credibilidade e respeito.", dur: 4.6 },
+  { foto: null, t: "<em>Dra. Simone...</em>", dur: 3.5 },
+  r("08.jpg", C),
+  { t: "Talvez o seu maior legado esteja<br>nas pessoas que você inspirou.", dur: 5.2 },
   { foto: "02.jpg", tom: C, tipo: "lista", titulo: "Gratidão", linhas: [
     "Às sócias fundadoras.",
     "À família.",
     "Aos colaboradores.",
-    "Aos profissionais da odontologia.",
+    "Aos parceiros da odontologia.",
     "A cada paciente.",
-  ], dur: 10 },
+  ], dur: 8.5 },
 
   // ENCERRAMENTO
-  { foto: "06.jpg", tom: C, tipo: "lista", linhas: ["Começou com um sonho.", "Cresceu com trabalho.", "Superou desafios com coragem.", "E continua com amor."], dur: 9 },
-  { foto: "03.jpg", tom: C, t: "Dra. Simone,<br><em>que orgulho de tudo o que foi construído até aqui.</em>", dur: 6.5 },
-  { foto: null, tipo: "titulo", logo: true, t: "INTRAFACE RADIOLOGIA", sub: "Mais de 20 anos de história, inovação e confiança", dur: 7 },
-  { t: "Algumas histórias são contadas pelo tempo...", dur: 4.5 },
-  { t: "As mais bonitas permanecem<br>no coração das pessoas.", dur: 5 },
-  { t: "E essa história...<br><em>ainda está sendo escrita.</em>", dur: 6 },
-  { tipo: "respiro", dur: 2.5 },
-  { foto: "05.jpg", tom: C, tipo: "respiro", dur: 3 },
+  r("3d:logo", C, 3.4),
+  { t: "<em>Mais de 20 anos de história, inovação e confiança.</em>", dur: 4.4 },
+  { foto: null, t: "E essa história...<br><em>ainda está sendo escrita.</em>", dur: 5 },
+  { tipo: "respiro", dur: 1.8 },
+  r("01.jpg", C, 1.8),
   { tipo: "final", linhas: [
     "Há histórias que construímos.",
     "E há histórias que nos transformam.",
     "<em>Obrigado, Dra. Simone, por fazer parte da nossa.</em>",
-  ], dur: 11 },
-  { foto: "01.jpg", tom: C, tipo: "respiro", dur: 5 },
+  ], dur: 9 },
+  { tipo: "respiro", dur: 2.5 },
 ];

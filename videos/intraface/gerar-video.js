@@ -14,7 +14,7 @@ const fps = +opt("fps", 30);
 const W = +opt("largura", 1920), H = Math.round(W * 9 / 16);
 const raiz = __dirname;
 
-const tipos = { ".html": "text/html", ".js": "text/javascript", ".ttf": "font/ttf", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp" };
+const tipos = { ".html": "text/html", ".js": "text/javascript", ".ttf": "font/ttf", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml" };
 const srv = http.createServer((q, r) => {
   const f = path.join(raiz, decodeURIComponent(q.url.split("?")[0]));
   if (!f.startsWith(raiz) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { r.writeHead(404); return r.end(); }

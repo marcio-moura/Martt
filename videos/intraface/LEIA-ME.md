@@ -1,9 +1,9 @@
 # Vídeo — Intraface Radiologia, 20 anos
 
-Documentário com texto na tela, 16:9, para telão. Duração atual: ~4min54s.
+Documentário curto (~2min42s), texto na tela, 16:9 para telão.
 
-- `roteiro.js`: os textos, a ordem e quais fotos entram em cada trecho (`FOTOS`), a logo (`LOGO`) e a trilha (`TRILHA`).
-- `fotos/`: fotos da cliente e logomarca. `trilha/`: música em MP3.
-- `index.html`: o player (abre no navegador; espaço toca/pausa, F tela cheia).
-- `gerar-video.js`: gera o MP4. `node gerar-video.js intraface-20-anos.mp4` (1080p, 30 fps).
-  Para conferir alguns segundos: `node gerar-video.js --quadros 10,60,120`.
+- `roteiro.js`: textos, ordem e qual foto ou cena 3D entra em cada momento.
+- `cena3d.js`: cenas 3D (three.js) da logo e da fachada da unidade Setor Maysa, feitas a partir de `logo3d/logo.svg`.
+- `logo3d/vetorizar.py`: gera o SVG em camadas a partir da logo original.
+- `preparar-fotos.py`: recorta e enquadra as fotos de `fotos/originais/` (fotos não vão para o git).
+- `index.html`: o player. `gerar-video.js`: gera o MP4 (`node gerar-video.js intraface-20-anos.mp4`).

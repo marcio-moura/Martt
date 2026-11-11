@@ -38,6 +38,7 @@ body { font-family: "Cormorant", Georgia, serif; }
   font: 500 20px/1 "Montserrat", sans-serif; letter-spacing: .3em; text-transform: uppercase;
   color: rgba(246,239,227,.38); border: 1px dashed rgba(246,239,227,.25); padding: 14px 22px;
 }
+#c3d { position: absolute; inset: 0; width: 1920px; height: 1080px; opacity: 0; }
 #escurece { position: absolute; inset: 0; background: #000; pointer-events: none; }
 #base {
   position: absolute; inset: 0; pointer-events: none; opacity: 0;
@@ -98,10 +99,12 @@ body:not(.parado) #ui { opacity: 0; }
 body.render #ui, body.render #capa { display: none; }
 @media (max-width: 600px) { #ui { gap: 8px; padding: 10px 12px 14px; } #tempo { min-width: 0; } }
 </style>
+<script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
 </head>
 <body class="parado">
 <div id="palco-wrap"><div id="palco">
   <div id="fotos"></div>
+  <canvas id="c3d" width="1920" height="1080"></canvas>
   <div id="escurece"></div>
   <div id="base"></div>
   <div id="vinheta"></div>
@@ -119,6 +122,13 @@ body.render #ui, body.render #capa { display: none; }
 <audio id="som" preload="auto"></audio>
 
 <script src="roteiro.js"></script>
+<script type="module">
+  import { iniciar } from "./cena3d.js";
+  window.__c3dPronto = (async () => {
+    await document.fonts.load("700 92px Montserrat");
+    window.__c3d = await iniciar(document.getElementById("c3d"));
+  })();
+</script>
 <script>
 (() => {
   const FADE_TXT = 0.9, CROSS = 1.6, KB = 0.08;
@@ -146,7 +156,7 @@ body.render #ui, body.render #capa { display: none; }
   });
   const TOTAL = t;
   window.__TOTAL = TOTAL;
-  window.__ARQUIVOS = [...new Set(corridas.map((c) => c.foto).filter(Boolean))];
+  window.__ARQUIVOS = [...new Set(corridas.map((c) => c.foto).filter((f) => f && !f.startsWith("3d:")))];
 
   // ---------- elementos ----------
   const $ = (s) => document.querySelector(s);
@@ -168,8 +178,16 @@ body.render #ui, body.render #capa { display: none; }
 
   function desenhaFotos(t) {
     const vis = new Set();
+    let op3d = 0;
     corridas.forEach((c) => {
       if (!c.foto) return;
+      if (c.foto.startsWith("3d:")) {
+        const a = c.ini - CROSS / 2, b = c.fim + CROSS / 2;
+        if (t < a || t > b) return;
+        op3d = Math.min(ease((t - a) / CROSS), ease((b - t) / CROSS));
+        if (window.__c3d) window.__c3d.desenha(c.foto.slice(3), t - c.ini, c.fim - c.ini);
+        return;
+      }
       const a = c.ini - CROSS / 2, b = c.fim + CROSS / 2;
       if (t < a || t > b) return;
       const el = camada(c);
@@ -186,6 +204,7 @@ body.render #ui, body.render #capa { display: none; }
       vis.add(el);
     });
     camadas.forEach((el) => { if (!vis.has(el)) el.style.opacity = 0; });
+    $("#c3d").style.opacity = op3d;
   }
 
   // ---------- textos ----------
@@ -295,7 +314,7 @@ body.render #ui, body.render #capa { display: none; }
   if (new URLSearchParams(location.search).has("render")) {
     document.body.classList.add("render");
     desenha(0);
-    window.__pronto = document.fonts.ready.then(() => Promise.all(
+    window.__pronto = document.fonts.ready.then(() => new Promise((r) => { const k = () => window.__c3dPronto ? r(window.__c3dPronto) : setTimeout(k, 50); k(); })).then(() => Promise.all(
       window.__ARQUIVOS.concat(LOGO ? [LOGO] : []).map((f) => new Promise((r) => {
         const im = new Image(); im.onload = im.onerror = r; im.src = "fotos/" + f;
       }))
