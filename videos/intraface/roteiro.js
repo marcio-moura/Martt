@@ -10,7 +10,7 @@
 //
 // As fotos de fotos/ são geradas por preparar-fotos.py a partir de fotos/originais/.
 
-window.LOGO = "";      // logomarca em fotos/ (vazio = nome em texto)
+window.LOGO = "logo.png";      // logomarca em fotos/ (vazio = nome em texto)
 window.TRILHA = "";    // música em trilha/ (vazio = sem som)
 
 const A = "antigo", C = "cor";
