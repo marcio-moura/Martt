@@ -25,8 +25,10 @@ window.ROTEIRO = [
   // I — ONDE TUDO COMEÇOU
   { tipo: "capitulo", n: "I", t: "Onde tudo começou", dur: 4.5 },
   { tipo: "ano", t: "2004", dur: 4 },
+  { foto: "22.jpg", tom: A, tipo: "respiro", dur: 3.5 },
   { t: "Três sócias.<br>Um sonho compartilhado." },
   { t: "Conhecimento, determinação e coragem<br>para trazer a Trindade algo que a cidade ainda não tinha." },
+  { foto: "19.jpg", tom: A, tipo: "respiro", dur: 3.5 },
   { t: "Nascia a primeira clínica de radiologia<br>odontológica de Trindade." },
   { t: "Pequena na estrutura.<br><em>Grande no propósito.</em>" },
 
@@ -49,6 +51,9 @@ window.ROTEIRO = [
   { t: "Novos colaboradores. Estrutura ampliada.<br>Novas tecnologias." },
   { foto: "08.jpg", tom: C, tipo: "respiro", dur: 3 },
   { t: "Mais do que acompanhar o tempo,<br><em>a Intraface quis estar à frente dele.</em>" },
+  { foto: "18.jpg", tom: C, tipo: "respiro", dur: 3 },
+  { t: "E o trabalho sério<br>se transformou em reconhecimento." },
+  { foto: "17.jpg", tom: C, tipo: "respiro", dur: 4.5 },
 
   // IV — CORAGEM EM TEMPOS DE INCERTEZA
   { foto: null, tipo: "ano", t: "2020", dur: 4 },
@@ -79,9 +84,9 @@ window.ROTEIRO = [
   { t: "De mãos que trabalham juntas<br>e corações que acreditam no mesmo propósito." },
 
   // VII — MAIS DE DUAS DÉCADAS DE CONFIANÇA
-  { foto: "10.jpg", tom: C, tipo: "respiro", dur: 3 },
+  { foto: "20.jpg", tom: C, tipo: "respiro", dur: 3.5 },
   { t: "Mais de duas décadas de pioneirismo,<br>inovação e ética." },
-  { foto: "02.jpg", tom: C, tipo: "respiro", dur: 3 },
+  { foto: "21.jpg", tom: C, tipo: "respiro", dur: 3 },
   { t: "E algo que não se compra:", dur: 3.5 },
   { tipo: "lista", linhas: ["Confiança.", "Credibilidade.", "Respeito.", "Relações verdadeiras."], dur: 7 },
 
