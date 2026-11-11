@@ -39,6 +39,14 @@ body { font-family: "Cormorant", Georgia, serif; }
   color: rgba(246,239,227,.38); border: 1px dashed rgba(246,239,227,.25); padding: 14px 22px;
 }
 #escurece { position: absolute; inset: 0; background: #000; pointer-events: none; }
+#base {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(to bottom, transparent 38%, rgba(8,6,4,.55) 62%, rgba(8,6,4,.92) 100%);
+}
+.bloco.baixo { top: auto; bottom: 120px; }
+.baixo.frase { font-size: 58px; }
+.baixo .ln { font-size: 54px; line-height: 1.3; }
+.baixo .tl { margin-bottom: 26px; }
 #vinheta {
   position: absolute; inset: 0; pointer-events: none;
   background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 45%, rgba(0,0,0,.75) 100%);
@@ -95,6 +103,7 @@ body.render #ui, body.render #capa { display: none; }
 <div id="palco-wrap"><div id="palco">
   <div id="fotos"></div>
   <div id="escurece"></div>
+  <div id="base"></div>
   <div id="vinheta"></div>
   <div id="grao"></div>
   <div id="texto"></div>
@@ -121,69 +130,60 @@ body.render #ui, body.render #capa { display: none; }
     const palavras = plain.split(/\s+/).filter(Boolean).length;
     return Math.max(4.2, 2.2 + palavras * 0.36);
   };
-  const trechos = [];
-  let t = 0;
-  ROTEIRO.forEach((b, i) => {
-    const ini = t;
-    const itens = b.textos.map((x) => { const d = durTexto(x); const it = { ...x, ini: t, fim: t + d }; t += d; return it; });
-    const lista = b.foto ? (FOTOS[b.foto] || []) : [];
-    trechos.push({ ...b, i, ini, fim: t, itens, arquivos: lista });
+  const itens = [];
+  let t = 0, fotoAt = null, tomAt = "cor";
+  ROTEIRO.forEach((x, i) => {
+    if ("foto" in x) { fotoAt = x.foto; tomAt = x.tom || "cor"; }
+    const d = durTexto(x);
+    itens.push({ ...x, i, ini: t, fim: t + d, fotoAtual: fotoAt, tomAtual: tomAt });
+    t += d;
+  });
+  const corridas = [];
+  itens.forEach((it) => {
+    const u = corridas[corridas.length - 1];
+    if (u && u.foto === it.fotoAtual && u.tom === it.tomAtual) u.fim = it.fim;
+    else corridas.push({ foto: it.fotoAtual, tom: it.tomAtual, ini: it.ini, fim: it.fim, i: corridas.length });
   });
   const TOTAL = t;
   window.__TOTAL = TOTAL;
+  window.__ARQUIVOS = [...new Set(corridas.map((c) => c.foto).filter(Boolean))];
 
   // ---------- elementos ----------
   const $ = (s) => document.querySelector(s);
-  const palco = $("#palco"), camFotos = $("#fotos"), camTexto = $("#texto"), escurece = $("#escurece");
+  const palco = $("#palco"), camFotos = $("#fotos"), camTexto = $("#texto"), escurece = $("#escurece"), base = $("#base");
   const ease = (x) => x < 0 ? 0 : x > 1 ? 1 : x * x * (3 - 2 * x);
   const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
-  // uma camada de foto por (trecho, índice do arquivo)
   const camadas = new Map();
-  function camada(tr, k) {
-    const key = tr.i + ":" + k;
-    if (camadas.has(key)) return camadas.get(key);
+  function camada(c) {
+    if (camadas.has(c.i)) return camadas.get(c.i);
     const d = document.createElement("div");
     d.className = "foto";
-    const arq = tr.arquivos[k];
-    if (arq) d.style.backgroundImage = `url("fotos/${arq}")`;
-    else { d.classList.add("vazio"); d.innerHTML = `<div class="etq">foto · ${tr.foto}</div>`; }
+    d.style.backgroundImage = `url("fotos/${c.foto}")`;
     d.style.opacity = 0;
     camFotos.appendChild(d);
-    camadas.set(key, d);
+    camadas.set(c.i, d);
     return d;
-  }
-
-  // cada trecho com foto é dividido entre seus arquivos
-  function sub(tr) {
-    const n = Math.max(1, tr.arquivos.length);
-    const len = (tr.fim - tr.ini) / n;
-    return Array.from({ length: n }, (_, k) => ({ k, ini: tr.ini + k * len, fim: tr.ini + (k + 1) * len }));
   }
 
   function desenhaFotos(t) {
     const vis = new Set();
-    trechos.forEach((tr) => {
-      if (!tr.foto) return;
-      const partes = sub(tr);
-      // trecho anterior/seguinte com a mesma foto continua sem corte
-      partes.forEach((p, idx) => {
-        const a = p.ini - CROSS / 2, b = p.fim + CROSS / 2;
-        if (t < a || t > b) return;
-        let op = Math.min(ease((t - a) / CROSS), ease((b - t) / CROSS));
-        const el = camada(tr, p.k);
-        const prog = clamp((t - a) / (b - a), 0, 1);
-        const dir = (tr.i + p.k) % 4;
-        const s = 1 + (dir % 2 ? KB * (1 - prog) : KB * prog);
-        const dx = (dir < 2 ? -1 : 1) * 1.6 * (prog - 0.5);
-        const dy = (dir % 3 ? 1 : -1) * 1.0 * (prog - 0.5);
-        el.style.opacity = op;
-        el.style.transform = `translate(${dx}%, ${dy}%) scale(${s})`;
-        el.style.filter = tr.tom === "antigo"
-          ? "sepia(.55) saturate(.75) contrast(1.05) brightness(.92)"
-          : "saturate(1.02) contrast(1.03)";
-        vis.add(el);
-      });
+    corridas.forEach((c) => {
+      if (!c.foto) return;
+      const a = c.ini - CROSS / 2, b = c.fim + CROSS / 2;
+      if (t < a || t > b) return;
+      const el = camada(c);
+      const prog = clamp((t - a) / (b - a), 0, 1);
+      const dir = c.i % 4;
+      const s = 1 + (dir % 2 ? KB * (1 - prog) : KB * prog);
+      const dx = (dir < 2 ? -1 : 1) * 1.6 * (prog - 0.5);
+      const dy = (dir % 3 ? 1 : -1) * 1.0 * (prog - 0.5);
+      el.style.opacity = Math.min(ease((t - a) / CROSS), ease((b - t) / CROSS));
+      el.style.transform = `translate(${dx}%, ${dy}%) scale(${s})`;
+      el.style.filter = c.tom === "antigo"
+        ? "sepia(.5) saturate(.8) contrast(1.05) brightness(.95)"
+        : "saturate(1.03) contrast(1.03)";
+      vis.add(el);
     });
     camadas.forEach((el) => { if (!vis.has(el)) el.style.opacity = 0; });
   }
@@ -201,7 +201,7 @@ body.render #ui, body.render #capa { display: none; }
       }
       case "lista": case "final":
         return `<div class="bloco ${it.tipo}">${it.titulo ? `<div class="tl">${it.titulo}</div>` : ""}${it.linhas.map((l) => `<div class="ln">${l}</div>`).join("")}</div>`;
-      case "pausa": return `<div class="bloco"></div>`;
+      case "pausa": case "respiro": return `<div class="bloco"></div>`;
       default: return `<div class="bloco frase">${it.t}</div>`;
     }
   }
@@ -210,6 +210,7 @@ body.render #ui, body.render #capa { display: none; }
     const w = document.createElement("div");
     w.innerHTML = html(it);
     const el = w.firstChild;
+    if (it.fotoAtual && !["capitulo", "ano", "titulo"].includes(it.tipo)) el.classList.add("baixo");
     el.style.opacity = 0;
     camTexto.appendChild(el);
     blocos.set(key, el);
@@ -222,7 +223,8 @@ body.render #ui, body.render #capa { display: none; }
     const op = Math.min(entra, sai);
     el.style.opacity = op;
     const subir = (1 - entra) * 18;
-    el.style.transform = `translateY(calc(-50% + ${subir}px))`;
+    const y0 = el.classList.contains("baixo") ? "0px" : "-50%";
+    el.style.transform = `translateY(calc(${y0} + ${subir}px))`;
     el.style.filter = `blur(${(1 - entra) * 8}px)`;
 
     if (it.tipo === "capitulo" || it.tipo === "titulo") {
@@ -257,25 +259,27 @@ body.render #ui, body.render #capa { display: none; }
   }
 
   function desenhaTexto(t) {
-    let cobertura = 0;
+    let cob = 0, cobBaixo = 0;
     const vis = new Set();
-    trechos.forEach((tr) => tr.itens.forEach((it, k) => {
+    itens.forEach((it) => {
       if (t < it.ini || t > it.fim) return;
-      const el = bloco(it, tr.i + ":" + k);
+      const el = bloco(it, it.i);
       anima(el, it, t);
       vis.add(el);
-      if (it.tipo !== "pausa") cobertura = Math.max(cobertura, Math.min(ease((t - it.ini) / 1.2), ease((it.fim - t) / 1.2)));
-    }));
+      if (it.tipo === "respiro" || it.tipo === "pausa") return;
+      const c = Math.min(ease((t - it.ini) / 1.2), ease((it.fim - t) / 1.2));
+      if (el.classList.contains("baixo")) cobBaixo = Math.max(cobBaixo, c); else cob = Math.max(cob, c);
+    });
     blocos.forEach((el) => { if (!vis.has(el)) el.style.opacity = 0; });
-    return cobertura;
+    return [cob, cobBaixo];
   }
 
   function desenha(t) {
     desenhaFotos(t);
-    const cob = desenhaTexto(t);
-    // escurece a foto quando há texto; fade de entrada e saída do vídeo
-    const ab = ease(t / 2), fe = ease((TOTAL - t) / 2.5);
-    escurece.style.opacity = clamp(1 - Math.min(ab, fe) + Math.min(ab, fe) * (0.12 + 0.40 * cob), 0, 1);
+    const [cob, cobBaixo] = desenhaTexto(t);
+    const ab = ease(t / 2), fe = ease((TOTAL - t) / 2.5), vivo = Math.min(ab, fe);
+    escurece.style.opacity = clamp(1 - vivo + vivo * (0.06 + 0.4 * cob + 0.14 * cobBaixo), 0, 1);
+    base.style.opacity = cobBaixo;
     $("#grao").style.transform = `translate(${(Math.sin(t * 37) * 3).toFixed(2)}%, ${(Math.cos(t * 23) * 3).toFixed(2)}%)`;
   }
 
@@ -292,7 +296,7 @@ body.render #ui, body.render #capa { display: none; }
     document.body.classList.add("render");
     desenha(0);
     window.__pronto = document.fonts.ready.then(() => Promise.all(
-      [...new Set(Object.values(FOTOS).flat().concat(LOGO ? [LOGO] : []))].map((f) => new Promise((r) => {
+      window.__ARQUIVOS.concat(LOGO ? [LOGO] : []).map((f) => new Promise((r) => {
         const im = new Image(); im.onload = im.onerror = r; im.src = "fotos/" + f;
       }))
     ));
