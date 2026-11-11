@@ -60,8 +60,9 @@ window.ROTEIRO = [
   { t: "O mundo parou.", dur: 3.5 },
   { t: "Medo. Incerteza. Sonhos adiados.", dur: 4.5 },
   { t: "Foi aí que ela decidiu avançar.", dur: 4.5 },
+  { foto: "23.jpg", tom: C, tipo: "respiro", dur: 3 },
   { t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 6 },
-  { t: "Acreditar em um sonho também é<br>ter coragem para seguir em frente.", dur: 6 },
+  { foto: null, t: "Acreditar em um sonho também é<br>ter coragem para seguir em frente.", dur: 6 },
 
   // V — O AMOR QUE SUSTENTA OS SONHOS
   { tipo: "capitulo", n: "IV", t: "O amor que sustenta os sonhos", dur: 4.5 },
