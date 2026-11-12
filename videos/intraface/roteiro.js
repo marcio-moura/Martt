@@ -20,16 +20,17 @@ window.ROTEIRO = [
   { foto: null, t: "Toda grande história começa com um sonho.", dur: 4.5 },
   { tipo: "titulo", t: "INTRAFACE RADIOLOGIA", sub: "Uma história de sonhos, coragem, amor e superação", dur: 6 },
 
-  // 2004
-  { tipo: "ano", t: "2004", dur: 3.5 },
-  r("22.jpg", A, 2.2),
-  { t: "Três sócias.<br>Um sonho compartilhado.", dur: 4 },
-  r("19.jpg", A),
-  { t: "Nascia a primeira clínica de radiologia<br>odontológica de Trindade.", dur: 4.8 },
-  r("14.jpg", A),
-  { t: "Sem secretária, sem técnico.<br>Elas mesmas recebiam, examinavam e laudavam.", dur: 5 },
-  r("07.jpg", A),
-  { t: "Mas nunca faltou a vontade de fazer dar certo.", dur: 4.2 },
+  // 2004 (de 10.5 s a 40.2 s: a trilha muda de clima exatamente em 40.2 s)
+  { tipo: "ano", t: "2004", dur: 3.13 },
+  r("22.jpg", A, 1.79),
+  { t: "Três sócias.<br>Um sonho compartilhado.", dur: 3.40 },
+  r("19.jpg", A, 1.79),
+  { t: "Nascia a primeira clínica de radiologia<br>odontológica de Trindade.", dur: 4.29 },
+  r("24.jpg", A, 1.79),
+  { t: "Muito trabalho, muita dedicação<br>e o apoio de quem sempre acreditou.", dur: 4.12 },
+  { t: "E nunca faltou a vontade de fazer dar certo.", dur: 3.13 },
+  r("25.jpg", A, 1.79),
+  { t: "Pelo caminho, passaram pessoas especiais<br><em>que deixaram sua marca para sempre.</em>", dur: 4.47 },
 
   // A DRA. SIMONE SEGUE
   r("13.jpg", A),
@@ -44,7 +45,7 @@ window.ROTEIRO = [
   { foto: null, tipo: "ano", t: "2020", dur: 3.5 },
   { t: "O mundo parou.", dur: 3 },
   { t: "Ela decidiu avançar.", dur: 3.2 },
-  { t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 5.2 },
+  { foto: "26.jpg", tom: C, t: "Em plena pandemia, nascia a segunda unidade:<br><em>Setor Maysa.</em>", dur: 5.2 },
 
   // FAMÍLIA E EQUIPE
   r("03.jpg", C),

@@ -15,6 +15,7 @@ W, H = 1920, 1080
 
 # recortes (esquerda, topo, direita, base) para prints de celular
 RECORTES = {
+    "26.jpg": (0, 318, 720, 1276),   # print do Instagram: só a foto da fachada
     "18.jpg": (60, 215, 1600, 1300),
     "23.jpg": (0, 745, 1320, 1488),  # Google Maps (Street View): só o prédio
     "21.jpg": (0, 640, 1200, 1560),
@@ -23,7 +24,7 @@ RECORTES = {
     "14.jpg": (0, 399, 720, 880),
 }
 # onde fica o rosto na vertical (0 = topo, 1 = base), para o corte das deitadas
-FOCO_V = {"02.jpg": 0.45, "07.jpg": 0.35, "13.jpg": 0.4, "16.jpg": 0.4, "11.jpg": 0.35, "12.jpg": 0.4, "14.jpg": 0.35, "18.jpg": 0.4, "19.jpg": 0.3, "21.jpg": 0.55, "22.jpg": 0.3, "23.jpg": 0.45}
+FOCO_V = {"02.jpg": 0.45, "07.jpg": 0.35, "13.jpg": 0.4, "16.jpg": 0.4, "11.jpg": 0.35, "12.jpg": 0.4, "14.jpg": 0.35, "18.jpg": 0.4, "19.jpg": 0.3, "21.jpg": 0.55, "22.jpg": 0.3, "23.jpg": 0.45, "24.jpg": 0.3, "25.jpg": 0.3}
 
 
 def cobre(im, w, h, fv=0.5):
