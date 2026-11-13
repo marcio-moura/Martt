@@ -1,0 +1,50 @@
+{
+  "cliente": "Natura",
+  "tom": "limpo e calmo: proximidade, bem-estar, autenticidade",
+  "cores": {
+    "creme": "#FBF6EE",
+    "marrom": "#452C13",
+    "laranja": "#EB6619",
+    "branco": "#FFFFFF"
+  },
+  "regras": {
+    "uma_cor_de_destaque": "laranja, so na palavra-chave ou na assinatura",
+    "hierarquia": "no maximo 1 titulo + 1 legenda na tela ao mesmo tempo",
+    "proporcao": "70% imagem/fundo, 20% conteudo, 10% destaque"
+  },
+  "imagem": {
+    "cor": "natural e levemente quente (nada de preto e branco)",
+    "saturacao": 0.95,
+    "temperatura": "+5% quente"
+  },
+  "titulo_atras_da_pessoa": {
+    "fonte": "DMSans.ttf", "peso": 800, "caixa": "alta",
+    "cor": "creme", "opacidade": 0.92,
+    "entrada": "desliza devagar (0.6s, ease-out), sem tremor"
+  },
+  "legenda": {
+    "fonte": "DMSans.ttf", "peso": 700, "tamanho_px_1080": 64,
+    "cor": "branco", "palavra_falada": "laranja",
+    "sombra": "marrom 40%, suave",
+    "posicao": "terço inferior, acima da área da interface do Instagram",
+    "max_palavras_por_tela": 4,
+    "animacao": "pop leve (escala 0.92 -> 1.0 em 0.12s)"
+  },
+  "etiquetas": {
+    "fonte": "DMSans.ttf", "peso": 600, "caixa": "alta", "espacamento": 0.18,
+    "cor": "creme sobre marrom 70%", "uso": "nome do produto, benefício"
+  },
+  "assinatura_manuscrita": {
+    "fonte": "Caveat.ttf", "cor": "laranja", "uso": "só no CTA final"
+  },
+  "rastreamento": {
+    "produto_ou_mao": "etiqueta presa ao produto com linha fina creme",
+    "rosto": "não usar efeitos tipo HUD/tecnológico — não combina com a marca"
+  },
+  "som": {
+    "musica": "acústica/leve, -22 LUFS sob a voz, abaixa quando há fala",
+    "efeitos": "whoosh macio nas entradas de título, pop discreto na etiqueta; sem glitch ou impacto",
+    "voz": "-14 LUFS final"
+  },
+  "cortes": "remover silêncios > 0.35s, ritmo médio (não frenético); zoom suave 1.0 -> 1.08 nas frases-chave"
+}
