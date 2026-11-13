@@ -2,19 +2,27 @@
  "video": "bruto.mov",
  "palavras": "words.json",
  "estilo": "/home/user/Martt/edicao-video/clientes/natura/estilo.json",
- "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v3.mp4",
+ "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v4.mp4",
  "segmentos": [
   [
-   0.74,
-   8.5
+   13.2,
+   13.8
   ],
   [
-   8.5,
-   14.2
+   14.5,
+   15.0
   ],
   [
-   30.75,
-   34.6
+   18.9,
+   19.3
+  ],
+  [
+   20,
+   20.5
+  ],
+  [
+   25.8,
+   26.3
   ]
  ],
  "correcoes": {
@@ -82,7 +90,7 @@
    "nome": "Kriska Romance",
    "de": "R$ 169,90",
    "por": "R$ 84,99",
-   "t_de": 2.0,
+   "t_de": 1.72,
    "t_risco": 3.44,
    "t_por": 4.42,
    "ate": 6.04,

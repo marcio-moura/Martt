@@ -86,7 +86,7 @@ def camada_titulo(t, tit, cores, est):
     while max(largura(l) for l in linhas) > W * 0.88 and tam > 90:
         tam -= 6; f = fonte(FT, tam, 900)
     cor = cores[tit.get("cor", "branco")]
-    l0 = largura(linhas[0]); x0 = (W - l0) / 2; dir0 = x0 + l0
+    lmax = max(largura(l) for l in linhas); dir0 = (W + lmax) / 2; x0 = dir0 - largura(linhas[0])
     y = tit.get("y", 0.05) * H; fim = tit["ate"] - t; idx = 0
     for li, l in enumerate(linhas):
         lw = largura(l)
@@ -144,8 +144,10 @@ def camada_nome(t, pr, cores, caixa, palavras):
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
     ditas = [w for w in palavras if w["s"] - 0.04 <= t]
     if not ditas: return img
-    f = fonte(FT, 58, 800)
     txt = " ".join(w["w"].strip(".,!?") for w in ditas)
+    todo = " ".join(w["w"].strip(".,!?") for w in palavras); tn = 58; f = fonte(FT, tn, 800)
+    while d.textlength(todo, font=f) > W * 0.84 - 56 and tn > 30:
+        tn -= 2; f = fonte(FT, tn, 800)
     k0 = ease_out((t - ditas[0]["s"]) / 0.25); kn = ease_out_back((t - ditas[-1]["s"] + 0.04) / 0.2)
     sai = max(0, min(1, (pr["t_de"] - t) / 0.15)); alpha = k0 * sai
     tw = d.textlength(txt, font=f); cw = tw + 56; chh = 92
@@ -158,7 +160,7 @@ def camada_nome(t, pr, cores, caixa, palavras):
     d.line((px, py, ex, y + chh / 2), fill=A(cores["creme"], 230), width=3)
     d.ellipse((px - 9, py - 9, px + 9, py + 9), fill=A(cores["creme"]), outline=A(cores["laranja"]), width=3)
     d.rounded_rectangle((x, y, x + cw * (0.97 + 0.03 * kn), y + chh), 30, fill=A(cores["marrom"], 238))
-    d.text((x + 28, y + 14), txt, font=f, fill=A(cores["creme"]))
+    d.text((x + 28, y + (chh - tn * 1.2) / 2), txt, font=f, fill=A(cores["creme"]))
     return img
 
 
@@ -223,7 +225,12 @@ def camada_preco(t, pr, cores, caixa):
     """etiqueta presa ao produto: nome, preço antigo riscado e preço novo com pop"""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
     fl = fonte(FT, 30, 600); fo = fonte(FT, 50, 600); fn = fonte(FT, 104, 800)
-    nome = "  ".join(pr["nome"].upper()); velho = "de " + pr["de"]; novo = pr["por"]
+    velho = "de " + pr["de"]; novo = pr["por"]; maxw = W * 0.84 - 64
+    nome = "  ".join(pr["nome"].upper())
+    if d.textlength(nome, font=fl) > maxw: nome = " ".join(pr["nome"].upper())
+    tl = 30
+    while d.textlength(nome, font=fl) > maxw and tl > 18:
+        tl -= 2; fl = fonte(FT, tl, 600)
     cw = max(d.textlength(nome, font=fl), d.textlength(velho, font=fo), d.textlength(novo, font=fn)) + 64
     chh = 40 + 30 + 62 + 120
     k = ease_out((t - pr["t_de"]) / 0.3); sai = max(0, min(1, (pr["ate"] - t) / 0.25))
