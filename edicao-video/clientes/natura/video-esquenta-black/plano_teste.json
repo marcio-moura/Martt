@@ -1,0 +1,10 @@
+{"video":"bruto.mov","palavras":"words.json","estilo":"/home/user/Martt/edicao-video/clientes/natura/estilo.json",
+ "inicio":0.0,"fim":8.5,"saida":"teste_cena1.mp4",
+ "correcoes":{"Crisca":"Kriska"},
+ "titulos":[{"texto":"ESQUENTA","de":6.95,"ate":8.5,"y":0.03,"cor":"marrom"},
+            {"texto":"BLACK","de":7.3,"ate":8.5,"y":0.135,"cor":"laranja","tamanho":330}],
+ "precos":[{"nome":"Kriska Romance","de":"R$ 169,90","por":"R$ 84,99",
+            "t_de":2.0,"t_risco":3.44,"t_por":4.42,"ate":6.04,
+            "rastrear":{"t":2.5,"caixa":[30,1230,240,560]}}],
+ "zooms":[{"de":4.42,"ate":6.04,"escala":1.1,"cx":540,"cy":900}],
+ "destaques":["esquenta","black"]}

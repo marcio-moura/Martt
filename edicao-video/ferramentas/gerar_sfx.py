@@ -41,6 +41,12 @@ def riser(dur=1.2):
     n = int(SR * dur); t = np.linspace(0, 1, n)
     return bandsweep(rng.standard_normal(n), 200, 6000, 4) * t ** 2
 
+def ding(dur=0.9, f=1568):
+    n = int(SR * dur); t = np.arange(n) / SR
+    x = sum(a * np.sin(2 * np.pi * f * k * t) * np.exp(-t * d) for k, a, d in [(1, 1, 5), (2.76, .4, 9), (5.4, .2, 14), (1.5, .3, 7)])
+    return x * env(n, SR * 0.002, 0)
+
+
 def save(path, x, peak=0.8):
     x = x / (np.abs(x).max() + 1e-9) * peak
     with wave.open(path, "w") as w:
@@ -51,4 +57,4 @@ if __name__ == "__main__":
     d = sys.argv[1]
     save(f"{d}/whoosh.wav", whoosh()); save(f"{d}/whoosh_curto.wav", whoosh(0.25, 600, 5000))
     save(f"{d}/pop.wav", pop()); save(f"{d}/tick.wav", tick(), 0.5)
-    save(f"{d}/impacto_suave.wav", thump()); save(f"{d}/riser.wav", riser(), 0.6)
+    save(f"{d}/ding.wav", ding(), 0.6); save(f"{d}/impacto_suave.wav", thump()); save(f"{d}/riser.wav", riser(), 0.6)
