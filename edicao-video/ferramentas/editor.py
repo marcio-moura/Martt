@@ -151,13 +151,10 @@ def camada_nome(t, pr, cores, caixa, palavras):
     k0 = ease_out((t - ditas[0]["s"]) / 0.25); kn = ease_out_back((t - ditas[-1]["s"] + 0.04) / 0.2)
     sai = max(0, min(1, (pr["t_de"] - t) / 0.15)); alpha = k0 * sai
     tw = d.textlength(txt, font=f); cw = tw + 56; chh = 92
-    bx, by, bw, bh = caixa
-    x = bx + bw + 40
-    if x + cw > W - 30: x = bx - 40 - cw
-    x = min(max(x, 30), W - 30 - cw); y = min(max(by + bh * 0.1, H * 0.45), H * 0.66) + (1 - k0) * 40
+    x, y, (px, py), (ex, ey) = posicionar(caixa, cw, chh, y_max=0.66)
+    dy = (1 - k0) * 40; y += dy; ey += dy
     A = lambda c, a=255: c + (int(a * alpha),)
-    px, py = bx + bw * 0.5, by + bh * 0.25; ex = x if px < x else x + cw
-    d.line((px, py, ex, y + chh / 2), fill=A(cores["creme"], 230), width=3)
+    d.line((px, py, ex, ey), fill=A(cores["creme"], 230), width=3)
     d.ellipse((px - 9, py - 9, px + 9, py + 9), fill=A(cores["creme"]), outline=A(cores["laranja"]), width=3)
     d.rounded_rectangle((x, y, x + cw * (0.97 + 0.03 * kn), y + chh), 30, fill=A(cores["marrom"], 238))
     d.text((x + 28, y + (chh - tn * 1.2) / 2), txt, font=f, fill=A(cores["creme"]))
@@ -198,6 +195,26 @@ def rastrear(video, box, t_init, t_fim):
     return res
 
 
+def rastrear_cor(video, lo, hi, t_ini, t_fim):
+    """segue o produto pela cor (HSV): maior mancha dentro da faixa"""
+    cap = cv2.VideoCapture(video); fps = cap.get(cv2.CAP_PROP_FPS)
+    cap.set(cv2.CAP_PROP_POS_FRAMES, int(round(t_ini * fps))); t = t_ini; sm = None; res = []
+    k = np.ones((9, 9), np.uint8)
+    while t < t_fim:
+        ok, f = cap.read()
+        if not ok: break
+        m = cv2.inRange(cv2.cvtColor(f, cv2.COLOR_BGR2HSV), tuple(lo), tuple(hi))
+        m = cv2.morphologyEx(m, cv2.MORPH_OPEN, k)
+        n, _, st, _ = cv2.connectedComponentsWithStats(m)
+        if n > 1:
+            i = 1 + int(np.argmax(st[1:, 4]))
+            if st[i][4] > 3000:
+                b = np.array(st[i][:4], float); sm = b if sm is None else 0.6 * sm + 0.4 * b
+        if sm is not None: res.append((t, sm.copy()))
+        t += 1 / fps
+    return res
+
+
 def caixa_em(trilha, t):
     if t <= trilha[0][0]: return trilha[0][1]
     for tt, b in trilha:
@@ -221,6 +238,24 @@ def aplica_zoom(rgb, s, cx, cy):
     return cv2.warpAffine(rgb, M, (W, H), flags=cv2.INTER_LINEAR), (x0, y0)
 
 
+def posicionar(caixa, cw, chh, y_min=0.45, y_max=0.62):
+    """etiqueta ao lado do produto; sem espaço lateral, vai para baixo dele.
+    devolve (x, y, ponto no produto, ponto na etiqueta)"""
+    bx, by, bw, bh = caixa
+    for x in (bx + bw + 40, bx - 40 - cw):
+        if 30 <= x <= W - 30 - cw:
+            y = min(max(by + bh * 0.1, H * y_min), H * y_max)
+            p = (bx + bw * 0.5, by + bh * 0.25)
+            return x, y, p, (x if p[0] < x else x + cw, y + chh / 2)
+    x = min(max(bx + bw / 2 - cw / 2, 30), W - 30 - cw)
+    y = min(max(by + bh + 30, H * y_min), H * 0.74 - chh)
+    if y + chh < by + bh * 0.5:   # não coube embaixo: etiqueta fica acima, linha sai do topo do produto
+        p = (bx + bw * 0.5, by + bh * 0.15)
+        return x, y, p, (min(max(p[0], x + 40), x + cw - 40), y + chh)
+    p = (bx + bw * 0.5, by + bh * 0.85)
+    return x, y, p, (min(max(p[0], x + 40), x + cw - 40), y)
+
+
 def camada_preco(t, pr, cores, caixa):
     """etiqueta presa ao produto: nome, preço antigo riscado e preço novo com pop"""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
@@ -236,16 +271,10 @@ def camada_preco(t, pr, cores, caixa):
     k = ease_out((t - pr["t_de"]) / 0.3); sai = max(0, min(1, (pr["ate"] - t) / 0.25))
     alpha = min(1, k) * sai
     if alpha <= 0: return img
-    bx, by, bw, bh = caixa
-    x = bx + bw + 40
-    if x + cw > W - 30: x = bx - 40 - cw
-    x = min(max(x, 30), W - 30 - cw); y = min(max(by + bh * 0.1, H * 0.45), H * 0.62)   # nunca sobre o rosto
-    y += (1 - k) * 50
+    x, y, (px, py), (ex, ey) = posicionar(caixa, cw, chh)
+    dy = (1 - k) * 50; y += dy; ey += dy
     A = lambda c, a=255: c + (int(a * alpha),)
-    # linha do produto até a etiqueta
-    px, py = bx + bw * 0.5, by + bh * 0.25
-    ex = x if px < x else x + cw
-    d.line((px, py, ex, y + 60), fill=A(cores["creme"], 230), width=3)
+    d.line((px, py, ex, ey), fill=A(cores["creme"], 230), width=3)
     d.ellipse((px - 9, py - 9, px + 9, py + 9), fill=A(cores["creme"]), outline=A(cores["laranja"]), width=3)
     d.rounded_rectangle((x, y, x + cw, y + chh), 28, fill=A(cores["marrom"], 238))
     d.text((x + 32, y + 26), nome, font=fl, fill=A(cores["creme"], 210))
@@ -285,7 +314,11 @@ def main(plano_path):
     pags = []; destaques = set(P.get("destaques", []))
     titulos = P.get("titulos", []); precos = P.get("precos", []); zooms = P.get("zooms", [])
     for pr in precos:
-        a = pr["rastrear"]; pr["_trilha"] = rastrear(rel(P["video"]), a["caixa"], a["t"], pr["ate"])
+        a = pr["rastrear"]
+        if "cor" in a:
+            pr["_trilha"] = rastrear_cor(rel(P["video"]), a["cor"][0], a["cor"][1], pr.get("t_nome", pr["t_de"]) - 0.1, pr["ate"])
+        else:
+            pr["_trilha"] = rastrear(rel(P["video"]), a["caixa"], a["t"], pr["ate"])
     tmpdir = rel(P["saida"]) + ".tmp"; os.makedirs(tmpdir, exist_ok=True)
     seg = Segmentador(); sombra = None
     if P.get("sombra"):
