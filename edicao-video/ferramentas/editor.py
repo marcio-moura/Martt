@@ -143,6 +143,8 @@ def juntar_moeda(ws, correcoes):
             if j < len(ws) and ws[j]["w"].startswith(","):
                 txt += ws[j]["w"].rstrip("."); e = ws[j]["e"]; j += 1
             out.append(dict(w=txt, s=w["s"], e=e)); i = j
+        elif i + 1 < len(ws) and ws[i + 1]["w"].startswith("%"):
+            out.append(dict(w=w["w"] + "%", s=w["s"], e=ws[i + 1]["e"])); i += 2
         else:
             ww = dict(w); chave = ww["w"].strip(".,!?")
             if chave in correcoes: ww["w"] = ww["w"].replace(chave, correcoes[chave])
@@ -201,7 +203,7 @@ def camada_preco(t, pr, cores, caixa):
     bx, by, bw, bh = caixa
     x = bx + bw + 40
     if x + cw > W - 30: x = bx - 40 - cw
-    x = min(max(x, 30), W - 30 - cw); y = min(max(by + bh * 0.1, 120), H * 0.62)
+    x = min(max(x, 30), W - 30 - cw); y = min(max(by + bh * 0.1, H * 0.45), H * 0.62)   # nunca sobre o rosto
     y += (1 - k) * 50
     A = lambda c, a=255: c + (int(a * alpha),)
     # linha do produto até a etiqueta
@@ -234,9 +236,11 @@ def main(plano_path):
     rel = lambda p: p if os.path.isabs(p) else os.path.join(dirp, p)
     est = json.load(open(rel(P["estilo"])))
     cores = {k: hexrgb(v) for k, v in est["cores"].items()}
-    t0, t1 = P["inicio"], P["fim"]
+    segs = P.get("segmentos") or [[P["inicio"], P["fim"]]]
+    t0, t1 = segs[0][0], segs[-1][1]
+    dentro = lambda x: any(a <= x < b for a, b in segs)
     palavras = juntar_moeda(json.load(open(rel(P["palavras"]))), P.get("correcoes", {}))
-    palavras = [w for w in palavras if t0 <= w["s"] < t1]
+    palavras = [w for w in palavras if dentro(w["s"])]
     pr_jan = [(pr["t_de"] - 0.05, pr["ate"]) for pr in P.get("precos", [])]
     pags = paginas([w for w in palavras if not any(a <= w["s"] < b for a, b in pr_jan)]); destaques = set(P.get("destaques", []))
     titulos = P.get("titulos", []); precos = P.get("precos", []); zooms = P.get("zooms", [])
@@ -245,13 +249,16 @@ def main(plano_path):
     tmpdir = rel(P["saida"]) + ".tmp"; os.makedirs(tmpdir, exist_ok=True)
     seg = Segmentador()
     cap = cv2.VideoCapture(rel(P["video"])); vfps = cap.get(cv2.CAP_PROP_FPS)
-    cap.set(cv2.CAP_PROP_POS_FRAMES, int(round(t0 * vfps)))
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                             "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-crf", "18",
                             "-preset", "medium", "-pix_fmt", "yuv420p", f"{tmpdir}/v.mp4"], stdin=subprocess.PIPE)
-    n = int(round((t1 - t0) * FPS)); frame = None; vt = t0
-    for i in range(n):
-        t = t0 + i / FPS
+    quadros = []
+    for a, b in segs:
+        quadros += [(a + i / FPS, i == 0) for i in range(int(round((b - a) * FPS)))]
+    frame = None; vt = 0
+    for t, novo in quadros:
+        if novo:
+            cap.set(cv2.CAP_PROP_POS_FRAMES, int(round(t * vfps))); vt = t; seg.prev = None
         while vt <= t + 1e-6:
             ok, fr = cap.read()
             if not ok: break
@@ -289,14 +296,28 @@ def main(plano_path):
     enc.stdin.close(); enc.wait()
 
     # --- áudio: original + efeitos sonoros
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(t0), "-t", str(t1 - t0), "-i", rel(P["video"]),
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", rel(P["video"]),
                     "-ac", "1", "-ar", str(SR), f"{tmpdir}/a.wav"], check=True)
-    mix = ler_wav(f"{tmpdir}/a.wav") * P.get("volume_original", 1.0)
+    orig = ler_wav(f"{tmpdir}/a.wav") * P.get("volume_original", 1.0)
+    partes, offs, off = [], [], 0.0
+    for a, b in segs:
+        x = orig[int(a * SR):int(b * SR)].copy(); f = min(480, len(x) // 2)
+        x[:f] *= np.linspace(0, 1, f); x[-f:] *= np.linspace(1, 0, f)
+        partes.append(x); offs.append(off); off += (b - a)
+    mix = np.concatenate(partes)
+    def saida_t(q):
+        for (a, b), o in zip(segs, offs):
+            if a - 0.3 <= q < b: return o + (q - a)
+        return None
     sfxd = os.path.join(BASE, "sfx")
-    def poe(nome, quando, vol):
-        x = ler_wav(os.path.join(sfxd, nome + ".wav")) * vol; i = int((quando - t0) * SR)
+    def poe(nome, quando, vol, ja_saida=False):
+        q = quando if ja_saida else saida_t(quando)
+        if q is None: return
+        x = ler_wav(os.path.join(sfxd, nome + ".wav")) * vol; i = int(q * SR)
         if i < 0: x = x[-i:]; i = 0
         j = min(len(mix), i + len(x)); mix[i:j] += x[:j - i]
+    for o in offs[1:]:
+        poe("whoosh_curto", o - 0.12, 0.35, True)
     for tt in titulos:
         poe("whoosh", tt["de"] - 0.12, 0.55); poe("impacto_suave", tt["de"] + 0.05, 0.35)
     for pr in precos:
