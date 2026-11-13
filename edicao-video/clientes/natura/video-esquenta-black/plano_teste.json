@@ -2,7 +2,7 @@
  "video": "bruto.mov",
  "palavras": "words.json",
  "estilo": "/home/user/Martt/edicao-video/clientes/natura/estilo.json",
- "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v2.mp4",
+ "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v3.mp4",
  "segmentos": [
   [
    0.74,
@@ -10,7 +10,11 @@
   ],
   [
    8.5,
-   11.3
+   14.2
+  ],
+  [
+   30.75,
+   34.6
   ]
  ],
  "correcoes": {
@@ -90,7 +94,8 @@
      240,
      560
     ]
-   }
+   },
+   "t_nome": 0.78
   },
   {
    "nome": "Tododia Amora e Flor de Pêssego",
@@ -108,7 +113,8 @@
      280,
      620
     ]
-   }
+   },
+   "t_nome": 12.48
   },
   {
    "nome": "Body Splash Acerola e Hibisco",
@@ -126,7 +132,8 @@
      290,
      720
     ]
-   }
+   },
+   "t_nome": 17.6
   },
   {
    "nome": "K Max Deo Parfum",
@@ -144,7 +151,8 @@
      165,
      320
     ]
-   }
+   },
+   "t_nome": 30.92
   },
   {
    "nome": "Ilía Tradicional",
@@ -162,7 +170,8 @@
      130,
      190
     ]
-   }
+   },
+   "t_nome": 53.88
   },
   {
    "nome": "Luna Nuit",
@@ -180,7 +189,8 @@
      130,
      320
     ]
-   }
+   },
+   "t_nome": 59.94
   }
  ],
  "zooms": [
@@ -233,12 +243,16 @@
   "trindade",
   "60%",
   "desconto",
+  "somente",
   "hoje",
   "amanhã",
   "presente",
   "especial",
   "limitado",
-  "corram"
+  "corram",
+  "aproveitam",
+  "R$250,00",
+  "aqui"
  ],
  "sombra": {
   "imagem": "../sombra.png",

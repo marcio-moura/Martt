@@ -94,7 +94,7 @@
    "nome": "Kriska Romance",
    "de": "R$ 169,90",
    "por": "R$ 84,99",
-   "t_de": 2.0,
+   "t_de": 1.72,
    "t_risco": 3.44,
    "t_por": 4.42,
    "ate": 6.04,
@@ -106,7 +106,8 @@
      240,
      560
     ]
-   }
+   },
+   "t_nome": 0.78
   },
   {
    "nome": "Tododia Amora e Flor de Pêssego",
@@ -124,7 +125,8 @@
      280,
      620
     ]
-   }
+   },
+   "t_nome": 12.48
   },
   {
    "nome": "Body Splash Acerola e Hibisco",
@@ -142,7 +144,8 @@
      290,
      720
     ]
-   }
+   },
+   "t_nome": 17.6
   },
   {
    "nome": "K Max Deo Parfum",
@@ -160,7 +163,8 @@
      165,
      320
     ]
-   }
+   },
+   "t_nome": 30.92
   },
   {
    "nome": "Ilía Tradicional",
@@ -178,7 +182,8 @@
      130,
      190
     ]
-   }
+   },
+   "t_nome": 53.88
   },
   {
    "nome": "Luna Nuit",
@@ -196,7 +201,8 @@
      130,
      320
     ]
-   }
+   },
+   "t_nome": 59.94
   }
  ],
  "zooms": [
@@ -249,12 +255,16 @@
   "trindade",
   "60%",
   "desconto",
+  "somente",
   "hoje",
   "amanhã",
   "presente",
   "especial",
   "limitado",
-  "corram"
+  "corram",
+  "aproveitam",
+  "R$250,00",
+  "aqui"
  ],
  "sombra": {
   "imagem": "../sombra.png",

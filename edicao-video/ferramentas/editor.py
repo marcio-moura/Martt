@@ -115,33 +115,51 @@ def paginas(palavras, maxp=3):
     return pags
 
 
-def camada_legenda(t, pag, cores, destaques):
-    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    T = 80; f = fonte(FT, T, 800)
-    tmp = ImageDraw.Draw(img)
-    textos = [w["w"].strip(".!?") if "$" in w["w"] else w["w"].strip(".,!?").lower() for w in pag]
-    esp = T * 0.3
-    larg = sum(tmp.textlength(s, font=f) for s in textos) + esp * (len(textos) - 1)
-    while larg > W * 0.86 and T > 44:
-        T -= 4; f = fonte(FT, T, 800); esp = T * 0.3
-        larg = sum(tmp.textlength(s, font=f) for s in textos) + esp * (len(textos) - 1)
-    x = (W - larg) / 2; y = H * POS_LEGENDA
-    som = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(som)
-    for w, s in zip(pag, textos):
-        lw = tmp.textlength(s, font=f)
-        if t >= w["s"] - 0.05:
-            prox = pag[pag.index(w) + 1]["s"] - 0.05 if w is not pag[-1] else w["e"] + 0.3
-            falando = w["s"] - 0.05 <= t < prox
-            k = ease_out_back((t - w["s"] + 0.05) / 0.16)
-            esc = 0.75 + 0.25 * k + (0.04 if falando else 0)
-            cor = cores["laranja"] if (falando or s in destaques) else cores["branco"]
-            fw = fonte(FT, max(10, int(T * esc)), 800)
-            lw2 = tmp.textlength(s, font=fw); xx = x + (lw - lw2) / 2; yy = y + (T - T * esc) * 0.6
-            ds.text((xx + 3, yy + 6), s, font=fw, fill=cores["marrom"] + (150,))
-            ImageDraw.Draw(img).text((xx, yy), s, font=fw, fill=cor + (255,))
-        x += lw + esp
-    som = som.filter(ImageFilter.GaussianBlur(7))
-    return Image.alpha_composite(som, img)
+def texto_legenda(w):
+    return w["w"].strip(".!?") if "$" in w["w"] else w["w"].strip(".,!?").lower()
+
+
+def camada_legenda(t, w, cores, destaques):
+    """uma palavra por vez; branca. Destaque: laranja, maior, pop mais forte e leve tremida"""
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); som = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    s = texto_legenda(w); dest = s in destaques
+    T = 96 if dest else 74
+    k = (t - w["s"] + 0.04) / (0.26 if dest else 0.14)
+    esc = (0.55 + 0.45 * ease_out_back(k)) if dest else (0.82 + 0.18 * ease_out(k))
+    tam = max(10, int(T * esc)); f = fonte(FT, tam, 900 if dest else 800)
+    d = ImageDraw.Draw(img)
+    while d.textlength(s, font=f) > W * 0.88 and tam > 40:
+        tam -= 4; f = fonte(FT, tam, 900 if dest else 800)
+    lw = d.textlength(s, font=f); x = (W - lw) / 2; y = H * POS_LEGENDA + (T - tam) * 0.5
+    if dest and 0 < k < 1.6:  # tremida curta na entrada
+        x += np.sin(k * 26) * 6 * max(0, 1 - k / 1.6)
+    cor = cores["laranja"] if dest else cores["branco"]
+    ImageDraw.Draw(som).text((x + 3, y + 6), s, font=f, fill=(0, 0, 0, 140))
+    d.text((x, y), s, font=f, fill=cor + (255,))
+    return Image.alpha_composite(som.filter(ImageFilter.GaussianBlur(7)), img)
+
+
+def camada_nome(t, pr, cores, caixa, palavras):
+    """nome do produto preso ao produto, palavra por palavra, antes da etiqueta de preço"""
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    ditas = [w for w in palavras if w["s"] - 0.04 <= t]
+    if not ditas: return img
+    f = fonte(FT, 58, 800)
+    txt = " ".join(w["w"].strip(".,!?") for w in ditas)
+    k0 = ease_out((t - ditas[0]["s"]) / 0.25); kn = ease_out_back((t - ditas[-1]["s"] + 0.04) / 0.2)
+    sai = max(0, min(1, (pr["t_de"] - t) / 0.15)); alpha = k0 * sai
+    tw = d.textlength(txt, font=f); cw = tw + 56; chh = 92
+    bx, by, bw, bh = caixa
+    x = bx + bw + 40
+    if x + cw > W - 30: x = bx - 40 - cw
+    x = min(max(x, 30), W - 30 - cw); y = min(max(by + bh * 0.1, H * 0.45), H * 0.66) + (1 - k0) * 40
+    A = lambda c, a=255: c + (int(a * alpha),)
+    px, py = bx + bw * 0.5, by + bh * 0.25; ex = x if px < x else x + cw
+    d.line((px, py, ex, y + chh / 2), fill=A(cores["creme"], 230), width=3)
+    d.ellipse((px - 9, py - 9, px + 9, py + 9), fill=A(cores["creme"]), outline=A(cores["laranja"]), width=3)
+    d.rounded_rectangle((x, y, x + cw * (0.97 + 0.03 * kn), y + chh), 30, fill=A(cores["marrom"], 238))
+    d.text((x + 28, y + 14), txt, font=f, fill=A(cores["creme"]))
+    return img
 
 
 def juntar_moeda(ws, correcoes):
@@ -252,8 +270,12 @@ def main(plano_path):
     dentro = lambda x: any(a <= x < b for a, b in segs)
     palavras = juntar_moeda(json.load(open(rel(P["palavras"]))), P.get("correcoes", {}))
     palavras = [w for w in palavras if dentro(w["s"])]
-    pr_jan = [(pr["t_de"] - 0.05, pr["ate"]) for pr in P.get("precos", [])]
-    pags = paginas([w for w in palavras if not any(a <= w["s"] < b for a, b in pr_jan)]); destaques = set(P.get("destaques", []))
+    pr_jan = [(pr.get("t_nome", pr["t_de"]) - 0.05, pr["ate"]) for pr in P.get("precos", [])]
+    legenda = [w for w in palavras if not any(a <= w["s"] < b for a, b in pr_jan)]
+    for i_, w in enumerate(legenda):   # cada palavra fica até a próxima (ou +0.4s)
+        prox = legenda[i_ + 1]["s"] - 0.04 if i_ + 1 < len(legenda) else w["e"] + 0.4
+        w["ate"] = min(prox, w["e"] + 0.45)
+    pags = []; destaques = set(P.get("destaques", []))
     titulos = P.get("titulos", []); precos = P.get("precos", []); zooms = P.get("zooms", [])
     for pr in precos:
         a = pr["rastrear"]; pr["_trilha"] = rastrear(rel(P["video"]), a["caixa"], a["t"], pr["ate"])
@@ -301,14 +323,20 @@ def main(plano_path):
             base = Image.fromarray(a.astype(np.uint8), "RGBA")
         preco_ativo = False
         for pr in precos:
+            if "t_nome" in pr and pr["t_nome"] - 0.05 <= t < pr["t_de"]:
+                bx, by, bw, bh = caixa_em(pr["_trilha"], t)
+                bx, by = (bx - x0) * sx, (by - top) * sy; bw, bh = bw * sx, bh * sy
+                bx, by, bw, bh = (bx - zx0) * zs, (by - zy0) * zs, bw * zs, bh * zs
+                nomes = [w for w in palavras if pr["t_nome"] - 0.05 <= w["s"] < pr["t_de"] - 0.05]
+                base = Image.alpha_composite(base, camada_nome(t, pr, cores, (bx, by, bw, bh), nomes)); preco_ativo = True
             if pr["t_de"] - 0.05 <= t < pr["ate"]:
                 bx, by, bw, bh = caixa_em(pr["_trilha"], t)
                 bx, by = (bx - x0) * sx, (by - top) * sy; bw, bh = bw * sx, bh * sy
                 bx, by, bw, bh = (bx - zx0) * zs, (by - zy0) * zs, bw * zs, bh * zs
                 base = Image.alpha_composite(base, camada_preco(t, pr, cores, (bx, by, bw, bh))); preco_ativo = True
-        for pg in ([] if preco_ativo else pags):
-            if pg[0]["s"] - 0.05 <= t < (pg[-1]["e"] + 0.15):
-                base = Image.alpha_composite(base, camada_legenda(t, pg, cores, destaques)); break
+        for w in ([] if preco_ativo else legenda):
+            if w["s"] - 0.04 <= t < w["ate"]:
+                base = Image.alpha_composite(base, camada_legenda(t, w, cores, destaques)); break
         enc.stdin.write(np.asarray(base.convert("RGB")).tobytes())
     enc.stdin.close(); enc.wait()
 
@@ -345,8 +373,10 @@ def main(plano_path):
     for pg in pags:
         if any(pr["t_de"] - 0.05 <= pg[0]["s"] < pr["ate"] for pr in precos): continue
         poe("pop", pg[0]["s"] - 0.03, 0.28)
-    for w in palavras:
-        if w["w"].strip(".,!?").lower() in destaques: poe("tick", w["s"], 0.35)
+    for w in legenda:
+        if texto_legenda(w) in destaques: poe("pop", w["s"] - 0.02, 0.45)
+    for pr in precos:
+        if "t_nome" in pr: poe("whoosh_curto", pr["t_nome"] - 0.08, 0.4)
     if P.get("musica"):
         mu = ler_wav(rel(P["musica"]))[:len(mix)]
         voz = np.convolve(np.abs(mix), np.ones(4800) / 4800, "same")
