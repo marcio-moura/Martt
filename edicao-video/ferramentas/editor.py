@@ -27,6 +27,10 @@ def hexrgb(h):
     h = h.lstrip("#"); return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
 
 
+FT = "Montserrat.ttf"
+POS_LEGENDA = 0.79
+
+
 def fonte(nome, tam, peso):
     f = ImageFont.truetype(os.path.join(BASE, "fontes", nome), tam)
     try:
@@ -72,29 +76,33 @@ def grade(rgb, est):
 
 
 def camada_titulo(t, tit, cores, est):
-    """letras sobem uma a uma com leve overshoot; saem descendo com fade"""
+    """título em 1+ linhas (\\n), letras sobem uma a uma; linhas seguintes alinhadas à direita da 1ª"""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
-    texto = tit["texto"]; tam = tit.get("tamanho", 300)
-    f = fonte("DMSans.ttf", tam, 800)
-    while d.textlength(texto, font=f) > W * 1.02 and tam > 120:
-        tam -= 10; f = fonte("DMSans.ttf", tam, 800)
-    larg = d.textlength(texto, font=f); x = (W - larg) / 2; y0 = tit.get("y", 0.17) * H
-    if "cor" in tit:
-        cor = cores[tit["cor"]]
-    else:  # cor automática pelo brilho do fundo atrás do título
-        lum = tit.get("_lum", 100)
-        cor = cores["marrom"] if lum > 140 else cores["creme"]
-    fim = tit["ate"] - t
-    for i, ch in enumerate(texto):
-        k = (t - tit["de"] - i * 0.045) / 0.38
-        p = ease_out_back(k); alpha = min(1, max(0, k * 2.2))
-        if fim < 0.25:  # saída
-            alpha *= max(0, fim / 0.25); p += (1 - fim / 0.25) * 0.4
-        dy = (1 - p) * tam * 0.55
-        if alpha > 0:
-            d.text((x, y0 + dy), ch, font=f, fill=cor + (int(235 * alpha),))
-        x += d.textlength(ch, font=f)
-    return img
+    som = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(som)
+    linhas = tit["texto"].split("\n"); tam = tit.get("tamanho", 230)
+    f = fonte(FT, tam, 900)
+    trk = lambda: -0.03 * tam
+    largura = lambda l: sum(d.textlength(c, font=f) + trk() for c in l) - trk()
+    while max(largura(l) for l in linhas) > W * 0.88 and tam > 90:
+        tam -= 6; f = fonte(FT, tam, 900)
+    cor = cores[tit.get("cor", "branco")]
+    l0 = largura(linhas[0]); x0 = (W - l0) / 2; dir0 = x0 + l0
+    y = tit.get("y", 0.05) * H; fim = tit["ate"] - t; idx = 0
+    for li, l in enumerate(linhas):
+        lw = largura(l)
+        x = x0 if li == 0 else ((W - lw) / 2 if tit.get("alinhar") == "centro" else dir0 - lw)
+        for ch in l:
+            k = (t - tit["de"] - idx * 0.035) / 0.36
+            p = ease_out_back(k); alpha = min(1, max(0, k * 2.2))
+            if fim < 0.25:
+                alpha *= max(0, fim / 0.25); p += (1 - fim / 0.25) * 0.4
+            dy = (1 - p) * tam * 0.5
+            if alpha > 0:
+                ds.text((x + 2, y + dy + 8), ch, font=f, fill=(0, 0, 0, int(90 * alpha)))
+                d.text((x, y + dy), ch, font=f, fill=cor + (int(255 * alpha),))
+            x += d.textlength(ch, font=f) + trk(); idx += 1
+        y += tam * 0.95
+    return Image.alpha_composite(som.filter(ImageFilter.GaussianBlur(10)), img)
 
 
 def paginas(palavras, maxp=3):
@@ -109,12 +117,15 @@ def paginas(palavras, maxp=3):
 
 def camada_legenda(t, pag, cores, destaques):
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    f = fonte("DMSans.ttf", 84, 800)
+    T = 80; f = fonte(FT, T, 800)
     tmp = ImageDraw.Draw(img)
     textos = [w["w"].strip(".!?") if "$" in w["w"] else w["w"].strip(".,!?").lower() for w in pag]
-    esp = 84 * 0.32
+    esp = T * 0.3
     larg = sum(tmp.textlength(s, font=f) for s in textos) + esp * (len(textos) - 1)
-    x = (W - larg) / 2; y = H * 0.70
+    while larg > W * 0.86 and T > 44:
+        T -= 4; f = fonte(FT, T, 800); esp = T * 0.3
+        larg = sum(tmp.textlength(s, font=f) for s in textos) + esp * (len(textos) - 1)
+    x = (W - larg) / 2; y = H * POS_LEGENDA
     som = Image.new("RGBA", (W, H), (0, 0, 0, 0)); ds = ImageDraw.Draw(som)
     for w, s in zip(pag, textos):
         lw = tmp.textlength(s, font=f)
@@ -124,8 +135,8 @@ def camada_legenda(t, pag, cores, destaques):
             k = ease_out_back((t - w["s"] + 0.05) / 0.16)
             esc = 0.75 + 0.25 * k + (0.04 if falando else 0)
             cor = cores["laranja"] if (falando or s in destaques) else cores["branco"]
-            fw = fonte("DMSans.ttf", max(10, int(84 * esc)), 800)
-            lw2 = tmp.textlength(s, font=fw); xx = x + (lw - lw2) / 2; yy = y + (84 - 84 * esc) * 0.6
+            fw = fonte(FT, max(10, int(T * esc)), 800)
+            lw2 = tmp.textlength(s, font=fw); xx = x + (lw - lw2) / 2; yy = y + (T - T * esc) * 0.6
             ds.text((xx + 3, yy + 6), s, font=fw, fill=cores["marrom"] + (150,))
             ImageDraw.Draw(img).text((xx, yy), s, font=fw, fill=cor + (255,))
         x += lw + esp
@@ -193,7 +204,7 @@ def aplica_zoom(rgb, s, cx, cy):
 def camada_preco(t, pr, cores, caixa):
     """etiqueta presa ao produto: nome, preço antigo riscado e preço novo com pop"""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
-    fl = fonte("DMSans.ttf", 30, 600); fo = fonte("DMSans.ttf", 50, 600); fn = fonte("DMSans.ttf", 104, 800)
+    fl = fonte(FT, 30, 600); fo = fonte(FT, 50, 600); fn = fonte(FT, 104, 800)
     nome = "  ".join(pr["nome"].upper()); velho = "de " + pr["de"]; novo = pr["por"]
     cw = max(d.textlength(nome, font=fl), d.textlength(velho, font=fo), d.textlength(novo, font=fn)) + 64
     chh = 40 + 30 + 62 + 120
@@ -219,7 +230,7 @@ def camada_preco(t, pr, cores, caixa):
         yy = y + 66 + 34; d.line((x + 28, yy, x + 32 + (vw + 8) * r, yy - 4), fill=A(cores["laranja"]), width=6)
     if t >= pr["t_por"]:
         kp = ease_out_back((t - pr["t_por"]) / 0.28); tam = max(10, int(104 * (0.55 + 0.45 * kp)))
-        fz = fonte("DMSans.ttf", tam, 800)
+        fz = fonte(FT, tam, 800)
         d.text((x + 32, y + 132 + (104 - tam) * 0.5), novo, font=fz, fill=A(cores["laranja"]))
     return img
 
@@ -247,7 +258,11 @@ def main(plano_path):
     for pr in precos:
         a = pr["rastrear"]; pr["_trilha"] = rastrear(rel(P["video"]), a["caixa"], a["t"], pr["ate"])
     tmpdir = rel(P["saida"]) + ".tmp"; os.makedirs(tmpdir, exist_ok=True)
-    seg = Segmentador()
+    seg = Segmentador(); sombra = None
+    if P.get("sombra"):
+        sm = Image.open(rel(P["sombra"]["imagem"])).convert("RGBA").resize((W, H))
+        a_ = np.asarray(sm).astype(np.float32); al = a_[..., 3:4] / 255 * P["sombra"].get("opacidade", 1.0)
+        sombra = (a_[..., :3] * al, 1 - al)
     cap = cv2.VideoCapture(rel(P["video"])); vfps = cap.get(cv2.CAP_PROP_FPS)
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                             "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-crf", "18",
@@ -270,6 +285,8 @@ def main(plano_path):
         rgb = grade(rgb, est)
         zs, zcx, zcy = zoom_em(t, zooms); rgb, (zx0, zy0) = aplica_zoom(rgb, zs, zcx, zcy)
         sx, sy = W / cw, H / ch   # fonte -> saída (antes do zoom)
+        if sombra is not None:
+            rgb = (rgb.astype(np.float32) * sombra[1] + sombra[0]).astype(np.uint8)
         base = Image.fromarray(rgb).convert("RGBA")
         ativos = [tt for tt in titulos if tt["de"] <= t < tt["ate"]]
         if ativos:
@@ -296,7 +313,8 @@ def main(plano_path):
     enc.stdin.close(); enc.wait()
 
     # --- áudio: original + efeitos sonoros
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", rel(P["video"]),
+    filtro = "highpass=f=80,afftdn=nr=14:nf=-45:tn=1" if P.get("reduzir_ruido", True) else "anull"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", rel(P["video"]), "-af", filtro,
                     "-ac", "1", "-ar", str(SR), f"{tmpdir}/a.wav"], check=True)
     orig = ler_wav(f"{tmpdir}/a.wav") * P.get("volume_original", 1.0)
     partes, offs, off = [], [], 0.0
@@ -313,7 +331,7 @@ def main(plano_path):
     def poe(nome, quando, vol, ja_saida=False):
         q = quando if ja_saida else saida_t(quando)
         if q is None: return
-        x = ler_wav(os.path.join(sfxd, nome + ".wav")) * vol; i = int(q * SR)
+        x = ler_wav(os.path.join(sfxd, nome + ".wav")) * vol * P.get("volume_sfx", 0.5); i = int(q * SR)
         if i < 0: x = x[-i:]; i = 0
         j = min(len(mix), i + len(x)); mix[i:j] += x[:j - i]
     for o in offs[1:]:

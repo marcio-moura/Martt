@@ -1,10 +1,249 @@
-{"video":"bruto.mov","palavras":"words.json","estilo":"/home/user/Martt/edicao-video/clientes/natura/estilo.json",
- "inicio":0.0,"fim":8.5,"saida":"teste_cena1.mp4",
- "correcoes":{"Crisca":"Kriska"},
- "titulos":[{"texto":"ESQUENTA","de":6.95,"ate":8.5,"y":0.03,"cor":"marrom"},
-            {"texto":"BLACK","de":7.3,"ate":8.5,"y":0.135,"cor":"laranja","tamanho":330}],
- "precos":[{"nome":"Kriska Romance","de":"R$ 169,90","por":"R$ 84,99",
-            "t_de":2.0,"t_risco":3.44,"t_por":4.42,"ate":6.04,
-            "rastrear":{"t":2.5,"caixa":[30,1230,240,560]}}],
- "zooms":[{"de":4.42,"ate":6.04,"escala":1.1,"cx":540,"cy":900}],
- "destaques":["esquenta","black"]}
+{
+ "video": "bruto.mov",
+ "palavras": "words.json",
+ "estilo": "/home/user/Martt/edicao-video/clientes/natura/estilo.json",
+ "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v2.mp4",
+ "segmentos": [
+  [
+   0.74,
+   8.5
+  ],
+  [
+   8.5,
+   11.3
+  ]
+ ],
+ "correcoes": {
+  "Crisca": "Kriska",
+  "Amore": "Amora e",
+  "Acero": "Acerola",
+  "Alibisco": "e Hibisco",
+  "-Max": "Max",
+  "Delpharfam": "Deo Parfum",
+  "Elia": "Ilía",
+  "Noite": "Nuit"
+ },
+ "titulos": [
+  {
+   "texto": "Esquenta\nBlack",
+   "de": 6.95,
+   "ate": 8.5,
+   "y": 0.03
+  },
+  {
+   "texto": "Esquenta\nBlack",
+   "de": 9.35,
+   "ate": 11.15,
+   "y": 0.03
+  },
+  {
+   "texto": "Até\n60% OFF",
+   "de": 24.95,
+   "ate": 27.3,
+   "y": 0.03
+  },
+  {
+   "texto": "Dias\n13 e 14",
+   "de": 27.35,
+   "ate": 30.3,
+   "y": 0.03
+  },
+  {
+   "texto": "Acima de\nR$ 250",
+   "de": 41.8,
+   "ate": 44.5,
+   "y": 0.03
+  },
+  {
+   "texto": "Presente\nespecial",
+   "de": 45.3,
+   "ate": 46.85,
+   "y": 0.03
+  },
+  {
+   "texto": "Limitado",
+   "de": 47.7,
+   "ate": 50.0,
+   "y": 0.06
+  },
+  {
+   "texto": "Corram!",
+   "de": 66.0,
+   "ate": 68.65,
+   "y": 0.13
+  }
+ ],
+ "precos": [
+  {
+   "nome": "Kriska Romance",
+   "de": "R$ 169,90",
+   "por": "R$ 84,99",
+   "t_de": 2.0,
+   "t_risco": 3.44,
+   "t_por": 4.42,
+   "ate": 6.04,
+   "rastrear": {
+    "t": 2.5,
+    "caixa": [
+     30,
+     1230,
+     240,
+     560
+    ]
+   }
+  },
+  {
+   "nome": "Tododia Amora e Flor de Pêssego",
+   "de": "R$ 78,90",
+   "por": "R$ 39,99",
+   "t_de": 13.88,
+   "t_risco": 15.1,
+   "t_por": 15.78,
+   "ate": 17.3,
+   "rastrear": {
+    "t": 12.6,
+    "caixa": [
+     520,
+     420,
+     280,
+     620
+    ]
+   }
+  },
+  {
+   "nome": "Body Splash Acerola e Hibisco",
+   "de": "R$ 96,90",
+   "por": "R$ 49,99",
+   "t_de": 19.42,
+   "t_risco": 21.22,
+   "t_por": 22.0,
+   "ate": 23.65,
+   "rastrear": {
+    "t": 18.6,
+    "caixa": [
+     70,
+     430,
+     290,
+     720
+    ]
+   }
+  },
+  {
+   "nome": "K Max Deo Parfum",
+   "de": "R$ 299,90",
+   "por": "R$ 209,99",
+   "t_de": 33.66,
+   "t_risco": 36.46,
+   "t_por": 37.38,
+   "ate": 39.45,
+   "rastrear": {
+    "t": 35.5,
+    "caixa": [
+     0,
+     1000,
+     165,
+     320
+    ]
+   }
+  },
+  {
+   "nome": "Ilía Tradicional",
+   "de": "R$ 199,90",
+   "por": "R$ 139,99",
+   "t_de": 55.32,
+   "t_risco": 57.2,
+   "t_por": 57.88,
+   "ate": 59.8,
+   "rastrear": {
+    "t": 57.5,
+    "caixa": [
+     230,
+     1170,
+     130,
+     190
+    ]
+   }
+  },
+  {
+   "nome": "Luna Nuit",
+   "de": "R$ 185,90",
+   "por": "R$ 109,99",
+   "t_de": 60.6,
+   "t_risco": 62.8,
+   "t_por": 63.56,
+   "ate": 65.5,
+   "rastrear": {
+    "t": 60.5,
+    "caixa": [
+     50,
+     640,
+     130,
+     320
+    ]
+   }
+  }
+ ],
+ "zooms": [
+  {
+   "de": 4.42,
+   "ate": 6.04,
+   "escala": 1.1,
+   "cx": 540,
+   "cy": 900
+  },
+  {
+   "de": 15.78,
+   "ate": 17.3,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 800
+  },
+  {
+   "de": 22.0,
+   "ate": 23.65,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 800
+  },
+  {
+   "de": 37.38,
+   "ate": 39.45,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 800
+  },
+  {
+   "de": 57.88,
+   "ate": 59.8,
+   "escala": 1.1,
+   "cx": 540,
+   "cy": 950
+  },
+  {
+   "de": 63.56,
+   "ate": 65.5,
+   "escala": 1.1,
+   "cx": 540,
+   "cy": 950
+  }
+ ],
+ "destaques": [
+  "esquenta",
+  "black",
+  "trindade",
+  "60%",
+  "desconto",
+  "hoje",
+  "amanhã",
+  "presente",
+  "especial",
+  "limitado",
+  "corram"
+ ],
+ "sombra": {
+  "imagem": "../sombra.png",
+  "opacidade": 1.0
+ },
+ "volume_sfx": 0.5,
+ "reduzir_ruido": true
+}
