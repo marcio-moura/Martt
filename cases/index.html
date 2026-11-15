@@ -49,6 +49,27 @@
   .metrics{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
   .metric .num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.02em;color:var(--sage-dark);line-height:1.1;margin-bottom:6px}
 
+
+  .media{position:relative;background:var(--sand);aspect-ratio:16/9;overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-weight:600;font-size:13px;letter-spacing:.04em}
+  .media.tall{aspect-ratio:9/16}
+  .media img,.media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .media .ph{padding:12px}
+  .media .ph b{display:block;color:var(--sage-dark);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+  .case{background:#fff;border:1.5px solid var(--sand)}
+  .case .body{padding:22px}
+  .case .meta{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--sage-dark);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .case .meta i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+  .case h3{font-size:22px;margin-bottom:10px}
+  .case p{font-size:15px;color:#4a4a45;margin-bottom:8px}
+  .case dl{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+  .case dt{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:24px;letter-spacing:-0.02em;color:var(--sage-dark);line-height:1.1}
+  .case dd{font-size:13px;color:var(--muted);margin-top:2px}
+  .metric small{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .src{margin-top:14px;font-size:12px;color:var(--muted)}
+  .sand .case{border-color:var(--bg)}
+  .sand .media{background:#fff}
+
   .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
   .btn{display:inline-block;text-decoration:none;font-weight:600;font-size:15px;padding:15px 22px;min-height:50px;border:1.5px solid var(--ink)}
   .btn.primary{background:var(--ink);color:var(--bg)}
@@ -84,34 +105,84 @@
 
   <section class="sand">
     <div class="wrap">
-      <p class="eyebrow"><i></i>Trabalhos</p>
-      <h2>Projetos realizados</h2>
-      <div class="grid">
-        <div class="card"><div class="tag"><i></i>Case 01</div><h3>Em breve</h3><p>Contexto, o que foi feito e o resultado.</p></div>
-        <div class="card"><div class="tag"><i></i>Case 02</div><h3>Em breve</h3><p>Contexto, o que foi feito e o resultado.</p></div>
-        <div class="card"><div class="tag"><i></i>Case 03</div><h3>Em breve</h3><p>Contexto, o que foi feito e o resultado.</p></div>
+      <p class="eyebrow"><i></i>Resultados em destaque</p>
+      <h2>Números reais de perfis que atendo</h2>
+      <div class="grid metrics">
+        <div class="card metric"><div class="num">115,2 mil</div><p>visualizações em 30 dias</p><small>Infinity Celulares · 13/09 a 12/10</small></div>
+        <div class="card metric"><div class="num">+39%</div><p>de visualizações em setembro sobre agosto</p><small>Infinity Celulares · +77% entre quem ainda não segue</small></div>
+        <div class="card metric"><div class="num">40%</div><p>das contas alcançadas visitaram o perfil</p><small>Infinity Celulares · 13/09 a 12/10</small></div>
+        <div class="card metric"><div class="num">54 mil</div><p>visualizações em 30 dias</p><small>Golfinho Azul · 20/07 a 18/08</small></div>
       </div>
+      <p class="src">Fonte: Instagram Insights de cada perfil, nos períodos indicados.</p>
     </div>
   </section>
 
   <section>
     <div class="wrap">
-      <p class="eyebrow"><i></i>Clientes</p>
-      <h2>Quem já atendi</h2>
+      <p class="eyebrow"><i></i>Cases</p>
+      <h2>Trabalhos realizados</h2>
       <div class="grid">
-        <div class="card"><h3>Em breve</h3><p>Clientes atendidos, com segmento e tipo de trabalho.</p></div>
+
+        <article class="case">
+          <div class="media"><!-- Troque este bloco por <img src="/cases/midia/infinity.jpg" alt=""> ou <video src="/cases/midia/infinity.mp4" controls playsinline></video> --><div class="ph"><b>Foto ou vídeo</b>Infinity Celulares</div></div>
+          <div class="body">
+            <div class="meta"><i></i>Varejo · Trindade</div>
+            <h3>Infinity Celulares</h3>
+            <p><strong>Objetivo:</strong> vender pelo WhatsApp e na loja.</p>
+            <p><strong>O que foi feito:</strong> linha de conteúdo que orienta a decisão de compra e ensina antes de vender, com roteiro de 6 vídeos gravados na própria loja (celulares, JBL, tablet, TV e acessórios).</p>
+            <dl>
+              <div><dt>115,2 mil</dt><dd>visualizações</dd></div>
+              <div><dt>+39%</dt><dd>em setembro sobre agosto</dd></div>
+              <div><dt>290</dt><dd>toques no link da bio</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="case">
+          <div class="media"><!-- Troque este bloco por <img src="/cases/midia/golfinho-azul.jpg" alt=""> ou <video src="/cases/midia/golfinho-azul.mp4" controls playsinline></video> --><div class="ph"><b>Foto ou vídeo</b>Golfinho Azul</div></div>
+          <div class="body">
+            <div class="meta"><i></i>Academia · Trindade</div>
+            <h3>Golfinho Azul</h3>
+            <p><strong>O que foi feito:</strong> calendário editorial com 5 pilares (posicionamento, bastidores, prova social, conteúdo de valor e conversão) e relatório mensal de resultados.</p>
+            <dl>
+              <div><dt>54 mil</dt><dd>visualizações em 30 dias</dd></div>
+              <div><dt>1.222</dt><dd>interações</dd></div>
+              <div><dt>113</dt><dd>toques no link da bio</dd></div>
+            </dl>
+          </div>
+        </article>
+
+        <article class="case">
+          <div class="media"><div class="ph"><b>Foto ou vídeo</b>Próximo case</div></div>
+          <div class="body">
+            <div class="meta"><i></i>Segmento</div>
+            <h3>Novo case em breve</h3>
+            <p>Objetivo, o que foi feito e o resultado.</p>
+          </div>
+        </article>
+
       </div>
     </div>
   </section>
 
   <section class="sand">
     <div class="wrap">
-      <p class="eyebrow"><i></i>Métricas</p>
-      <h2>Resultados em números</h2>
-      <div class="grid metrics">
-        <div class="card metric"><div class="num">—</div><p>Métrica 01</p></div>
-        <div class="card metric"><div class="num">—</div><p>Métrica 02</p></div>
-        <div class="card metric"><div class="num">—</div><p>Métrica 03</p></div>
+      <p class="eyebrow"><i></i>Bastidores e vídeos</p>
+      <h2>Galeria</h2>
+      <div class="gallery">
+        <div class="media tall"><div class="ph"><b>Vídeo</b>Reels</div></div>
+        <div class="media tall"><div class="ph"><b>Vídeo</b>Reels</div></div>
+        <div class="media tall"><div class="ph"><b>Foto</b>Gravação</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="eyebrow"><i></i>Relatos de campanha</p>
+      <h2>O que o cliente viu acontecer</h2>
+      <div class="grid">
+        <div class="card"><div class="tag"><i></i>Relato</div><h3>Em breve</h3><p>Depoimento do cliente ou resumo da campanha: o desafio, o que foi feito e o que mudou.</p></div>
       </div>
     </div>
   </section>
