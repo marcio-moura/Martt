@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agende um horário | Martt Co.</title>
+<meta name="description" content="Escolha um horário de 2 horas e fale com a Martt Co. pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7F2; --ink:#242522; --sand:#E8E3D8; --muted:#8D8B82;
+    --sage:#8FB5A3; --sage-dark:#6F9885;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.5;padding:28px 20px 48px}
+  main{max-width:520px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+  .brand i{display:inline-block;width:27px;height:9px;background:var(--sage-dark)}
+  .back{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage)}
+  h1{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:30px;line-height:1.15;margin:28px 0 10px}
+  .lead{font-size:16px;margin-bottom:6px}
+  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:24px}
+  .day{margin-top:22px}
+  .day h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .day h2 i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+  .slots{display:flex;flex-wrap:wrap;gap:10px}
+  a.slot{display:inline-block;text-decoration:none;color:var(--ink);background:#fff;border:1.5px solid var(--sand);padding:13px 18px;font-weight:600;font-size:15px;min-height:48px}
+  a.slot:active,a.slot:hover{background:var(--sage);border-color:var(--sage-dark)}
+  .other{margin-top:34px;padding-top:22px;border-top:1.5px solid var(--sand);font-size:15px}
+  .other a{color:var(--ink);font-weight:600}
+  .note{margin-top:14px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="brand" href="/"><i></i>Martt Co.</a>
+    <a class="back" href="/">Voltar ao site</a>
+  </div>
+  <h1>Agende um horário</h1>
+  <p class="lead">Escolha um horário de 2 horas. Ao tocar, o WhatsApp abre com a mensagem pronta para enviar.</p>
+  <p class="eyebrow">Semana de 16 a 20 de novembro</p>
+
+  <div id="days"></div>
+
+  <div class="other">
+    Nenhum horário serve? <a id="other" href="#">Fale comigo no WhatsApp</a> e combinamos outro.
+  </div>
+  <p class="note">O horário só fica reservado depois da minha confirmação.</p>
+</main>
+
+<script>
+  var NUMBER = "5562993037223";
+  var DAYS = [
+    { label: "Terça, 17/11",  slots: [["10h","12h"]] },
+    { label: "Quarta, 18/11", slots: [["13h","15h"],["15h","17h"]] },
+    { label: "Quinta, 19/11", slots: [["13h","15h"],["15h","17h"]] },
+    { label: "Sexta, 20/11",  slots: [["8h","10h"],["10h","12h"]] }
+  ];
+  function wa(text){ return "https://wa.me/" + NUMBER + "?text=" + encodeURIComponent(text); }
+  var root = document.getElementById("days");
+  DAYS.forEach(function(d){
+    var sec = document.createElement("section"); sec.className = "day";
+    var h = document.createElement("h2"); h.innerHTML = "<i></i>"; h.appendChild(document.createTextNode(d.label));
+    var box = document.createElement("div"); box.className = "slots";
+    d.slots.forEach(function(s){
+      var a = document.createElement("a"); a.className = "slot";
+      a.target = "_blank"; a.rel = "noopener";
+      a.textContent = s[0] + " às " + s[1];
+      a.href = wa("Olá! Quero reservar o horário de " + d.label.toLowerCase() + ", das " + s[0] + " às " + s[1] + ".");
+      box.appendChild(a);
+    });
+    sec.appendChild(h); sec.appendChild(box); root.appendChild(sec);
+  });
+  var o = document.getElementById("other");
+  o.href = wa("Olá! Gostaria de agendar um horário, mas nenhum dos disponíveis serve para mim.");
+  o.target = "_blank"; o.rel = "noopener";
+</script>
+</body>
+</html>
