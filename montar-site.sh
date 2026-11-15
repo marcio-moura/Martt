@@ -7,6 +7,6 @@ mkdir -p .site/horarios
 cp index.html .site/
 cp horarios/index.html .site/horarios/index.html
 mkdir -p .site/cases
-cp cases/index.html .site/cases/index.html
+cp -r cases/. .site/cases/
 cp -r ecossistema/dist .site/ecossistema
 bash analises-instagram/publicar-site.sh
