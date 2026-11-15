@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "npm ci --prefix ecossistema",
-  "buildCommand": "npm run build --prefix ecossistema && rm -rf .site && mkdir -p .site && cp index.html .site/ && cp -r ecossistema/dist .site/ecossistema && bash analises-instagram/publicar-site.sh",
+  "buildCommand": "npm run build --prefix ecossistema && rm -rf .site && mkdir -p .site && cp index.html .site/ && mkdir -p .site/horarios && cp horarios/index.html .site/horarios/index.html && cp -r ecossistema/dist .site/ecossistema && bash analises-instagram/publicar-site.sh",
   "outputDirectory": ".site",
   "framework": null,
   "trailingSlash": true,
