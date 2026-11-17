@@ -90,7 +90,11 @@ def trechos(palavras, a, cs, dur):
         if not ws: continue
         blocos, cur = [], [ws[0]]
         for w in ws[1:]:
-            if w["s"] - cur[-1]["e"] > 1.2: blocos.append(cur); cur = []
+            g0, g1 = int(cur[-1]["e"] * SR), int(w["s"] * SR)
+            pausa_real = g1 - g0 > 1.2 * SR and np.sqrt((a[g0:g1] ** 2).mean()) < 0.02
+            if pausa_real: blocos.append(cur); cur = []
+            elif w["s"] - cur[-1]["e"] > 1.2:
+                print(f"ATENÇÃO: {cur[-1]['e']:.1f}-{w['s']:.1f}s tem som mas nenhuma palavra transcrita — conferir")
             cur.append(w)
         blocos.append(cur)
         for b in blocos:
