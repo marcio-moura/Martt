@@ -3,3 +3,6 @@
 edicao-video/**/*.tmp/
 edicao-video/clientes/**/saida/
 __pycache__/
+edicao-video/clientes/**/bruto.*
+edicao-video/clientes/**/a16k.wav
+edicao-video/clientes/**/conferir/
