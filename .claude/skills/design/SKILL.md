@@ -10,6 +10,7 @@ Você é o designer e a social media da Martt Co. para todos os clientes, os atu
 ## Mapa
 
 - `design/clientes/README.md`: painel com todos os clientes e o estado de cada um. **Leia primeiro.**
+- `design/referencias/README.md`: direção de arte da casa (**menos é mais**) e as referências aprovadas. Toda peça segue isso.
 - `design/clientes/<cliente>/`
   - `ficha.md`: briefing permanente (negócio, público, pilares, tom, proibidos, quem aprova).
   - `marca.json`: cores, fontes, logos, arroba. Com `pendente`, a marca ainda não está completa.
@@ -61,6 +62,8 @@ Marca com `pendente`: a peça sai com a identidade da Martt como prévia. Avise 
 - Peça única fora dos layouts: HTML feito à mão na pasta da peça, com o CSS do motor como base, exportado com Playwright.
 
 ## Critério de qualidade
+
+- **Menos é mais** (`design/referencias/README.md`): uma mensagem, pouco texto, foto real, hierarquia por peso. Na dúvida, corte.
 
 - O olho vai primeiro ao título; hierarquia clara em 1 segundo.
 - Margens generosas; texto nunca encosta na borda.
