@@ -1,6 +1,6 @@
 # Estúdio de design MARTT
 
-Peças visuais (posts, carrosséis, stories, capas) geradas a partir de um JSON, com a marca de cada cliente. O passo a passo que o Claude segue está em `.claude/skills/design/SKILL.md`.
+Peças visuais (posts, carrosséis, stories, capas) e calendário de conteúdo de todos os clientes. Cada cliente tem ficha, marca, calendário e peças na própria pasta; o painel fica em `clientes/README.md`. Cliente novo: `bash design/novo-cliente.sh <pasta> "Nome"`. O passo a passo que o Claude segue está em `.claude/skills/design/SKILL.md`.
 
 ```bash
 node design/gerar.mjs design/clientes/<cliente>/pecas/<AAAA-MM-DD-nome>/peca.json
@@ -46,5 +46,5 @@ No texto, `*palavra*` sai na cor de destaque e `\n` quebra a linha.
 
 ## Marca do cliente (`marca.json`)
 
-`nome`, `arroba`, `logo_fundo_escuro` (caminho a partir da pasta do cliente), `cores` (`escuro`, `claro`, `texto_escuro`, `texto_claro`, `destaque`, `destaque_forte`, `apoio`, `suave`), `fontes` (`titulo`, `titulo_peso`, `texto`, `texto_peso`; nomes do Google Fonts), `tom` e `evitar`.
+`nome`, `arroba`, `pendente` (texto; enquanto existir, a peça é só prévia), `logo_fundo_escuro` e `logo_fundo_claro` (caminhos a partir da pasta do cliente), `cores` (`escuro`, `claro`, `texto_escuro`, `texto_claro`, `destaque`, `destaque_forte`, `apoio`, `suave`), `fontes` (`titulo`, `titulo_peso`, `texto`, `texto_peso`; nomes do Google Fonts), `tom` e `evitar`.
 Modelo: `clientes/martt/marca.json`.

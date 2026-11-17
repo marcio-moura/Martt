@@ -88,19 +88,21 @@ function css(marca, [w, h]) {
   .rodape .barra{display:inline-block;width:calc(40*var(--u));height:calc(10*var(--u));background:var(--dest);margin-right:calc(14*var(--u));vertical-align:middle}
   .tema-destaque .rodape .barra{background:var(--escuro)}
   .logo{mix-blend-mode:lighten;height:calc(110*var(--u));align-self:flex-start;margin-bottom:calc(20*var(--u))}
+  .logo.sem-mistura{mix-blend-mode:normal}
   .seta{font-size:calc(30*var(--u))}
   `;
 }
 
 function tela(t, i, total, ctx) {
-  const { marca, logoRel, formato } = ctx;
+  const { marca, logos, formato } = ctx;
   const tema = t.tema || (t.layout === "capa" || t.layout === "cta" ? "escuro" : "claro");
   const rotulo = t.rotulo ? `<div class="rotulo"><i></i>${esc(t.rotulo)}</div>` : "";
   const texto = t.texto ? `<p class="texto">${rico(t.texto)}</p>` : "";
   let corpo = "";
   switch (t.layout) {
     case "capa":
-      corpo = `${tema === "escuro" && logoRel && t.logo !== false ? `<img class="logo" src="${logoRel}">` : ""}
+      const logo = tema === "escuro" ? logos.escuro : logos.claro;
+      corpo = `${logo && t.logo !== false ? `<img class="logo${tema === "escuro" ? "" : " sem-mistura"}" src="${logo}">` : ""}
         <div class="base">${rotulo}<h1>${rico(t.titulo)}</h1>${t.texto ? `<p class="texto" style="margin-top:calc(36*var(--u))">${rico(t.texto)}</p>` : ""}</div>`;
       break;
     case "texto":
@@ -133,9 +135,13 @@ function tela(t, i, total, ctx) {
 
 function montar({ peca, marca, pastaPeca, pastaCliente }) {
   const tamanho = FORMATOS[peca.formato];
-  const logoAbs = marca.logo_fundo_escuro ? path.resolve(pastaCliente, marca.logo_fundo_escuro) : null;
-  const logoRel = logoAbs && fs.existsSync(logoAbs) ? path.relative(pastaPeca, logoAbs) : null;
-  const ctx = { marca, logoRel, formato: peca.formato };
+  const rel = (c) => {
+    const abs = c ? path.resolve(pastaCliente, c) : null;
+    return abs && fs.existsSync(abs) ? path.relative(pastaPeca, abs) : null;
+  };
+  const logos = { escuro: rel(marca.logo_fundo_escuro), claro: rel(marca.logo_fundo_claro) };
+  if (marca.pendente) console.error(`Aviso: a marca de ${marca.nome} ainda está pendente (${marca.pendente}). Peça só para prévia.`);
+  const ctx = { marca, logos, formato: peca.formato };
   const fam = [marca.fontes.titulo, marca.fontes.texto]
     .map((n) => `family=${n.replace(/ /g, "+")}:wght@400;600;700;800`).join("&");
   const telas = peca.telas.map((t, i) => tela(t, i, peca.telas.length, ctx)).join("\n");
