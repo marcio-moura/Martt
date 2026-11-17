@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Portfólio | Martt Co.</title>
-<meta name="description" content="Portfólio da Martt Co.: casamento civil em cartório, Goiânia. Fotos, vídeos e PDF.">
+<meta name="description" content="Portfólio da Martt Co.: casamento civil em cartório, Goiânia.">
 <meta property="og:title" content="Portfólio | Martt Co.">
-<meta property="og:description" content="Casamento civil · Cartório · Goiânia. Fotos, vídeos e PDF.">
+<meta property="og:description" content="Casamento civil · Cartório · Goiânia">
 <meta property="og:image" content="/portfolio/midia/casal-sorrindo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,158 +19,90 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.6;font-size:17px}
-  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
-  .wide{max-width:1080px}
-
-  header{padding:26px 0}
-  header .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px}
-  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:19px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;white-space:nowrap}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.5;padding:28px 20px 48px}
+  main{max-width:520px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
   .brand i{display:inline-block;width:27px;height:9px;background:var(--sage-dark)}
-  nav{display:flex;gap:20px;align-items:center}
-  nav a{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage);padding-bottom:1px;white-space:nowrap}
-  @media (max-width:520px){ nav a.talk{display:none} }
+  .back{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage)}
+  h1{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:30px;line-height:1.15;margin:28px 0 10px}
+  .lead{font-size:16px;margin-bottom:6px}
+  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
 
-  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:10px}
-  .eyebrow i{display:inline-block;width:18px;height:6px;background:var(--sage)}
-  h1,h2{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em}
-  h1{font-weight:800;font-size:clamp(40px,10vw,68px);line-height:1.06;margin:18px 0 20px}
-  h1 em{font-style:normal;color:var(--sage-dark)}
-  h2{font-weight:800;font-size:clamp(26px,6vw,36px);line-height:1.12;margin:14px 0 10px}
-  p.lead{font-size:18px;max-width:520px}
-  p.sub{color:#4a4a45;font-size:15px;max-width:560px;margin-bottom:28px}
+  .block{margin-top:34px}
+  .block h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .block h2 i{display:inline-block;width:18px;height:6px;background:var(--sage)}
 
-  .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
-  .btn{display:inline-block;text-decoration:none;font-weight:600;font-size:15px;padding:15px 22px;min-height:50px;border:1.5px solid var(--ink)}
-  .btn.primary{background:var(--ink);color:var(--bg)}
-  .btn.primary:hover{background:var(--sage-dark);border-color:var(--sage-dark)}
-  .btn.ghost{background:transparent;color:var(--ink)}
-  .btn.ghost:hover{background:var(--sage);border-color:var(--sage-dark)}
+  figure{margin-bottom:18px}
+  figure img{display:block;width:100%;height:auto;background:var(--sand)}
+  figcaption{margin-top:8px;font-size:14px;color:var(--muted)}
+  figcaption b{color:var(--ink);font-weight:600}
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .pair figure{margin-bottom:0}
 
-  section{padding:64px 0}
-  .hero{padding:40px 0 56px}
-  .sand{background:var(--sand)}
+  .videos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .videos video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--ink)}
+  .hint{font-size:14px;color:var(--muted);margin:-6px 0 14px}
 
-  /* vídeos verticais */
-  .reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  @media (min-width:760px){ .reels{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px} }
-  .reels video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--ink)}
-
-  /* fotos */
-  .grid{columns:2;column-gap:12px}
-  @media (min-width:760px){ .grid{columns:3;column-gap:16px} }
-  .grid button{display:block;width:100%;margin:0 0 12px;padding:0;border:0;background:var(--sand);cursor:zoom-in;break-inside:avoid}
-  @media (min-width:760px){ .grid button{margin-bottom:16px} }
-  .grid img{display:block;width:100%;height:auto}
-  .grid button:focus-visible{outline:3px solid var(--sage-dark);outline-offset:2px}
-
-  /* ampliação */
-  dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100vh;margin:0}
-  dialog::backdrop{background:rgba(36,37,34,.92)}
-  dialog .box{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:56px 16px 24px}
-  dialog img{max-width:100%;max-height:100%;object-fit:contain}
-  dialog .close{position:fixed;top:14px;right:16px;background:var(--bg);color:var(--ink);border:0;font:600 14px 'Manrope',sans-serif;padding:10px 14px;cursor:pointer}
-
-  footer{padding:36px 0 48px;border-top:1.5px solid var(--sand);font-size:13px;color:var(--muted)}
-  footer .wrap{display:flex;flex-direction:column;gap:6px}
-  footer .brand{font-size:16px;color:var(--ink)}
+  .other{margin-top:34px;padding-top:22px;border-top:1.5px solid var(--sand);font-size:15px}
+  .other a{color:var(--ink);font-weight:600}
+  .note{margin-top:14px;font-size:13px;color:var(--muted)}
 </style>
 </head>
 <body>
-
-<header>
-  <div class="wrap wide">
-    <a class="brand" href="/"><i></i>Martt Co.</a>
-    <nav>
-      <a href="/horarios/">Agendar horário</a>
-      <a class="talk" href="https://wa.me/5562993037223" target="_blank" rel="noopener">Falar com o time</a>
-    </nav>
-  </div>
-</header>
-
 <main>
-  <section class="hero">
-    <div class="wrap wide">
-      <p class="eyebrow"><i></i>Portfólio · Casamento civil · Goiânia</p>
-      <h1>Uma amostra do <em>nosso trabalho.</em></h1>
-      <p class="lead">A Martt Co. estrutura o posicionamento e a comunicação de negócios, e produz o conteúdo visual que sustenta essa presença.</p>
-      <div class="btns">
-        <a class="btn primary" href="Portfolio-Martt.pdf" download>Baixar portfólio em PDF</a>
-        <a class="btn ghost" href="#videos">Ver vídeos</a>
-      </div>
+  <div class="top">
+    <a class="brand" href="/"><i></i>Martt Co.</a>
+    <a class="back" href="/">Voltar ao site</a>
+  </div>
+
+  <h1>Portfólio</h1>
+  <p class="lead">A Martt Co. estrutura o posicionamento e a comunicação de negócios, e produz o conteúdo visual que sustenta essa presença.</p>
+  <p class="eyebrow">Casamento civil · Cartório · Goiânia</p>
+
+  <section class="block">
+    <h2><i></i>Fotos</h2>
+    <figure><img src="midia/casal-corredor.jpg" width="976" height="1400" alt="Casal no corredor de flores, noiva com buquê">
+      <figcaption><b>O casal.</b> Retrato de corpo inteiro.</figcaption></figure>
+    <div class="pair">
+      <figure><img src="midia/noiva-buque.jpg" width="926" height="1400" loading="lazy" alt="Noiva sorrindo com o buquê">
+        <figcaption><b>A noiva.</b></figcaption></figure>
+      <figure><img src="midia/casal-flores.jpg" width="905" height="1400" loading="lazy" alt="Casal entre flores de cerejeira">
+        <figcaption><b>Olhar.</b></figcaption></figure>
+    </div>
+    <figure><img src="midia/casal-sorrindo.jpg" width="934" height="1400" loading="lazy" alt="Casal abraçado e sorrindo">
+      <figcaption><b>Espontaneidade.</b> Registro natural, sem pose forçada.</figcaption></figure>
+    <div class="pair">
+      <figure><img src="midia/aliancas.jpg" width="934" height="1400" loading="lazy" alt="Mãos do casal com as alianças">
+        <figcaption><b>Detalhe.</b></figcaption></figure>
+      <figure><img src="midia/casal-espelho.jpg" width="921" height="1400" loading="lazy" alt="Casal refletido no espelho">
+        <figcaption><b>Composição.</b></figcaption></figure>
+    </div>
+    <figure><img src="midia/abraco.jpg" width="1400" height="884" loading="lazy" alt="Detalhe do abraço do casal">
+      <figcaption><b>Abraço.</b> Enquadramento fechado no gesto.</figcaption></figure>
+  </section>
+
+  <section class="block" id="videos">
+    <h2><i></i>Vídeos</h2>
+    <p class="hint">Toque para assistir com som.</p>
+    <div class="videos">
+      <video src="midia/video-mesa-doces.mp4" poster="midia/video-mesa-doces.jpg" controls playsinline preload="none" aria-label="Vídeo 1"></video>
+      <video src="midia/video-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" controls playsinline preload="none" aria-label="Vídeo 2"></video>
+      <video src="midia/video-bolo-copos-de-leite.mp4" poster="midia/video-bolo-copos-de-leite.jpg" controls playsinline preload="none" aria-label="Vídeo 3"></video>
+      <video src="midia/video-fachada.mp4" poster="midia/video-fachada.jpg" controls playsinline preload="none" aria-label="Vídeo 4"></video>
     </div>
   </section>
 
-
-  <section style="padding-top:0">
-    <div class="wrap wide">
-      <p class="eyebrow"><i></i>Fotos</p>
-      <h2>Casamento civil no cartório</h2>
-      <p class="sub">Toque em uma foto para ampliar.</p>
-      <div class="grid">
-        <button type="button"><img src="midia/casal-corredor.jpg" width="976" height="1400" loading="lazy" alt="Casal no corredor de flores, noiva com buquê"></button>
-        <button type="button"><img src="midia/noiva-buque.jpg" width="926" height="1400" loading="lazy" alt="Noiva sorrindo com o buquê"></button>
-        <button type="button"><img src="midia/aliancas.jpg" width="934" height="1400" loading="lazy" alt="Detalhe das mãos e alianças do casal"></button>
-        <button type="button"><img src="midia/casal-flores.jpg" width="905" height="1400" loading="lazy" alt="Casal abraçado ao lado de flores de cerejeira"></button>
-        <button type="button"><img src="midia/abraco.jpg" width="1400" height="884" loading="lazy" alt="Detalhe do abraço do casal"></button>
-        <button type="button"><img src="midia/casal-sorrindo.jpg" width="934" height="1400" loading="lazy" alt="Casal abraçado e sorrindo"></button>
-        <button type="button"><img src="midia/casal-espelho.jpg" width="921" height="1400" loading="lazy" alt="Casal refletido no espelho"></button>
-      </div>
-    </div>
-  </section>
-
-  <section class="sand" id="videos">
-    <div class="wrap wide">
-      <p class="eyebrow"><i></i>Vídeos</p>
-      <h2>Vídeos</h2>
-      <p class="sub">Vídeos verticais para Instagram e stories. Toque para assistir com som.</p>
-      <div class="reels">
-        <video src="midia/video-mesa-doces.mp4" poster="midia/video-mesa-doces.jpg" controls playsinline preload="none" aria-label="Vídeo: mesa de doces com peônias"></video>
-        <video src="midia/video-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" controls playsinline preload="none" aria-label="Vídeo: bolo branco e cortina de cristais"></video>
-        <video src="midia/video-bolo-copos-de-leite.mp4" poster="midia/video-bolo-copos-de-leite.jpg" controls playsinline preload="none" aria-label="Vídeo: bolo com copos-de-leite e mesa de salgados"></video>
-        <video src="midia/video-fachada.mp4" poster="midia/video-fachada.jpg" controls playsinline preload="none" aria-label="Vídeo: fachada"></video>
-      </div>
-    </div>
-  </section>
-
-  <section class="sand">
-    <div class="wrap">
-      <p class="eyebrow"><i></i>PDF</p>
-      <h2>Leve o portfólio com você.</h2>
-      <div class="btns">
-        <a class="btn primary" href="Portfolio-Martt.pdf" download>Baixar PDF</a>
-        <a class="btn ghost" href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">Falar com o time</a>
-      </div>
-    </div>
-  </section>
+  <div class="other">
+    Gostou do trabalho? <a href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Fale comigo no WhatsApp</a>.
+  </div>
+  <p class="note">Crescimento não é sorte. É estrutura.</p>
 </main>
 
-<footer>
-  <div class="wrap">
-    <a class="brand" href="/"><i></i>Martt Co.</a>
-    <span>Estrutura gera crescimento.</span>
-    <span>© 2026 Martt Co.</span>
-  </div>
-</footer>
-
-<dialog id="zoom" aria-label="Foto ampliada">
-  <button class="close" type="button">Fechar ✕</button>
-  <div class="box"><img alt=""></div>
-</dialog>
-
 <script>
-  const dlg = document.getElementById('zoom');
-  const big = dlg.querySelector('img');
-  document.querySelectorAll('.grid button').forEach(b => b.addEventListener('click', () => {
-    const img = b.querySelector('img');
-    big.src = img.src; big.alt = img.alt;
-    dlg.showModal();
-  }));
-  dlg.addEventListener('click', e => { if (e.target !== big) dlg.close(); });
-  // pausa os outros vídeos quando um começa
-  const vids = document.querySelectorAll('.reels video');
-  vids.forEach(v => v.addEventListener('play', () => vids.forEach(o => { if (o !== v) o.pause(); })));
+  // um vídeo por vez
+  var vids = document.querySelectorAll('video');
+  vids.forEach(function(v){ v.addEventListener('play', function(){ vids.forEach(function(o){ if (o !== v) o.pause(); }); }); });
 </script>
-
 </body>
 </html>
