@@ -64,6 +64,8 @@ Marca com `pendente`: a peça sai com a identidade da Martt como prévia. Avise 
 ## Critério de qualidade
 
 - **Menos é mais** (`design/referencias/README.md`): uma mensagem, pouco texto, foto real, hierarquia por peso. Na dúvida, corte.
+- Prefira os layouts `foto-frase`, `bloco`, `horario` e `atos`. Os outros (lista, número, cta...) só em carrossel educativo, e mesmo assim com pouco texto.
+- Com foto do cliente, a foto é a peça. Sem foto boa, peça foto ao usuário antes de cair em arte só de texto.
 
 - O olho vai primeiro ao título; hierarquia clara em 1 segundo.
 - Margens generosas; texto nunca encosta na borda.

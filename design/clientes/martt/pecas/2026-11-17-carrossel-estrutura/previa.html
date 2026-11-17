@@ -1,7 +1,10 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crescimento não é sorte · Martt Co.</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
   :root{--escuro:#0B0C0B;--claro:#F1EDE6;--tx-e:#242522;--tx-c:#F1EDE6;
     --dest:#8FB5A3;--dest-f:#6F9885;--apoio:#E8E3D8;--suave:#8D8B82;--u:1px}
@@ -51,6 +54,32 @@
   .logo{mix-blend-mode:lighten;height:calc(110*var(--u));align-self:flex-start;margin-bottom:calc(20*var(--u))}
   .logo.sem-mistura{mix-blend-mode:normal}
   .seta{font-size:calc(30*var(--u))}
+
+  /* ---- menos é mais ---- */
+  .serifa{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:-.01em}
+  .fio{width:calc(110*var(--u));height:calc(4*var(--u));background:currentColor;margin:calc(44*var(--u)) 0}
+  .layout-foto-frase,.layout-horario,.layout-atos{color:#fff;background:#111}
+  .layout-foto-frase .foto-veu{background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.08) 45%,rgba(0,0,0,.08) 60%,rgba(0,0,0,.6) 100%)}
+  .frase{font-family:'Manrope',sans-serif;font-weight:300;text-transform:uppercase;font-size:calc(66*var(--u));line-height:1.12;letter-spacing:.005em}
+  .frase strong{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-.01em}
+  .frase em{color:inherit}
+  .marca-topo{height:calc(150*var(--u));object-fit:contain;align-self:flex-start;mix-blend-mode:lighten}
+  .marca-txt{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:calc(40*var(--u))}
+  .assinatura{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-style:italic;font-size:calc(52*var(--u));line-height:1.15}
+  .layout-bloco{align-items:center;text-align:center}
+  .bloco-frase{font-size:calc(124*var(--u));line-height:1.08;text-transform:uppercase}
+  .bloco-assin{font-size:calc(24*var(--u));text-decoration:underline;opacity:.8;font-family:'Cormorant Garamond',serif}
+  .hora{font-family:'Manrope',sans-serif;font-weight:300;font-size:calc(170*var(--u));letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+  .layout-horario .foto-veu{background:rgba(0,0,0,.18)}
+  .layout-atos{padding:0}
+  .ato{flex:1;position:relative;background-size:cover;background-position:center;display:flex;padding:calc(56*var(--u)) calc(70*var(--u))}
+  .ato::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.05) 50%,rgba(0,0,0,.3))}
+  .ato>div{position:relative}
+  .ato+.ato{border-top:calc(4*var(--u)) solid #111}
+  .ato p{font-style:italic;font-size:calc(84*var(--u));line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .ato .fio{height:calc(2*var(--u));width:calc(220*var(--u));margin:calc(16*var(--u)) 0 0}
+  .ato-dir{margin-left:auto;text-align:right;align-self:flex-end}.ato-dir .fio{margin-left:auto}
+  .ato-esq{align-self:flex-start}
   </style></head>
 <body><div class="grade"><section class="tela tema-escuro layout-capa" id="t1"><img class="logo" src="../../../../../marca/martt-logo-faixa.jpg">
         <div class="base"><div class="rotulo"><i></i>Método Martt</div><h1>Crescimento não é sorte.<br>É <em>estrutura.</em></h1></div><div class="rodape"><span><span class="barra"></span>@marttco</span><span class="seta">1/5 &nbsp;→</span></div></section>

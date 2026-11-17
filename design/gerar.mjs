@@ -17,11 +17,14 @@ const FORMATOS = {
   stories: [1080, 1920],   // stories e capa de reels (9:16)
   paisagem: [1920, 1080],  // capa de YouTube, apresentação
 };
-const LAYOUTS = ["capa", "texto", "lista", "numero", "citacao", "foto", "cta"];
+const LAYOUTS = ["capa", "texto", "lista", "numero", "citacao", "foto", "cta", "foto-frase", "bloco", "horario", "atos"];
+// layouts "menos é mais": sem rodapé de @ e numeração, salvo pedido explícito
+const MINIMOS = ["foto-frase", "bloco", "horario", "atos"];
 
 const esc = (s = "") => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 // *palavra* vira destaque na cor da marca; quebra de linha vira <br>
-const rico = (s = "") => esc(s).replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\n/g, "<br>");
+// **palavra** fica em negrito (mesma cor); *palavra* sai na cor de destaque; quebra de linha vira <br>
+const rico = (s = "") => esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\*(.+?)\*/g, "<em>$1</em>").replace(/\n/g, "<br>");
 
 function carregar(arquivo) {
   const peca = JSON.parse(fs.readFileSync(arquivo, "utf8"));
@@ -90,6 +93,32 @@ function css(marca, [w, h]) {
   .logo{mix-blend-mode:lighten;height:calc(110*var(--u));align-self:flex-start;margin-bottom:calc(20*var(--u))}
   .logo.sem-mistura{mix-blend-mode:normal}
   .seta{font-size:calc(30*var(--u))}
+
+  /* ---- menos é mais ---- */
+  .serifa{font-family:'${f.serifa || "Cormorant Garamond"}',serif;font-weight:500;letter-spacing:-.01em}
+  .fio{width:calc(110*var(--u));height:calc(4*var(--u));background:currentColor;margin:calc(44*var(--u)) 0}
+  .layout-foto-frase,.layout-horario,.layout-atos{color:#fff;background:#111}
+  .layout-foto-frase .foto-veu{background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.08) 45%,rgba(0,0,0,.08) 60%,rgba(0,0,0,.6) 100%)}
+  .frase{font-family:'${f.texto}',sans-serif;font-weight:300;text-transform:uppercase;font-size:calc(66*var(--u));line-height:1.12;letter-spacing:.005em}
+  .frase strong{font-family:'${f.titulo}',sans-serif;font-weight:800;letter-spacing:-.01em}
+  .frase em{color:inherit}
+  .marca-topo{height:calc(150*var(--u));object-fit:contain;align-self:flex-start;mix-blend-mode:lighten}
+  .marca-txt{font-family:'${f.titulo}',sans-serif;font-weight:800;font-size:calc(40*var(--u))}
+  .assinatura{font-family:'${f.titulo}',sans-serif;font-weight:700;font-style:italic;font-size:calc(52*var(--u));line-height:1.15}
+  .layout-bloco{align-items:center;text-align:center}
+  .bloco-frase{font-size:calc(124*var(--u));line-height:1.08;text-transform:uppercase}
+  .bloco-assin{font-size:calc(24*var(--u));text-decoration:underline;opacity:.8;font-family:'${f.serifa || "Cormorant Garamond"}',serif}
+  .hora{font-family:'${f.texto}',sans-serif;font-weight:300;font-size:calc(170*var(--u));letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+  .layout-horario .foto-veu{background:rgba(0,0,0,.18)}
+  .layout-atos{padding:0}
+  .ato{flex:1;position:relative;background-size:cover;background-position:center;display:flex;padding:calc(56*var(--u)) calc(70*var(--u))}
+  .ato::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.05) 50%,rgba(0,0,0,.3))}
+  .ato>div{position:relative}
+  .ato+.ato{border-top:calc(4*var(--u)) solid #111}
+  .ato p{font-style:italic;font-size:calc(84*var(--u));line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .ato .fio{height:calc(2*var(--u));width:calc(220*var(--u));margin:calc(16*var(--u)) 0 0}
+  .ato-dir{margin-left:auto;text-align:right;align-self:flex-end}.ato-dir .fio{margin-left:auto}
+  .ato-esq{align-self:flex-start}
   `;
 }
 
@@ -122,13 +151,34 @@ function tela(t, i, total, ctx) {
       corpo = `<div class="foto-bg" style="background-image:url('${esc(t.imagem)}')"></div><div class="foto-veu"></div>
         <div class="base">${rotulo}<h2 style="margin-bottom:calc(20*var(--u))">${rico(t.titulo || "")}</h2>${texto}</div>`;
       break;
+    case "foto-frase": {
+      const topo = t.posicao !== "base";
+      const marcaTopo = t.logo === false ? "" : logos.escuro ? `<img class="marca-topo" src="${logos.escuro}">` : `<div class="marca-txt">${esc(marca.nome)}</div>`;
+      const bloco = `<div class="fio"></div><p class="frase">${rico(t.titulo)}</p>`;
+      const assin = t.assinatura ? `<div><div class="fio"></div><p class="assinatura">${rico(t.assinatura)}</p></div>` : "";
+      corpo = `<div class="foto-bg" style="background-image:url('${esc(t.imagem)}');background-position:${esc(t.foco || "center")}"></div><div class="foto-veu"></div>
+        ${marcaTopo}${topo ? bloco : ""}<div class="base">${topo ? "" : bloco}${assin}</div>`;
+      break;
+    }
+    case "bloco":
+      corpo = `<div class="meio"><p class="serifa bloco-frase">${rico(t.titulo)}</p></div>
+        <div class="bloco-assin">${esc(t.assinatura || marca.arroba || "")}</div>`;
+      break;
+    case "horario":
+      corpo = `<div class="foto-bg" style="background-image:url('${esc(t.imagem)}');background-position:${esc(t.foco || "center")}"></div><div class="foto-veu"></div>
+        <div class="meio" style="align-items:center"><div class="hora">${esc(t.titulo)}</div>${t.texto ? `<p class="texto" style="text-align:center">${rico(t.texto)}</p>` : ""}</div>`;
+      break;
+    case "atos":
+      corpo = (t.atos || []).map((a, k) => `<div class="ato" style="background-image:url('${esc(a.imagem)}');background-position:${esc(a.foco || "center")}">
+        <div class="${k % 2 ? "ato-esq" : "ato-dir"}"><p class="serifa">${rico(a.texto)}</p><div class="fio"></div></div></div>`).join("");
+      break;
     case "cta":
       corpo = `<div class="meio">${rotulo}<h2>${rico(t.titulo)}</h2>${texto}${t.botao ? `<span class="botao">${esc(t.botao)}</span>` : ""}</div>`;
       break;
   }
   const carrossel = total > 1 && formato !== "stories";
   const dir = carrossel && i < total - 1 ? `<span class="seta">${i + 1}/${total} &nbsp;→</span>` : carrossel ? `<span>${i + 1}/${total}</span>` : "";
-  const rodape = t.rodape === false ? "" :
+  const rodape = t.rodape === false || (MINIMOS.includes(t.layout) && t.rodape !== true) ? "" :
     `<div class="rodape"><span><span class="barra"></span>${esc(marca.arroba || marca.nome)}</span>${dir}</div>`;
   return `<section class="tela tema-${tema} layout-${t.layout}" id="t${i + 1}">${corpo}${rodape}</section>`;
 }
@@ -142,13 +192,19 @@ function montar({ peca, marca, pastaPeca, pastaCliente }) {
   const logos = { escuro: rel(marca.logo_fundo_escuro), claro: rel(marca.logo_fundo_claro) };
   if (marca.pendente) console.error(`Aviso: a marca de ${marca.nome} ainda está pendente (${marca.pendente}). Peça só para prévia.`);
   const ctx = { marca, logos, formato: peca.formato };
-  const fam = [marca.fontes.titulo, marca.fontes.texto]
-    .map((n) => `family=${n.replace(/ /g, "+")}:wght@400;600;700;800`).join("&");
+  // um <link> por fonte: se uma família não tiver um peso/itálico, as outras carregam mesmo assim
+  const q = (n) => n.replace(/ /g, "+");
+  const links = [
+    `family=${q(marca.fontes.titulo)}:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700`,
+    `family=${q(marca.fontes.titulo)}:wght@300;400;600;700;800`,
+    `family=${q(marca.fontes.texto)}:wght@300;400;600;700;800`,
+    `family=${q(marca.fontes.serifa || "Cormorant Garamond")}:ital,wght@0,500;1,500`,
+  ].map((f) => `<link href="https://fonts.googleapis.com/css2?${f}&display=swap" rel="stylesheet">`).join("\n");
   const telas = peca.telas.map((t, i) => tela(t, i, peca.telas.length, ctx)).join("\n");
   return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(peca.titulo || "Peça")} · ${esc(marca.nome)}</title>
-<link href="https://fonts.googleapis.com/css2?${fam}&display=swap" rel="stylesheet">
+${links}
 <style>${css(marca, tamanho)}</style></head>
 <body><div class="grade">${telas}</div></body></html>`;
 }

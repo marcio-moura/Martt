@@ -1,0 +1,11 @@
+{
+  "titulo": "Modelos menos é mais",
+  "formato": "feed",
+  "objetivo": "Mostruário dos 4 layouts minimalistas, com fotos do portfólio.",
+  "telas": [
+    { "layout": "foto-frase", "imagem": "../../../../../portfolio/midia/casal-flores.jpg", "titulo": "Cada detalhe\n**conta uma história.**", "assinatura": "Feito com estrutura,\nnão com sorte." },
+    { "layout": "bloco", "tema": "escuro", "titulo": "Menos\né *mais.*" },
+    { "layout": "horario", "imagem": "../../../../../portfolio/midia/video-mesa-doces.jpg", "titulo": "14:00" },
+    { "layout": "atos", "atos": [ { "imagem": "../../../../../portfolio/midia/noiva-buque.jpg", "foco": "center 15%", "texto": "A chegada." }, { "imagem": "../../../../../portfolio/midia/video-bolo-cristais.jpg", "texto": "A experiência." }, { "imagem": "../../../../../portfolio/midia/aliancas.jpg", "texto": "O resultado." } ] }
+  ]
+}

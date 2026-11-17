@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modelos menos é mais · Martt Co.</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{--escuro:#0B0C0B;--claro:#F1EDE6;--tx-e:#242522;--tx-c:#F1EDE6;
+    --dest:#8FB5A3;--dest-f:#6F9885;--apoio:#E8E3D8;--suave:#8D8B82;--u:1px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#2a2b29;font-family:'Manrope',system-ui,sans-serif;font-weight:400}
+  .grade{display:flex;flex-wrap:wrap;gap:40px;padding:40px;justify-content:center}
+  .grade .tela{zoom:.4}
+  .tela{width:1080px;height:1350px;position:relative;overflow:hidden;display:flex;flex-direction:column;
+    padding:calc(96*var(--u)) calc(88*var(--u)) calc(84*var(--u))}
+    /* stories: área livre da interface do Instagram */
+  .tema-escuro{background:var(--escuro);color:var(--tx-c)}
+  .tema-claro{background:var(--claro);color:var(--tx-e)}
+  .tema-destaque{background:var(--dest);color:var(--tx-e)}
+  .tema-destaque em{color:var(--claro)!important}
+  .tema-destaque .aspas{color:var(--escuro)}
+  h1,h2,.num{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-.025em;line-height:1.04}
+  h1{font-size:calc(118*var(--u))}
+  h2{font-size:calc(80*var(--u));margin-bottom:calc(36*var(--u))}
+  em{font-style:normal;color:var(--dest)}
+  .tema-claro em{color:var(--dest-f)}
+  .rotulo{font-weight:600;font-size:calc(24*var(--u));letter-spacing:.22em;text-transform:uppercase;
+    display:flex;align-items:center;gap:calc(18*var(--u));margin-bottom:calc(40*var(--u));opacity:.85}
+  .rotulo i{width:calc(46*var(--u));height:calc(4*var(--u));background:var(--dest)}
+  .texto{font-size:calc(40*var(--u));line-height:1.45;max-width:calc(860*var(--u))}
+  .meio{flex:1;display:flex;flex-direction:column;justify-content:center}
+  .base{flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+  ul{list-style:none;display:flex;flex-direction:column;gap:calc(34*var(--u))}
+  li{display:flex;gap:calc(28*var(--u));font-size:calc(42*var(--u));line-height:1.35}
+  li b{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;color:var(--dest);min-width:calc(64*var(--u))}
+  .tema-claro li b{color:var(--dest-f)}
+  .num{font-size:calc(300*var(--u));color:var(--dest);line-height:.9;margin-bottom:calc(30*var(--u))}
+  .tema-claro .num{color:var(--dest-f)}
+  .aspas{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:calc(220*var(--u));line-height:.6;color:var(--dest);height:calc(110*var(--u))}
+  .citacao{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:calc(64*var(--u));line-height:1.2;letter-spacing:-.02em}
+  .autor{margin-top:calc(40*var(--u));font-size:calc(30*var(--u));opacity:.75}
+  .foto-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+  .foto-veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(0,0,0,.78) 100%)}
+  .tela.layout-foto{color:#fff}
+  .tela>*:not(.foto-bg):not(.foto-veu){position:relative}
+  .botao{display:inline-block;margin-top:calc(54*var(--u));padding:calc(30*var(--u)) calc(46*var(--u));
+    font-weight:600;font-size:calc(34*var(--u));background:var(--dest);color:var(--tx-e);align-self:flex-start}
+  .tema-destaque .botao{background:var(--escuro);color:var(--tx-c)}
+  .rodape{display:flex;justify-content:space-between;align-items:center;margin-top:calc(48*var(--u));
+    font-size:calc(24*var(--u));font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+  .rodape .barra{display:inline-block;width:calc(40*var(--u));height:calc(10*var(--u));background:var(--dest);margin-right:calc(14*var(--u));vertical-align:middle}
+  .tema-destaque .rodape .barra{background:var(--escuro)}
+  .logo{mix-blend-mode:lighten;height:calc(110*var(--u));align-self:flex-start;margin-bottom:calc(20*var(--u))}
+  .logo.sem-mistura{mix-blend-mode:normal}
+  .seta{font-size:calc(30*var(--u))}
+
+  /* ---- menos é mais ---- */
+  .serifa{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:-.01em}
+  .fio{width:calc(110*var(--u));height:calc(4*var(--u));background:currentColor;margin:calc(44*var(--u)) 0}
+  .layout-foto-frase,.layout-horario,.layout-atos{color:#fff;background:#111}
+  .layout-foto-frase .foto-veu{background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.08) 45%,rgba(0,0,0,.08) 60%,rgba(0,0,0,.6) 100%)}
+  .frase{font-family:'Manrope',sans-serif;font-weight:300;text-transform:uppercase;font-size:calc(66*var(--u));line-height:1.12;letter-spacing:.005em}
+  .frase strong{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-.01em}
+  .frase em{color:inherit}
+  .marca-topo{height:calc(150*var(--u));object-fit:contain;align-self:flex-start;mix-blend-mode:lighten}
+  .marca-txt{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:calc(40*var(--u))}
+  .assinatura{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-style:italic;font-size:calc(52*var(--u));line-height:1.15}
+  .layout-bloco{align-items:center;text-align:center}
+  .bloco-frase{font-size:calc(124*var(--u));line-height:1.08;text-transform:uppercase}
+  .bloco-assin{font-size:calc(24*var(--u));text-decoration:underline;opacity:.8;font-family:'Cormorant Garamond',serif}
+  .hora{font-family:'Manrope',sans-serif;font-weight:300;font-size:calc(170*var(--u));letter-spacing:-.02em;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+  .layout-horario .foto-veu{background:rgba(0,0,0,.18)}
+  .layout-atos{padding:0}
+  .ato{flex:1;position:relative;background-size:cover;background-position:center;display:flex;padding:calc(56*var(--u)) calc(70*var(--u))}
+  .ato::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.3),rgba(0,0,0,.05) 50%,rgba(0,0,0,.3))}
+  .ato>div{position:relative}
+  .ato+.ato{border-top:calc(4*var(--u)) solid #111}
+  .ato p{font-style:italic;font-size:calc(84*var(--u));line-height:1;text-shadow:0 2px 20px rgba(0,0,0,.4)}
+  .ato .fio{height:calc(2*var(--u));width:calc(220*var(--u));margin:calc(16*var(--u)) 0 0}
+  .ato-dir{margin-left:auto;text-align:right;align-self:flex-end}.ato-dir .fio{margin-left:auto}
+  .ato-esq{align-self:flex-start}
+  </style></head>
+<body><div class="grade"><section class="tela tema-claro layout-foto-frase" id="t1"><div class="foto-bg" style="background-image:url('../../../../../portfolio/midia/casal-flores.jpg');background-position:center"></div><div class="foto-veu"></div>
+        <img class="marca-topo" src="../../../../../marca/martt-logo-faixa.jpg"><div class="fio"></div><p class="frase">Cada detalhe<br><strong>conta uma história.</strong></p><div class="base"><div><div class="fio"></div><p class="assinatura">Feito com estrutura,<br>não com sorte.</p></div></div></section>
+<section class="tela tema-escuro layout-bloco" id="t2"><div class="meio"><p class="serifa bloco-frase">Menos<br>é <em>mais.</em></p></div>
+        <div class="bloco-assin">@marttco</div></section>
+<section class="tela tema-claro layout-horario" id="t3"><div class="foto-bg" style="background-image:url('../../../../../portfolio/midia/video-mesa-doces.jpg');background-position:center"></div><div class="foto-veu"></div>
+        <div class="meio" style="align-items:center"><div class="hora">14:00</div></div></section>
+<section class="tela tema-claro layout-atos" id="t4"><div class="ato" style="background-image:url('../../../../../portfolio/midia/noiva-buque.jpg');background-position:center 15%">
+        <div class="ato-dir"><p class="serifa">A chegada.</p><div class="fio"></div></div></div><div class="ato" style="background-image:url('../../../../../portfolio/midia/video-bolo-cristais.jpg');background-position:center">
+        <div class="ato-esq"><p class="serifa">A experiência.</p><div class="fio"></div></div></div><div class="ato" style="background-image:url('../../../../../portfolio/midia/aliancas.jpg');background-position:center">
+        <div class="ato-dir"><p class="serifa">O resultado.</p><div class="fio"></div></div></div></section></div></body></html>

@@ -41,10 +41,21 @@ design/
 | `foto`    | `imagem` (caminho a partir da pasta da peça), `rotulo`, `titulo`, `texto` |
 | `cta`     | `rotulo`, `titulo`, `texto`, `botao`     |
 
+**Menos é mais** (preferidos da casa; sem @ e numeração no rodapé, salvo `rodape: true`):
+
+| Layout       | Campos | Referência |
+|--------------|--------|------------|
+| `foto-frase` | `imagem`, `titulo` (caixa alta; `**negrito**`), `assinatura`, `posicao` (`topo`/`base`), `foco`, `logo` | post da Golfinho |
+| `bloco`      | `titulo` (frase curta, em serifa), `assinatura`, `tema` | "YOU CAN" |
+| `horario`    | `imagem`, `titulo` (ex.: `8:00`), `texto`, `foco` | um dia real |
+| `atos`       | `atos`: lista de `{imagem, texto, foco}` (2 a 4) | chegada, experiência, resultado |
+
+`foco` ajusta o enquadramento da foto (ex.: `center 20%` sobe o corte).
+
 Em todas: `tema` = `escuro`, `claro` ou `destaque` (padrão: capa e cta escuros, o resto claro) e `rodape: false` para esconder o rodapé.
-No texto, `*palavra*` sai na cor de destaque e `\n` quebra a linha.
+No texto, `*palavra*` sai na cor de destaque, `**palavra**` sai em negrito na mesma cor e `\n` quebra a linha.
 
 ## Marca do cliente (`marca.json`)
 
-`nome`, `arroba`, `pendente` (texto; enquanto existir, a peça é só prévia), `logo_fundo_escuro` e `logo_fundo_claro` (caminhos a partir da pasta do cliente), `cores` (`escuro`, `claro`, `texto_escuro`, `texto_claro`, `destaque`, `destaque_forte`, `apoio`, `suave`), `fontes` (`titulo`, `titulo_peso`, `texto`, `texto_peso`; nomes do Google Fonts), `tom` e `evitar`.
+`nome`, `arroba`, `pendente` (texto; enquanto existir, a peça é só prévia), `logo_fundo_escuro` e `logo_fundo_claro` (caminhos a partir da pasta do cliente), `cores` (`escuro`, `claro`, `texto_escuro`, `texto_claro`, `destaque`, `destaque_forte`, `apoio`, `suave`), `fontes` (`titulo`, `titulo_peso`, `texto`, `texto_peso`, `serifa` opcional, padrão Cormorant Garamond; nomes do Google Fonts), `tom` e `evitar`.
 Modelo: `clientes/martt/marca.json`.
