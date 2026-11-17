@@ -13,7 +13,7 @@ plano.json:
   "musica": null, "volume_original": 1.0
 }
 """
-import json, os, subprocess, sys, wave
+import json, os, re, subprocess, sys, wave
 import numpy as np, cv2, mediapipe as mp
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
@@ -166,11 +166,21 @@ def juntar_moeda(ws, correcoes):
     out, i = [], 0
     while i < len(ws):
         w = ws[i]
+        moeda = None
         if w["w"] == "R" and i + 2 < len(ws) and ws[i + 1]["w"] == "$":
-            num = ws[i + 2]; txt = "R$" + num["w"]; e = num["e"]; j = i + 3
+            moeda = (ws[i + 2]["w"], ws[i + 2]["e"], i + 3)
+        elif w["w"] == "R" and i + 1 < len(ws) and re.match(r"^\$\d", ws[i + 1]["w"]):
+            moeda = (ws[i + 1]["w"][1:], ws[i + 1]["e"], i + 2)
+        elif w["w"] == "R$" and i + 1 < len(ws):
+            moeda = (ws[i + 1]["w"], ws[i + 1]["e"], i + 2)
+        elif re.match(r"^R\$\d", w["w"]):
+            moeda = (w["w"][2:], w["e"], i + 1)
+        if moeda:
+            num, e, j = moeda; num = num.rstrip(".")
+            txt = "R$" + num
             if j < len(ws) and ws[j]["w"].startswith(","):
                 txt += ws[j]["w"].rstrip("."); e = ws[j]["e"]; j += 1
-            out.append(dict(w=txt, s=w["s"], e=e)); i = j
+            out.append(dict(w=txt.rstrip("."), s=w["s"], e=e)); i = j
         elif i + 1 < len(ws) and ws[i + 1]["w"].startswith("%"):
             out.append(dict(w=w["w"] + "%", s=w["s"], e=ws[i + 1]["e"])); i += 2
         else:
@@ -260,7 +270,7 @@ def camada_preco(t, pr, cores, caixa):
     """etiqueta presa ao produto: nome, preço antigo riscado e preço novo com pop"""
     img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
     fl = fonte(FT, 30, 600); fo = fonte(FT, 50, 600); fn = fonte(FT, 104, 800)
-    velho = "de " + pr["de"]; novo = pr["por"]; maxw = W * 0.84 - 64
+    velho = ("de " + pr["de"]) if pr.get("de") else "por apenas"; novo = pr["por"]; maxw = W * 0.84 - 64
     nome = "  ".join(pr["nome"].upper())
     if d.textlength(nome, font=fl) > maxw: nome = " ".join(pr["nome"].upper())
     tl = 30
@@ -279,7 +289,7 @@ def camada_preco(t, pr, cores, caixa):
     d.rounded_rectangle((x, y, x + cw, y + chh), 28, fill=A(cores["marrom"], 238))
     d.text((x + 32, y + 26), nome, font=fl, fill=A(cores["creme"], 210))
     d.text((x + 32, y + 66), velho, font=fo, fill=A(cores["creme"], 200))
-    if t >= pr["t_risco"]:
+    if pr.get("de") and t >= pr["t_risco"]:
         r = ease_out((t - pr["t_risco"]) / 0.25); vw = d.textlength(velho, font=fo)
         yy = y + 66 + 34; d.line((x + 28, yy, x + 32 + (vw + 8) * r, yy - 4), fill=A(cores["laranja"]), width=6)
     if t >= pr["t_por"]:
@@ -304,7 +314,12 @@ def main(plano_path):
     segs = P.get("segmentos") or [[P["inicio"], P["fim"]]]
     t0, t1 = segs[0][0], segs[-1][1]
     dentro = lambda x: any(a <= x < b for a, b in segs)
-    palavras = juntar_moeda(json.load(open(rel(P["palavras"]))), P.get("correcoes", {}))
+    brutas = json.load(open(rel(P["palavras"])))
+    for ed in P.get("editar_palavras", []):   # correção pontual: {"t": início da palavra, "w": "novo" ou "" para tirar}
+        for w in brutas:
+            if abs(w["s"] - ed["t"]) < 0.03: w["w"] = ed["w"]
+    brutas = [w for w in brutas if w["w"].strip()]
+    palavras = juntar_moeda(brutas, P.get("correcoes", {}))
     palavras = [w for w in palavras if dentro(w["s"])]
     pr_jan = [(pr.get("t_nome", pr["t_de"]) - 0.05, pr["ate"]) for pr in P.get("precos", [])]
     legenda = [w for w in palavras if not any(a <= w["s"] < b for a, b in pr_jan)]
@@ -315,7 +330,11 @@ def main(plano_path):
     titulos = P.get("titulos", []); precos = P.get("precos", []); zooms = P.get("zooms", [])
     for pr in precos:
         a = pr["rastrear"]
-        if "cor" in a:
+        if "chaves" in a:   # várias marcas manuais: rastreia de uma marca até a próxima
+            ch = sorted(a["chaves"], key=lambda k: k["t"]); pr["_trilha"] = []
+            for k0, k1 in zip(ch, ch[1:] + [{"t": pr["ate"]}]):
+                pr["_trilha"] += rastrear(rel(P["video"]), k0["caixa"], k0["t"], k1["t"])
+        elif "cor" in a:
             pr["_trilha"] = rastrear_cor(rel(P["video"]), a["cor"][0], a["cor"][1], pr.get("t_nome", pr["t_de"]) - 0.1, pr["ate"])
         else:
             pr["_trilha"] = rastrear(rel(P["video"]), a["caixa"], a["t"], pr["ate"])
@@ -407,7 +426,7 @@ def main(plano_path):
     for tt in titulos:
         poe("whoosh", tt["de"] - 0.12, 0.55); poe("impacto_suave", tt["de"] + 0.05, 0.35)
     for pr in precos:
-        poe("whoosh_curto", pr["t_de"] - 0.08, 0.5); poe("tick", pr["t_risco"], 0.4); poe("ding", pr["t_por"], 0.45)
+        poe("whoosh_curto", pr["t_de"] - 0.08, 0.5); pr.get("de") and poe("tick", pr["t_risco"], 0.4); poe("ding", pr["t_por"], 0.45)
     for z in zooms:
         poe("impacto_suave", z["de"], 0.3)
     for pg in pags:

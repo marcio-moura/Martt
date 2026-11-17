@@ -1,0 +1,415 @@
+{
+ "video": "bruto.mov",
+ "palavras": "words.json",
+ "estilo": "../estilo.json",
+ "sombra": {
+  "imagem": "../sombra.png",
+  "opacidade": 1.0
+ },
+ "volume_sfx": 0.5,
+ "reduzir_ruido": true,
+ "musica": null,
+ "correcoes": {
+  "Crisca": "Kriska",
+  "Amore": "Amora e",
+  "Acero": "Acerola",
+  "Alibisco": "e Hibisco",
+  "-Max": "Max",
+  "Delpharfam": "Deo Parfum",
+  "Elia": "Ilía",
+  "Ilia": "Ilía"
+ },
+ "loja": "Natura Portal Shopping",
+ "saida": "saida/esquenta-black-portal-shopping.mp4",
+ "segmentos": [
+  [
+   0.2,
+   7.29
+  ],
+  [
+   7.57,
+   20.93
+  ],
+  [
+   20.93,
+   28.49
+  ],
+  [
+   28.76,
+   37.33
+  ],
+  [
+   38.05,
+   49.03
+  ],
+  [
+   49.27,
+   53.29
+  ],
+  [
+   53.33,
+   68.02
+  ],
+  [
+   77.62,
+   84.65
+  ]
+ ],
+ "editar_palavras": [
+  {
+   "t": 6.64,
+   "w": "Portal"
+  },
+  {
+   "t": 7.1,
+   "w": "Shopping."
+  },
+  {
+   "t": 43.68,
+   "w": "Portal"
+  },
+  {
+   "t": 81.9,
+   "w": "Portal"
+  },
+  {
+   "t": 14.84,
+   "w": "Homem"
+  },
+  {
+   "t": 15.14,
+   "w": "Essence"
+  },
+  {
+   "t": 29.1,
+   "w": ""
+  },
+  {
+   "t": 33.44,
+   "w": ""
+  },
+  {
+   "t": 29.3,
+   "w": "Clássico"
+  },
+  {
+   "t": 33.66,
+   "w": "Absoluta"
+  },
+  {
+   "t": 46.0,
+   "w": "estoura"
+  },
+  {
+   "t": 1.86,
+   "w": "Tododia"
+  },
+  {
+   "t": 1.98,
+   "w": ""
+  },
+  {
+   "t": 2.16,
+   "w": "Natura,"
+  },
+  {
+   "t": 8.0,
+   "w": "Essencial"
+  },
+  {
+   "t": 8.5,
+   "w": "Sentir"
+  },
+  {
+   "t": 38.38,
+   "w": "7"
+  }
+ ],
+ "titulos": [
+  {
+   "texto": "Portal\nShopping",
+   "de": 6.1,
+   "ate": 7.29,
+   "y": 0.03
+  },
+  {
+   "texto": "Dias\n27 e 28",
+   "de": 21.3,
+   "ate": 23.4,
+   "y": 0.03
+  },
+  {
+   "texto": "Até\n60% OFF",
+   "de": 26.4,
+   "ate": 28.45,
+   "y": 0.03
+  },
+  {
+   "texto": "7 primeiros\nclientes",
+   "de": 38.3,
+   "ate": 40.3,
+   "y": 0.03
+  },
+  {
+   "texto": "Brinde\nespecial",
+   "de": 42.2,
+   "ate": 43.4,
+   "y": 0.03
+  },
+  {
+   "texto": "Estoura\nbalão",
+   "de": 45.9,
+   "ate": 47.4,
+   "y": 0.03
+  },
+  {
+   "texto": "Acima de\nR$ 250",
+   "de": 47.45,
+   "ate": 49.0,
+   "y": 0.03
+  },
+  {
+   "texto": "Só 2 dias\nde Black",
+   "de": 79.3,
+   "ate": 80.7,
+   "y": 0.03
+  },
+  {
+   "texto": "Portal\nShopping",
+   "de": 81.45,
+   "ate": 84.6,
+   "y": 0.03
+  }
+ ],
+ "precos": [
+  {
+   "nome": "4 Caixas de Sabonete Tododia",
+   "de": null,
+   "por": "R$ 111,60",
+   "t_nome": 0.25,
+   "t_de": 2.88,
+   "t_risco": 2.88,
+   "t_por": 4.12,
+   "ate": 5.6,
+   "rastrear": {
+    "t": 0.5,
+    "caixa": [
+     760,
+     920,
+     240,
+     280
+    ]
+   }
+  },
+  {
+   "nome": "Essencial Sentir",
+   "de": "R$ 279,90",
+   "por": "R$ 181,90",
+   "t_nome": 8.0,
+   "t_de": 9.14,
+   "t_risco": 11.52,
+   "t_por": 12.4,
+   "ate": 14.3,
+   "rastrear": {
+    "t": 8.3,
+    "caixa": [
+     200,
+     940,
+     150,
+     260
+    ]
+   }
+  },
+  {
+   "nome": "Homem Essence",
+   "de": "R$ 244,90",
+   "por": "R$ 159,90",
+   "t_nome": 14.84,
+   "t_de": 15.78,
+   "t_risco": 18.04,
+   "t_por": 18.82,
+   "ate": 20.85,
+   "rastrear": {
+    "t": 15.1,
+    "caixa": [
+     750,
+     730,
+     170,
+     240
+    ]
+   }
+  },
+  {
+   "nome": "Luna Clássico",
+   "de": "R$ 185,90",
+   "por": "R$ 130,00",
+   "t_nome": 28.76,
+   "t_de": 29.62,
+   "t_risco": 31.06,
+   "t_por": 31.88,
+   "ate": 33.05,
+   "rastrear": {
+    "t": 28.9,
+    "caixa": [
+     190,
+     510,
+     140,
+     280
+    ]
+   }
+  },
+  {
+   "nome": "Luna Absoluta",
+   "de": "R$ 185,90",
+   "por": "R$ 120,90",
+   "t_nome": 33.18,
+   "t_de": 34.08,
+   "t_risco": 35.64,
+   "t_por": 36.4,
+   "ate": 37.3,
+   "rastrear": {
+    "t": 33.5,
+    "caixa": [
+     450,
+     650,
+     260,
+     240
+    ]
+   }
+  },
+  {
+   "nome": "Kit Presente Mamãe e Bebê",
+   "de": null,
+   "por": "R$ 94,90",
+   "t_nome": 49.4,
+   "t_de": 50.6,
+   "t_risco": 50.6,
+   "t_por": 51.82,
+   "ate": 53.1,
+   "rastrear": {
+    "t": 49.7,
+    "caixa": [
+     100,
+     920,
+     480,
+     620
+    ]
+   }
+  },
+  {
+   "nome": "Lumina Shampoo Antissinais",
+   "de": "R$ 56,90",
+   "por": "R$ 34,90",
+   "t_nome": 53.68,
+   "t_de": 57.44,
+   "t_risco": 58.82,
+   "t_por": 60.24,
+   "ate": 61.95,
+   "rastrear": {
+    "t": 57.7,
+    "caixa": [
+     810,
+     880,
+     190,
+     440
+    ]
+   }
+  },
+  {
+   "nome": "Lumina Condicionador Antissinais",
+   "de": "R$ 50,90",
+   "por": "R$ 36,90",
+   "t_nome": 62.34,
+   "t_de": 63.88,
+   "t_risco": 65.3,
+   "t_por": 66.92,
+   "ate": 67.95,
+   "rastrear": {
+    "t": 64.2,
+    "caixa": [
+     90,
+     830,
+     150,
+     400
+    ]
+   }
+  }
+ ],
+ "destaques": [
+  "portal",
+  "shopping",
+  "desconto",
+  "60%",
+  "selecionados",
+  "7",
+  "primeiros",
+  "brinde",
+  "especial",
+  "estoura",
+  "balão",
+  "somente",
+  "black",
+  "corre",
+  "R$250,00",
+  "novembro",
+  "promoção"
+ ],
+ "zooms": [
+  {
+   "de": 4.12,
+   "ate": 5.6,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 12.4,
+   "ate": 14.3,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 18.82,
+   "ate": 20.85,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 31.88,
+   "ate": 33.05,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 36.4,
+   "ate": 37.3,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 51.82,
+   "ate": 53.1,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 60.24,
+   "ate": 61.95,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 66.92,
+   "ate": 67.95,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+Natura  —  duração 50.9s  —  cortes: [6.23, 13.8, 19.4, 24.5, 31.27, 37.8, 43.67, 49.97]
+
+TRECHOS: [[0.22, 6.07], [6.51, 13.52], [13.8, 19.3], [19.4, 24.28], [24.94, 31.01], [31.27, 37.74], [37.92, 43.39], [43.83, 49.43]]
+
+FALA:
+[  0.00-  8.40] Body Splash de R$96,90 para apenas R$40,99 é na Black Natura Goianida. Del Corporal masculino,
+[  8.68- 14.82] homenós e essencial tradicional de R$72,90 por apenas R$50,00 cada. E lembrando que é dia
+[ 14.82- 20.38] 27 e 28 com produtos selecionados com até 60% de desconto. E o Ilía Lasso
+[ 20.38- 28.36] de R$199,90 está por apenas R$129,90 E o Biografia Encontros, um clássico da Natura, de
+[ 28.36- 35.20] R$209,90 para apenas R$119,90 E em compras acima de R$250,00 você participa do nosso história
+[ 35.20- 41.30] balão aqui na loja e garante presentes especiais. E também temos o Unassomo, de R$329,90
+[ 41.30- 47.60] para apenas R$197,90 São somente dois dias. Vem pra Natura Goianida e aproveita a Black
+[ 47.60- 49.50] com a gente. Esperamos por vocês!
+
+PREÇOS DETECTADOS (conferir nome e preço com a lista da loja):
+    1.04s  Body Splash: R$ 96,90 -> R$ 40,99
+   10.46s  Del Corporal masculino homenós e essencial tradicional: R$ 72,90 -> R$ 50,00
+   20.38s  Ilía Lasso: R$ 199,90 -> R$ 129,90
+   28.36s  Biografia Encontros um clássico da Natura: R$ 209,90 -> R$ 119,90
+   39.84s  Unassomo: R$ 329,90 -> R$ 197,90

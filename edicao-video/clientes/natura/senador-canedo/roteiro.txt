@@ -1,0 +1,21 @@
+Natura  —  duração 63.1s  —  cortes: [6.23, 12.7, 18.9, 26.07, 33.03, 39.13, 50.43, 56.77]
+
+TRECHOS: [[0.12, 5.71], [6.23, 12.32], [13.5, 18.82], [19.22, 25.85], [26.11, 33.01], [33.11, 38.51], [39.29, 50.06], [50.87, 56.77], [56.77, 61.92]]
+
+FALA:
+[  0.00-  1.04] Canedo,
+[  1.58-  8.74] produtos a partir de R$11,95 só aqui na Natura Fradais. Colônia Feminina Luna Tradicional de
+[  8.74- 21.12] R$189,90 por apenas R$95,95 Creme corporal todo dia de R$78,90 por R$47,34 Bel corporal essencial
+[ 21.12- 30.44] feminino de R$72,90 por R$29,16 E lembrando que os 7 primeiros clientes presenciais que chegarem
+[ 30.44- 38.74] na loja estarão ganhando um brinde. Conexão de um novo masculino de R$164,90 por R$98,95
+[ 39.40- 46.46] E nas compras acima de R$250,00 você estoura um balão e ganha um brinde. Todos
+[ 46.46- 49.90] os balões são premiados e são produtos maravilhosos.
+[ 50.76- 58.88] Leite hidratante corporal e lia secreto de R$84,90 por R$33,90 Então somente dois dias. Vem
+[ 58.88- 61.94] para a Natura Senador Canedo aproveitar nossas ofertas.
+
+PREÇOS DETECTADOS (conferir nome e preço com a lista da loja):
+    8.44s  Colônia Feminina Luna Tradicional: R$ 189,90 -> R$ 95,95
+   14.96s  Creme corporal todo dia: R$ 78,90 -> R$ 47,34
+   21.98s  Bel corporal essencial feminino: R$ 72,90 -> R$ 29,16
+   35.20s  Conexão de um novo masculino: R$ 164,90 -> R$ 98,95
+   53.66s  Leite hidratante corporal e lia secreto: R$ 84,90 -> R$ 33,90

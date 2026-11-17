@@ -1,0 +1,351 @@
+{
+ "video": "bruto.mov",
+ "palavras": "words.json",
+ "estilo": "../estilo.json",
+ "sombra": {
+  "imagem": "../sombra.png",
+  "opacidade": 1.0
+ },
+ "volume_sfx": 0.5,
+ "reduzir_ruido": true,
+ "musica": null,
+ "correcoes": {
+  "Crisca": "Kriska",
+  "Amore": "Amora e",
+  "Acero": "Acerola",
+  "Alibisco": "e Hibisco",
+  "-Max": "Max",
+  "Delpharfam": "Deo Parfum",
+  "Elia": "Ilía",
+  "Ilia": "Ilía"
+ },
+ "loja": "Natura Goianira",
+ "saida": "saida/esquenta-black-goianira.mp4",
+ "segmentos": [
+  [
+   0.22,
+   6.07
+  ],
+  [
+   6.51,
+   13.52
+  ],
+  [
+   13.8,
+   19.3
+  ],
+  [
+   19.4,
+   24.28
+  ],
+  [
+   24.94,
+   31.01
+  ],
+  [
+   31.27,
+   37.74
+  ],
+  [
+   37.92,
+   43.39
+  ],
+  [
+   43.83,
+   49.43
+  ]
+ ],
+ "editar_palavras": [
+  {
+   "t": 6.64,
+   "w": "Deo"
+  },
+  {
+   "t": 8.68,
+   "w": "Homem Nós"
+  },
+  {
+   "t": 19.62,
+   "w": "Ilía"
+  },
+  {
+   "t": 19.98,
+   "w": "Laços"
+  },
+  {
+   "t": 5.56,
+   "w": "Goianira."
+  },
+  {
+   "t": 46.12,
+   "w": "Goianira"
+  },
+  {
+   "t": 34.9,
+   "w": "estoura"
+  },
+  {
+   "t": 39.16,
+   "w": "Una Somos,"
+  }
+ ],
+ "titulos": [
+  {
+   "texto": "Black\nNatura",
+   "de": 4.85,
+   "ate": 6.05,
+   "y": 0.03
+  },
+  {
+   "texto": "Dias\n27 e 28",
+   "de": 14.6,
+   "ate": 16.3,
+   "y": 0.03
+  },
+  {
+   "texto": "Até\n60% OFF",
+   "de": 17.8,
+   "ate": 19.3,
+   "y": 0.03
+  },
+  {
+   "texto": "Acima de\nR$ 250",
+   "de": 31.85,
+   "ate": 34.6,
+   "y": 0.03
+  },
+  {
+   "texto": "Estoura\nbalão",
+   "de": 34.85,
+   "ate": 36.6,
+   "y": 0.03
+  },
+  {
+   "texto": "Presentes\nespeciais",
+   "de": 36.7,
+   "ate": 37.7,
+   "y": 0.03
+  },
+  {
+   "texto": "Só 2\ndias",
+   "de": 43.95,
+   "ate": 45.4,
+   "y": 0.03
+  },
+  {
+   "texto": "Natura\nGoianira",
+   "de": 45.7,
+   "ate": 47.4,
+   "y": 0.03
+  }
+ ],
+ "precos": [
+  {
+   "nome": "Body Splash",
+   "de": "R$ 96,90",
+   "por": "R$ 40,99",
+   "t_nome": 0.8,
+   "t_de": 1.04,
+   "t_risco": 2.52,
+   "t_por": 3.04,
+   "ate": 4.15,
+   "rastrear": {
+    "t": 1.0,
+    "caixa": [
+     870,
+     1290,
+     180,
+     330
+    ]
+   }
+  },
+  {
+   "nome": "Deo Corporal Homem Nós e Essencial Tradicional",
+   "de": "R$ 72,90",
+   "por": "R$ 50,00 cada",
+   "t_nome": 6.64,
+   "t_de": 10.46,
+   "t_risco": 11.98,
+   "t_por": 12.48,
+   "ate": 13.48,
+   "rastrear": {
+    "chaves": [
+     {
+      "t": 6.9,
+      "caixa": [
+       90,
+       870,
+       120,
+       200
+      ]
+     },
+     {
+      "t": 9.0,
+      "caixa": [
+       195,
+       765,
+       90,
+       195
+      ]
+     },
+     {
+      "t": 10.0,
+      "caixa": [
+       240,
+       660,
+       90,
+       195
+      ]
+     },
+     {
+      "t": 11.0,
+      "caixa": [
+       105,
+       825,
+       105,
+       195
+      ]
+     },
+     {
+      "t": 12.0,
+      "caixa": [
+       210,
+       1005,
+       120,
+       210
+      ]
+     },
+     {
+      "t": 12.8,
+      "caixa": [
+       186,
+       840,
+       75,
+       210
+      ]
+     },
+     {
+      "t": 13.4,
+      "caixa": [
+       150,
+       855,
+       90,
+       195
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "nome": "Ilía Laços",
+   "de": "R$ 199,90",
+   "por": "R$ 129,90",
+   "t_nome": 19.62,
+   "t_de": 20.38,
+   "t_risco": 22.08,
+   "t_por": 22.94,
+   "ate": 24.2,
+   "rastrear": {
+    "t": 19.9,
+    "caixa": [
+     160,
+     690,
+     170,
+     180
+    ]
+   }
+  },
+  {
+   "nome": "Biografia Encontros",
+   "de": "R$ 209,90",
+   "por": "R$ 119,90",
+   "t_nome": 25.28,
+   "t_de": 28.36,
+   "t_risco": 29.4,
+   "t_por": 30.0,
+   "ate": 30.95,
+   "rastrear": {
+    "t": 25.6,
+    "caixa": [
+     70,
+     830,
+     160,
+     260
+    ]
+   }
+  },
+  {
+   "nome": "Una Somos",
+   "de": "R$ 329,90",
+   "por": "R$ 197,90",
+   "t_nome": 39.16,
+   "t_de": 39.84,
+   "t_risco": 41.3,
+   "t_por": 41.86,
+   "ate": 43.3,
+   "rastrear": {
+    "t": 39.5,
+    "caixa": [
+     640,
+     740,
+     190,
+     270
+    ]
+   }
+  }
+ ],
+ "destaques": [
+  "black",
+  "goianira",
+  "desconto",
+  "60%",
+  "selecionados",
+  "estoura",
+  "balão",
+  "presentes",
+  "especiais",
+  "somente",
+  "aproveita",
+  "esperamos",
+  "clássico",
+  "R$250,00",
+  "cada"
+ ],
+ "zooms": [
+  {
+   "de": 3.04,
+   "ate": 4.15,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 12.48,
+   "ate": 13.48,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 22.94,
+   "ate": 24.2,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 30.0,
+   "ate": 30.95,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 41.86,
+   "ate": 43.3,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  }
+ ]
+}

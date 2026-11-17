@@ -1,0 +1,28 @@
+Natura  —  duração 85.3s  —  cortes: [7.57, 20.93, 28.73, 37.53, 49.27, 53.33, 68.1]
+
+TRECHOS: [[0.2, 7.29], [7.57, 20.93], [20.93, 28.49], [28.73, 37.33], [38.05, 49.03], [49.27, 53.29], [53.33, 68.02], [77.62, 84.65]]
+
+FALA:
+[  0.00-  6.50] Quatro caixas de sabonete, todo dia natura, saindo por apenas R$111,60 É aqui na Natura
+[  6.50- 15.14] do Portoal Shop. E o essencial sentir de R$279,90 por apenas R$181,90 E o home
+[ 15.14- 24.60] essência de R$244,90 por apenas R$159,90 E no dia 27 e 28 de novembro teremos
+[ 24.60- 32.64] produtos selecionados com até 60% de desconto. Luna é clássico de R$185,90 por apenas R$130
+[ 33.10- 39.64] E Luna é absoluto de R$185,90 por apenas R$120,90 Os sete primeiros clientes que chegar
+[ 39.64- 43.20] aqui na loja no dia 27 e 28 vai ganhar um brinde especial aqui da
+[ 43.20- 47.82] Natura do Portoal Shopping. E lembrando também que vamos ter história balão em compras acima
+[ 47.82- 55.04] de R$250,00 Presentes de mamãe e bebê saindo por apenas R$94,90 E o shampoo antissinais
+[ 55.04- 62.88] da Lumina entrou de promoção. De R$56,90 está saindo por apenas R$34,90 E o condicionador
+[ 62.88- 63.28] também.
+[ 63.88- 68.12] De R$50,90 está saindo por apenas R$36,90
+[ 78.42- 81.90] Lembrando que são somente dois dias de black. Então corre aqui para a Natura do
+[ 81.90- 84.84] Portoal Shopping para vocês aproveitar a black com a gente.
+
+PREÇOS DETECTADOS (conferir nome e preço com a lista da loja):
+    2.88s  Quatro caixas de sabonete todo dia natura: None -> R$ 111,60
+    9.14s  essencial sentir: R$ 279,90 -> R$ 181,90
+   15.78s  home essência: R$ 244,90 -> R$ 159,90
+   29.62s  Luna é clássico: R$ 185,90 -> R$ 130,00
+   34.08s  Luna é absoluto: R$ 185,90 -> R$ 120,90
+   50.60s  Presentes de mamãe e bebê: None -> R$ 94,90
+   57.44s  PRODUTO: R$ 56,90 -> R$ 34,90
+   63.88s  PRODUTO: R$ 50,90 -> R$ 36,90

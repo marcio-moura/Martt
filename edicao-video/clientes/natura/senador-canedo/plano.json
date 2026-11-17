@@ -1,0 +1,304 @@
+{
+ "video": "bruto.mov",
+ "palavras": "words.json",
+ "estilo": "../estilo.json",
+ "sombra": {
+  "imagem": "../sombra.png",
+  "opacidade": 1.0
+ },
+ "volume_sfx": 0.5,
+ "reduzir_ruido": true,
+ "musica": null,
+ "correcoes": {
+  "Crisca": "Kriska",
+  "Amore": "Amora e",
+  "Acero": "Acerola",
+  "Alibisco": "e Hibisco",
+  "-Max": "Max",
+  "Delpharfam": "Deo Parfum",
+  "Elia": "Ilía",
+  "Ilia": "Ilía"
+ },
+ "loja": "Natura Senador Canedo",
+ "saida": "saida/esquenta-black-senador-canedo.mp4",
+ "segmentos": [
+  [
+   1.22,
+   5.71
+  ],
+  [
+   6.23,
+   12.32
+  ],
+  [
+   13.5,
+   18.82
+  ],
+  [
+   19.22,
+   25.85
+  ],
+  [
+   26.11,
+   33.01
+  ],
+  [
+   33.11,
+   38.51
+  ],
+  [
+   39.29,
+   50.06
+  ],
+  [
+   50.6,
+   56.77
+  ],
+  [
+   56.77,
+   61.92
+  ]
+ ],
+ "editar_palavras": [
+  {
+   "t": 5.3,
+   "w": "Friday."
+  },
+  {
+   "t": 19.38,
+   "w": "Deo"
+  },
+  {
+   "t": 34.08,
+   "w": "Humor"
+  },
+  {
+   "t": 34.24,
+   "w": ""
+  },
+  {
+   "t": 52.64,
+   "w": ""
+  },
+  {
+   "t": 52.82,
+   "w": "Ilía"
+  },
+  {
+   "t": 14.46,
+   "w": "Tododia"
+  },
+  {
+   "t": 14.78,
+   "w": ""
+  }
+ ],
+ "titulos": [
+  {
+   "texto": "A partir de\nR$ 11,95",
+   "de": 1.5,
+   "ate": 3.8,
+   "y": 0.03
+  },
+  {
+   "texto": "Natura\nFriday",
+   "de": 4.7,
+   "ate": 5.71,
+   "y": 0.03
+  },
+  {
+   "texto": "7 primeiros\nclientes",
+   "de": 27.3,
+   "ate": 29.9,
+   "y": 0.03
+  },
+  {
+   "texto": "Ganham\num brinde",
+   "de": 31.7,
+   "ate": 33.0,
+   "y": 0.03
+  },
+  {
+   "texto": "Acima de\nR$ 250",
+   "de": 40.3,
+   "ate": 42.7,
+   "y": 0.03
+  },
+  {
+   "texto": "Estoura\no balão",
+   "de": 43.2,
+   "ate": 45.0,
+   "y": 0.03
+  },
+  {
+   "texto": "Todos\npremiados",
+   "de": 46.1,
+   "ate": 48.1,
+   "y": 0.03
+  },
+  {
+   "texto": "Só 2\ndias",
+   "de": 56.9,
+   "ate": 58.6,
+   "y": 0.03
+  },
+  {
+   "texto": "Senador\nCanedo",
+   "de": 59.4,
+   "ate": 61.9,
+   "y": 0.03
+  }
+ ],
+ "precos": [
+  {
+   "nome": "Colônia Luna Tradicional",
+   "de": "R$ 189,90",
+   "por": "R$ 95,95",
+   "t_nome": 6.46,
+   "t_de": 8.44,
+   "t_risco": 10.06,
+   "t_por": 10.76,
+   "ate": 12.25,
+   "rastrear": {
+    "t": 6.8,
+    "caixa": [
+     200,
+     250,
+     360,
+     400
+    ]
+   }
+  },
+  {
+   "nome": "Creme Corporal Tododia",
+   "de": "R$ 78,90",
+   "por": "R$ 47,34",
+   "t_nome": 13.62,
+   "t_de": 14.96,
+   "t_risco": 16.54,
+   "t_por": 17.0,
+   "ate": 18.75,
+   "rastrear": {
+    "t": 13.9,
+    "caixa": [
+     420,
+     950,
+     200,
+     330
+    ]
+   }
+  },
+  {
+   "nome": "Deo Corporal Essencial Feminino",
+   "de": "R$ 72,90",
+   "por": "R$ 29,16",
+   "t_nome": 19.38,
+   "t_de": 21.98,
+   "t_risco": 24.08,
+   "t_por": 24.42,
+   "ate": 25.8,
+   "rastrear": {
+    "t": 19.7,
+    "caixa": [
+     500,
+     1060,
+     240,
+     320
+    ]
+   }
+  },
+  {
+   "nome": "Conexão de Humor Masculino",
+   "de": "R$ 164,90",
+   "por": "R$ 98,95",
+   "t_nome": 33.24,
+   "t_de": 35.2,
+   "t_risco": 36.88,
+   "t_por": 37.1,
+   "ate": 38.45,
+   "rastrear": {
+    "t": 33.5,
+    "caixa": [
+     190,
+     670,
+     200,
+     260
+    ]
+   }
+  },
+  {
+   "nome": "Leite Hidratante Corporal Ilía Secreto",
+   "de": "R$ 84,90",
+   "por": "R$ 33,90",
+   "t_nome": 50.76,
+   "t_de": 53.66,
+   "t_risco": 55.14,
+   "t_por": 55.44,
+   "ate": 56.7,
+   "rastrear": {
+    "t": 51.1,
+    "caixa": [
+     400,
+     1060,
+     160,
+     280
+    ]
+   }
+  }
+ ],
+ "destaques": [
+  "friday",
+  "partir",
+  "R$11,95",
+  "7",
+  "primeiros",
+  "presenciais",
+  "brinde",
+  "R$250,00",
+  "estoura",
+  "balão",
+  "premiados",
+  "maravilhosos",
+  "somente",
+  "senador",
+  "canedo",
+  "ofertas"
+ ],
+ "zooms": [
+  {
+   "de": 10.76,
+   "ate": 12.25,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 17.0,
+   "ate": 18.75,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 24.42,
+   "ate": 25.8,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 37.1,
+   "ate": 38.45,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  },
+  {
+   "de": 55.44,
+   "ate": 56.7,
+   "escala": 1.08,
+   "cx": 540,
+   "cy": 850
+  }
+ ]
+}
