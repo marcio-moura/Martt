@@ -27,7 +27,9 @@ Fluxo: preparar → revisar → teste curto → render completo → conferir qua
 6. Nomes longos: a etiqueta diminui a letra sozinha. Mesmo assim, conferir se nada sai da tela.
 7. **A transcrição pode pular trechos inteiros** (Portal: Ekos Frescor e Óleo Sève sumiram). O `preparar.py` agora só corta pausa com áudio baixo e avisa "ATENÇÃO" quando há som sem palavras — transcrever esse trecho de novo à parte.
 8. Fundo claro: os títulos têm halo escuro; conferir legibilidade mesmo assim.
-9. Produto que ela mexe muito: usar várias marcas manuais (`"rastrear": {"chaves": [{"t":..,"caixa":[..]}, ...]}`) e conferir com a folha `conferir/rastreio.jpg`.
+9. **Nunca cortar a última palavra** de um trecho; terminar o vídeo logo depois da última fala e **antes de ela sair do quadro**, com o som diminuindo no fim (`"fade_final": 0.3`).
+10. Não presumir que a 1ª palavra é de quem filma: no Canedo, o "Canedo" do início era dela. Na dúvida, manter.
+11. Produto que ela mexe muito: usar várias marcas manuais (`"rastrear": {"chaves": [{"t":..,"caixa":[..]}, ...]}`) e conferir com a folha `conferir/rastreio.jpg`.
 
 ## Passo a passo
 

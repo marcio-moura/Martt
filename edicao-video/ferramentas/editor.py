@@ -437,6 +437,8 @@ def main(plano_path):
         voz = np.convolve(np.abs(mix), np.ones(4800) / 4800, "same")
         duck = np.where(voz > 0.02, 0.35, 1.0); duck = np.convolve(duck, np.ones(9600) / 9600, "same")
         mix[:len(mu)] += mu * 0.25 * duck[:len(mu)]
+    ff = int(P.get("fade_final", 0) * SR)
+    if ff: mix[-ff:] *= np.linspace(1, 0, ff) ** 1.5   # som termina suave
     mix = mix / max(1.0, np.abs(mix).max() / 0.95)
     with wave.open(f"{tmpdir}/mix.wav", "w") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)

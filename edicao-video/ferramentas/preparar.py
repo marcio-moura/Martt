@@ -99,7 +99,7 @@ def trechos(palavras, a, cs, dur):
         blocos.append(cur)
         for b in blocos:
             s = inicio_fala(a, max(c0, b[0]["s"] - 0.8), c1)
-            e = fim_fala(a, s, min(c1, b[-1]["e"] + 0.5))
+            e = max(fim_fala(a, s, min(c1, b[-1]["e"] + 0.5)), min(c1, b[-1]["e"] + 0.15))   # nunca corta a última palavra
             if e - s > 0.4: out.append([round(float(s), 2), round(float(e), 2)])
     return out
 

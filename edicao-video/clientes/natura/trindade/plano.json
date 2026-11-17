@@ -22,7 +22,7 @@
   ],
   [
    53.7,
-   68.65
+   68.82
   ]
  ],
  "correcoes": {
@@ -267,5 +267,6 @@
  },
  "volume_sfx": 0.5,
  "reduzir_ruido": true,
- "loja": "Natura Trindade"
+ "loja": "Natura Trindade",
+ "fade_final": 0.3
 }
