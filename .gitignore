@@ -2,3 +2,4 @@
 *.mov
 edicao-video/**/*.tmp/
 edicao-video/clientes/**/saida/
+__pycache__/
