@@ -1,0 +1,13 @@
+{
+  "titulo": "Crescimento não é sorte",
+  "formato": "feed",
+  "objetivo": "Exemplo do estúdio: carrossel de autoridade para o perfil da Martt.",
+  "legenda": "Negócio que cresce no improviso trava no primeiro mês ruim. Estrutura é o que segura o crescimento. Salva esse post e confere quantos dos 4 pontos você já tem.",
+  "telas": [
+    { "layout": "capa", "rotulo": "Método Martt", "titulo": "Crescimento não é sorte.\nÉ *estrutura.*" },
+    { "layout": "numero", "numero": "30", "titulo": "dias é o *ciclo mínimo* para ler um plano.", "texto": "Mudar tudo a cada semana não deixa nenhum resultado aparecer." },
+    { "layout": "lista", "rotulo": "O básico que funciona", "titulo": "4 pilares de um perfil que *vende*", "itens": ["Posicionamento claro: quem você atende e por quê.", "Calendário fixo: frequência vence inspiração.", "Conteúdo com objetivo: atrair, provar, vender.", "Números todo mês: o que não é medido, não melhora."] },
+    { "layout": "citacao", "tema": "destaque", "titulo": "Quem tem processo não depende de *um bom mês*.", "autor": "Martt Co." },
+    { "layout": "cta", "rotulo": "Próximo passo", "titulo": "Quer essa *estrutura* no seu negócio?", "texto": "Diagnóstico gratuito do seu Instagram em 15 minutos.", "botao": "Chama no direct" }
+  ]
+}
