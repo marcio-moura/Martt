@@ -98,11 +98,14 @@ def camada_titulo(t, tit, cores, est):
                 alpha *= max(0, fim / 0.25); p += (1 - fim / 0.25) * 0.4
             dy = (1 - p) * tam * 0.5
             if alpha > 0:
-                ds.text((x + 2, y + dy + 8), ch, font=f, fill=(0, 0, 0, int(90 * alpha)))
+                ds.text((x + 2, y + dy + 8), ch, font=f, fill=(0, 0, 0, int(150 * alpha)))
                 d.text((x, y + dy), ch, font=f, fill=cor + (int(255 * alpha),))
             x += d.textlength(ch, font=f) + trk(); idx += 1
         y += tam * 0.95
-    return Image.alpha_composite(som.filter(ImageFilter.GaussianBlur(10)), img)
+    halo = som.filter(ImageFilter.GaussianBlur(int(tam * 0.22)))   # halo escuro largo: legível em fundo claro
+    a_ = np.asarray(halo).copy(); a_[..., 3] = (a_[..., 3].astype(np.float32) * 0.85).astype(np.uint8)
+    halo = Image.fromarray(a_, "RGBA")
+    return Image.alpha_composite(Image.alpha_composite(halo, som.filter(ImageFilter.GaussianBlur(9))), img)
 
 
 def paginas(palavras, maxp=3):
