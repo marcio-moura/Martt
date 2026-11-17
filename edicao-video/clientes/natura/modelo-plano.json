@@ -1,0 +1,15 @@
+{
+ "video": "bruto.mov",
+ "palavras": "words.json",
+ "estilo": "../estilo.json",
+ "sombra": {"imagem": "../sombra.png", "opacidade": 1.0},
+ "volume_sfx": 0.5,
+ "reduzir_ruido": true,
+ "musica": null,
+ "destaques_base": ["esquenta", "black", "desconto", "somente", "hoje", "amanhã", "aqui",
+                    "presente", "especial", "limitado", "corram", "aproveitem", "aproveitam", "grátis", "off"],
+ "correcoes_base": {"Crisca": "Kriska", "Amore": "Amora e", "Acero": "Acerola", "Alibisco": "e Hibisco",
+                    "-Max": "Max", "Delpharfam": "Deo Parfum", "Elia": "Ilía", "Ilia": "Ilía"},
+ "zoom_preco": {"escala": 1.08},
+ "titulo_padrao": {"y": 0.03}
+}

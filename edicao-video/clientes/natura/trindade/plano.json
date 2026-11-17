@@ -1,32 +1,28 @@
 {
  "video": "bruto.mov",
  "palavras": "words.json",
- "estilo": "/home/user/Martt/edicao-video/clientes/natura/estilo.json",
- "saida": "/tmp/claude-0/-home-user-Martt/341e7bb3-2783-5c68-ae85-4065a7c68d6c/scratchpad/cliente/teste_v5.mp4",
+ "estilo": "../estilo.json",
+ "saida": "saida/esquenta-black-trindade.mp4",
  "segmentos": [
   [
-   12.6,
-   13.0
+   0.74,
+   8.5
   ],
   [
-   14.6,
-   15.0
+   8.5,
+   30.3
   ],
   [
-   16.2,
-   16.6
+   30.75,
+   39.5
   ],
   [
-   54.8,
-   55.2
+   39.55,
+   46.85
   ],
   [
-   56.0,
-   56.4
-  ],
-  [
-   58.2,
-   58.6
+   53.7,
+   68.65
   ]
  ],
  "correcoes": {
@@ -270,5 +266,6 @@
   "opacidade": 1.0
  },
  "volume_sfx": 0.5,
- "reduzir_ruido": true
+ "reduzir_ruido": true,
+ "loja": "Natura Trindade"
 }

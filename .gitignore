@@ -1,3 +1,4 @@
 .site
 *.mov
 edicao-video/**/*.tmp/
+edicao-video/clientes/**/saida/

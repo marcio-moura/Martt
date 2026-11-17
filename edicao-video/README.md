@@ -1,10 +1,13 @@
 # Edição de vídeo — padrão MARTT
 
-Edição no estilo "legendas dinâmicas": título atrás da pessoa, legenda palavra por palavra, etiquetas presas ao produto, cortes de silêncio, música com ducking e efeitos sonoros.
+Edição no estilo "legendas dinâmicas": título atrás da pessoa, legenda palavra por palavra, nome e preço presos ao produto (rastreamento), cortes, redução de ruído e efeitos sonoros.
 
-- `clientes/<cliente>/estilo.json`: cores, fontes, tom e regras de cada cliente
-- `ferramentas/transcrever.py`: transcrição (faster-whisper)
-- `ferramentas/previa_estilo.py`: gera um quadro de prévia do estilo (recorte da pessoa via MediaPipe)
-- `fontes/`: DM Sans e Caveat (licença OFL)
+**Comece pelo [PADRAO.md](PADRAO.md)**: o estilo aprovado e o passo a passo.
 
-Dependências: `pip install faster-whisper mediapipe opencv-python-headless` + `apt-get install libegl1 libgles2` + ffmpeg.
+- `ferramentas/preparar.py`: baixa do Drive, transcreve, detecta cortes e preços, gera o rascunho `plano.json`
+- `ferramentas/editor.py`: renderiza o vídeo a partir do `plano.json`
+- `ferramentas/gerar_sfx.py`: gera os efeitos sonoros (`sfx/`)
+- `clientes/natura/`: `estilo.json`, `modelo-plano.json`, `sombra.png` e uma pasta por loja
+- `fontes/` (Montserrat, DM Sans, Caveat; OFL) e `modelos/` (MediaPipe)
+
+Instalação: `bash ferramentas/instalar.sh`
