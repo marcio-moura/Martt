@@ -9,100 +9,199 @@
 <meta property="og:title" content="Portfólio | Martt Co.">
 <meta property="og:description" content="Casamento civil · Cartório · Goiânia">
 <meta property="og:image" content="/portfolio/midia/casal-sorrindo.jpg">
+<meta name="theme-color" content="#0B0C0B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#F8F7F2; --ink:#242522; --sand:#E8E3D8; --muted:#8D8B82;
+    --dark:#0B0C0B; --bg:#F8F7F2; --ink:#242522; --sand:#E8E3D8; --muted:#8D8B82;
     --sage:#8FB5A3; --sage-dark:#6F9885;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.5;padding:28px 20px 48px}
-  main{max-width:520px;margin:0 auto}
-  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
-  .brand i{display:inline-block;width:27px;height:9px;background:var(--sage-dark)}
-  .back{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage)}
-  h1{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:30px;line-height:1.15;margin:28px 0 10px}
-  .lead{font-size:16px;margin-bottom:6px}
-  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;line-height:1.55;font-size:16px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  h1,h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em}
+  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .eyebrow i{display:inline-block;width:18px;height:6px;background:var(--sage)}
 
-  .block{margin-top:34px}
-  .block h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-  .block h2 i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+  .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;font-size:15px;padding:15px 22px;min-height:50px;border:1.5px solid currentColor}
+  .btn.primary{background:var(--sage);border-color:var(--sage);color:var(--dark)}
+  .btn.primary:hover{background:var(--bg);border-color:var(--bg)}
+  .btn.ghost{color:var(--bg)}
+  .btn.ghost:hover{background:var(--bg);color:var(--dark)}
 
-  figure{margin-bottom:18px}
-  figure img{display:block;width:100%;height:auto;background:var(--sand)}
-  figcaption{margin-top:8px;font-size:14px;color:var(--muted)}
-  figcaption b{color:var(--ink);font-weight:600}
-  .pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
-  .pair figure{margin-bottom:0}
+  /* topo escuro */
+  .hero{background:var(--dark);color:var(--bg);padding:24px 0 56px}
+  .bar{display:flex;justify-content:space-between;align-items:center}
+  .mark{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;letter-spacing:.06em;color:var(--bg);text-decoration:none}
+  .mark span{color:var(--sage)}
+  .bar a.wa{font-weight:600;font-size:13px;color:var(--bg);text-decoration:none;border-bottom:2px solid var(--sage)}
+  .hero-grid{display:grid;gap:32px;margin-top:40px;align-items:center}
+  @media (min-width:820px){ .hero-grid{grid-template-columns:1.1fr .9fr;gap:56px;margin-top:56px} }
+  .hero .eyebrow{color:#b7b5ad}
+  .hero h1{font-size:clamp(38px,9vw,64px);line-height:1.06;margin:16px 0 18px}
+  .hero h1 span{color:var(--sage)}
+  .hero p.lead{font-size:17px;color:#d9d7cf;max-width:460px}
+  .hero-video{position:relative;max-width:360px;width:100%;justify-self:center}
+  .hero-video video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:#1b1c1a}
+  .sig{display:flex;align-items:center;gap:12px;margin-top:22px;font-weight:600;font-size:11px;letter-spacing:.3em;color:#b7b5ad}
+  .sig i{display:block;width:34px;height:1px;background:var(--sage)}
 
-  .videos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .videos video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--ink)}
-  .hint{font-size:14px;color:var(--muted);margin:-6px 0 14px}
+  section{padding:64px 0}
+  section h2{font-size:clamp(28px,6vw,40px);line-height:1.12;margin:12px 0 8px}
+  section p.sub{color:#5a5a54;font-size:15px;max-width:520px;margin-bottom:28px}
 
-  .other{margin-top:34px;padding-top:22px;border-top:1.5px solid var(--sand);font-size:15px}
-  .other a{color:var(--ink);font-weight:600}
-  .note{margin-top:14px;font-size:13px;color:var(--muted)}
+  /* fotos */
+  .photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  @media (min-width:820px){ .photos{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px} }
+  .photos figure{position:relative}
+  .photos .big,.photos .big-m{grid-column:1 / -1}
+  @media (min-width:820px){ .photos .big-m{grid-column:auto} }
+  @media (min-width:820px){ .photos .big{grid-column:span 2;grid-row:span 2} }
+  .photos img{display:block;width:100%;height:100%;object-fit:cover;background:var(--sand)}
+  .photos figcaption{position:absolute;left:0;bottom:0;background:var(--bg);font-size:12px;font-weight:600;padding:5px 10px}
+
+  /* vídeos */
+  .sand{background:var(--sand)}
+  .reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  @media (min-width:820px){ .reels{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px} }
+  .reel{position:relative;display:block;width:100%;padding:0;border:0;background:var(--dark);cursor:pointer}
+  .reel video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+  .reel span{position:absolute;left:0;bottom:0;background:var(--bg);color:var(--ink);font:600 12px 'Manrope',sans-serif;padding:6px 10px}
+  .reel:focus-visible{outline:3px solid var(--sage-dark);outline-offset:2px}
+
+  /* chamada final */
+  .cta{background:var(--dark);color:var(--bg)}
+  .cta h2{color:var(--bg)}
+  .cta h2 span{color:var(--sage)}
+  .cta p.sub{color:#d9d7cf}
+  footer{background:var(--dark);color:#8D8B82;font-size:13px;padding:0 0 40px}
+  footer .wrap{border-top:1px solid #2a2b28;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* player com som */
+  dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100vh;margin:0}
+  dialog::backdrop{background:rgba(11,12,11,.94)}
+  dialog .box{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px 16px 24px}
+  dialog video{max-width:100%;max-height:100%;background:#000}
+  dialog .close{position:fixed;top:14px;right:16px;background:var(--bg);color:var(--ink);border:0;font:600 14px 'Manrope',sans-serif;padding:10px 14px;cursor:pointer}
 </style>
 </head>
 <body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="bar">
+      <a class="mark" href="/"><span>M</span>ARTT</a>
+      <a class="wa" href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow"><i></i>Portfólio · Casamento civil · Goiânia</p>
+        <h1>Imagem que mostra <span>o que importa.</span></h1>
+        <p class="lead">A Martt Co. estrutura o posicionamento e a comunicação de negócios, e produz o conteúdo visual que sustenta essa presença.</p>
+        <div class="btns">
+          <a class="btn primary" href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Quero conversar</a>
+          <a class="btn ghost" href="#fotos">Ver o trabalho</a>
+        </div>
+        <div class="sig"><i></i>CONSULTORIA EM MARKETING</div>
+      </div>
+      <div class="hero-video">
+        <video src="midia/loop-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" autoplay muted loop playsinline preload="auto" aria-label="Trecho de vídeo do trabalho"></video>
+      </div>
+    </div>
+  </div>
+</header>
+
 <main>
-  <div class="top">
-    <a class="brand" href="/"><i></i>Martt Co.</a>
-    <a class="back" href="/">Voltar ao site</a>
-  </div>
-
-  <h1>Portfólio</h1>
-  <p class="lead">A Martt Co. estrutura o posicionamento e a comunicação de negócios, e produz o conteúdo visual que sustenta essa presença.</p>
-  <p class="eyebrow">Casamento civil · Cartório · Goiânia</p>
-
-  <section class="block">
-    <h2><i></i>Fotos</h2>
-    <figure><img src="midia/casal-corredor.jpg" width="976" height="1400" alt="Casal no corredor de flores, noiva com buquê">
-      <figcaption><b>O casal.</b> Retrato de corpo inteiro.</figcaption></figure>
-    <div class="pair">
-      <figure><img src="midia/noiva-buque.jpg" width="926" height="1400" loading="lazy" alt="Noiva sorrindo com o buquê">
-        <figcaption><b>A noiva.</b></figcaption></figure>
-      <figure><img src="midia/casal-flores.jpg" width="905" height="1400" loading="lazy" alt="Casal entre flores de cerejeira">
-        <figcaption><b>Olhar.</b></figcaption></figure>
-    </div>
-    <figure><img src="midia/casal-sorrindo.jpg" width="934" height="1400" loading="lazy" alt="Casal abraçado e sorrindo">
-      <figcaption><b>Espontaneidade.</b> Registro natural, sem pose forçada.</figcaption></figure>
-    <div class="pair">
-      <figure><img src="midia/aliancas.jpg" width="934" height="1400" loading="lazy" alt="Mãos do casal com as alianças">
-        <figcaption><b>Detalhe.</b></figcaption></figure>
-      <figure><img src="midia/casal-espelho.jpg" width="921" height="1400" loading="lazy" alt="Casal refletido no espelho">
-        <figcaption><b>Composição.</b></figcaption></figure>
-    </div>
-    <figure><img src="midia/abraco.jpg" width="1400" height="884" loading="lazy" alt="Detalhe do abraço do casal">
-      <figcaption><b>Abraço.</b> Enquadramento fechado no gesto.</figcaption></figure>
-  </section>
-
-  <section class="block" id="videos">
-    <h2><i></i>Vídeos</h2>
-    <p class="hint">Toque para assistir com som.</p>
-    <div class="videos">
-      <video src="midia/video-mesa-doces.mp4" poster="midia/video-mesa-doces.jpg" controls playsinline preload="none" aria-label="Vídeo 1"></video>
-      <video src="midia/video-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" controls playsinline preload="none" aria-label="Vídeo 2"></video>
-      <video src="midia/video-bolo-copos-de-leite.mp4" poster="midia/video-bolo-copos-de-leite.jpg" controls playsinline preload="none" aria-label="Vídeo 3"></video>
-      <video src="midia/video-fachada.mp4" poster="midia/video-fachada.jpg" controls playsinline preload="none" aria-label="Vídeo 4"></video>
+  <section id="fotos">
+    <div class="wrap">
+      <p class="eyebrow"><i></i>Fotos</p>
+      <h2>Casamento civil no cartório</h2>
+      <p class="sub">Retratos do casal: momentos espontâneos, detalhes e composição.</p>
+      <div class="photos">
+        <figure class="big"><img src="midia/casal-sorrindo.jpg" width="934" height="1400" alt="Casal abraçado e sorrindo"><figcaption>Espontaneidade</figcaption></figure>
+        <figure><img src="midia/noiva-buque.jpg" width="926" height="1400" loading="lazy" alt="Noiva sorrindo com o buquê"><figcaption>A noiva</figcaption></figure>
+        <figure><img src="midia/casal-flores.jpg" width="905" height="1400" loading="lazy" alt="Casal entre flores de cerejeira"><figcaption>Olhar</figcaption></figure>
+        <figure class="big-m"><img src="midia/casal-corredor.jpg" width="976" height="1400" loading="lazy" alt="Casal no corredor de flores"><figcaption>O casal</figcaption></figure>
+        <figure><img src="midia/aliancas.jpg" width="934" height="1400" loading="lazy" alt="Mãos do casal com as alianças"><figcaption>Detalhe</figcaption></figure>
+        <figure><img src="midia/casal-espelho.jpg" width="921" height="1400" loading="lazy" alt="Casal refletido no espelho"><figcaption>Composição</figcaption></figure>
+        <figure style="grid-column:1 / -1"><img src="midia/abraco.jpg" width="1400" height="884" loading="lazy" alt="Detalhe do abraço do casal"><figcaption>Abraço</figcaption></figure>
+      </div>
     </div>
   </section>
 
-  <div class="other">
-    Gostou do trabalho? <a href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Fale comigo no WhatsApp</a>.
-  </div>
-  <p class="note">Crescimento não é sorte. É estrutura.</p>
+  <section class="sand" id="videos">
+    <div class="wrap">
+      <p class="eyebrow"><i></i>Vídeos</p>
+      <h2>Em movimento</h2>
+      <p class="sub">Vídeos verticais para Instagram e stories. Toque em um vídeo para assistir completo, com som.</p>
+      <div class="reels">
+        <button class="reel" type="button" data-full="midia/video-mesa-doces.mp4"><video src="midia/loop-mesa-doces.mp4" poster="midia/video-mesa-doces.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span>Assistir</span></button>
+        <button class="reel" type="button" data-full="midia/video-bolo-cristais.mp4"><video src="midia/loop-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span>Assistir</span></button>
+        <button class="reel" type="button" data-full="midia/video-bolo-copos-de-leite.mp4"><video src="midia/loop-bolo-copos-de-leite.mp4" poster="midia/video-bolo-copos-de-leite.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span>Assistir</span></button>
+        <button class="reel" type="button" data-full="midia/video-fachada.mp4"><video src="midia/loop-fachada.mp4" poster="midia/video-fachada.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><span>Assistir</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <p class="eyebrow" style="color:#b7b5ad"><i></i>Próximo passo</p>
+      <h2>Quer esse olhar <span>no seu negócio?</span></h2>
+      <p class="sub">Fale com o time e conte o que você precisa.</p>
+      <div class="btns">
+        <a class="btn primary" href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20conversar." target="_blank" rel="noopener">Falar no WhatsApp</a>
+        <a class="btn ghost" href="/horarios/">Agendar um horário</a>
+      </div>
+    </div>
+  </section>
 </main>
 
+<footer>
+  <div class="wrap">
+    <span>Crescimento não é sorte. É estrutura.</span>
+    <span>© 2026 Martt Co.</span>
+  </div>
+</footer>
+
+<dialog id="player" aria-label="Vídeo com som">
+  <button class="close" type="button">Fechar ✕</button>
+  <div class="box"><video controls playsinline></video></div>
+</dialog>
+
 <script>
-  // um vídeo por vez
-  var vids = document.querySelectorAll('video');
-  vids.forEach(function(v){ v.addEventListener('play', function(){ vids.forEach(function(o){ if (o !== v) o.pause(); }); }); });
+  // trechos rodando sozinhos (sem som) só quando aparecem na tela
+  var loops = document.querySelectorAll('.reel video, .hero-video video');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) { v.preload = 'auto'; var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else v.pause();
+      });
+    }, { threshold: 0.25 });
+    loops.forEach(function (v) { io.observe(v); });
+  } else {
+    loops.forEach(function (v) { v.preload = 'auto'; v.play(); });
+  }
+
+  // toque: abre o vídeo completo com som
+  var dlg = document.getElementById('player');
+  var full = dlg.querySelector('video');
+  document.querySelectorAll('.reel').forEach(function (b) {
+    b.addEventListener('click', function () {
+      full.src = b.getAttribute('data-full');
+      dlg.showModal();
+      full.play();
+    });
+  });
+  function fechar(){ full.pause(); full.removeAttribute('src'); full.load(); if (dlg.open) dlg.close(); }
+  dlg.querySelector('.close').addEventListener('click', fechar);
+  dlg.addEventListener('click', function (e) { if (e.target !== full) fechar(); });
+  dlg.addEventListener('cancel', function (e) { e.preventDefault(); fechar(); });
 </script>
 </body>
 </html>
