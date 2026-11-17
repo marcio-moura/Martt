@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfólio | Martt Co.</title>
+<meta name="description" content="Fotos e vídeos produzidos pela Martt Co.: cobertura de casamento com ensaio do casal e reels de decoração.">
+<meta property="og:title" content="Portfólio | Martt Co.">
+<meta property="og:description" content="Fotos e vídeos produzidos pela Martt Co.">
+<meta property="og:image" content="/portfolio/midia/casal-sorrindo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7F2; --ink:#242522; --sand:#E8E3D8; --muted:#8D8B82;
+    --sage:#8FB5A3; --sage-dark:#6F9885;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.6;font-size:17px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  .wide{max-width:1080px}
+
+  header{padding:26px 0}
+  header .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px}
+  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:19px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;white-space:nowrap}
+  .brand i{display:inline-block;width:27px;height:9px;background:var(--sage-dark)}
+  nav{display:flex;gap:20px;align-items:center}
+  nav a{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage);padding-bottom:1px;white-space:nowrap}
+  @media (max-width:520px){ nav a.talk{display:none} }
+
+  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .eyebrow i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+  h1,h2{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em}
+  h1{font-weight:800;font-size:clamp(40px,10vw,68px);line-height:1.06;margin:18px 0 20px}
+  h1 em{font-style:normal;color:var(--sage-dark)}
+  h2{font-weight:800;font-size:clamp(26px,6vw,36px);line-height:1.12;margin:14px 0 10px}
+  p.lead{font-size:18px;max-width:520px}
+  p.sub{color:#4a4a45;font-size:15px;max-width:560px;margin-bottom:28px}
+
+  .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;font-size:15px;padding:15px 22px;min-height:50px;border:1.5px solid var(--ink)}
+  .btn.primary{background:var(--ink);color:var(--bg)}
+  .btn.primary:hover{background:var(--sage-dark);border-color:var(--sage-dark)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{background:var(--sage);border-color:var(--sage-dark)}
+
+  section{padding:64px 0}
+  .hero{padding:40px 0 56px}
+  .sand{background:var(--sand)}
+
+  /* vídeos verticais */
+  .reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media (min-width:760px){ .reels{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px} }
+  .reels video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--ink)}
+
+  /* fotos */
+  .grid{columns:2;column-gap:12px}
+  @media (min-width:760px){ .grid{columns:3;column-gap:16px} }
+  .grid button{display:block;width:100%;margin:0 0 12px;padding:0;border:0;background:var(--sand);cursor:zoom-in;break-inside:avoid}
+  @media (min-width:760px){ .grid button{margin-bottom:16px} }
+  .grid img{display:block;width:100%;height:auto}
+  .grid button:focus-visible{outline:3px solid var(--sage-dark);outline-offset:2px}
+
+  /* ampliação */
+  dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100vh;margin:0}
+  dialog::backdrop{background:rgba(36,37,34,.92)}
+  dialog .box{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:56px 16px 24px}
+  dialog img{max-width:100%;max-height:100%;object-fit:contain}
+  dialog .close{position:fixed;top:14px;right:16px;background:var(--bg);color:var(--ink);border:0;font:600 14px 'Manrope',sans-serif;padding:10px 14px;cursor:pointer}
+
+  footer{padding:36px 0 48px;border-top:1.5px solid var(--sand);font-size:13px;color:var(--muted)}
+  footer .wrap{display:flex;flex-direction:column;gap:6px}
+  footer .brand{font-size:16px;color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap wide">
+    <a class="brand" href="/"><i></i>Martt Co.</a>
+    <nav>
+      <a href="/horarios/">Agendar horário</a>
+      <a class="talk" href="https://wa.me/5562993037223" target="_blank" rel="noopener">Falar com o time</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap wide">
+      <p class="eyebrow"><i></i>Portfólio · Foto · Vídeo</p>
+      <h1>Momentos contados <em>com intenção.</em></h1>
+      <p class="lead">Uma amostra da nossa produção de conteúdo: cobertura de evento em foto e vídeo, dos detalhes da decoração aos reels prontos para publicar.</p>
+    </div>
+  </section>
+
+  <section class="sand">
+    <div class="wrap wide">
+      <p class="eyebrow"><i></i>Vídeos</p>
+      <h2>Reels de decoração e ambiente</h2>
+      <p class="sub">Vídeos verticais pensados para Instagram e stories. Toque para assistir com som.</p>
+      <div class="reels">
+        <video src="midia/video-mesa-doces.mp4" poster="midia/video-mesa-doces.jpg" controls playsinline preload="none" aria-label="Vídeo: mesa de doces com peônias"></video>
+        <video src="midia/video-bolo-cristais.mp4" poster="midia/video-bolo-cristais.jpg" controls playsinline preload="none" aria-label="Vídeo: bolo branco e cortina de cristais"></video>
+        <video src="midia/video-bolo-copos-de-leite.mp4" poster="midia/video-bolo-copos-de-leite.jpg" controls playsinline preload="none" aria-label="Vídeo: bolo com copos-de-leite e mesa de salgados"></video>
+        <video src="midia/video-fachada.mp4" poster="midia/video-fachada.jpg" controls playsinline preload="none" aria-label="Vídeo: fachada do local do evento"></video>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap wide">
+      <p class="eyebrow"><i></i>Fotos</p>
+      <h2>O casal</h2>
+      <p class="sub">Toque em uma foto para ampliar.</p>
+      <div class="grid">
+        <button type="button"><img src="midia/casal-corredor.jpg" width="976" height="1400" loading="lazy" alt="Casal no corredor de flores, noiva com buquê"></button>
+        <button type="button"><img src="midia/noiva-buque.jpg" width="926" height="1400" loading="lazy" alt="Noiva sorrindo com o buquê"></button>
+        <button type="button"><img src="midia/aliancas.jpg" width="934" height="1400" loading="lazy" alt="Detalhe das mãos e alianças do casal"></button>
+        <button type="button"><img src="midia/casal-flores.jpg" width="905" height="1400" loading="lazy" alt="Casal abraçado ao lado de flores de cerejeira"></button>
+        <button type="button"><img src="midia/abraco.jpg" width="1400" height="884" loading="lazy" alt="Detalhe do abraço do casal"></button>
+        <button type="button"><img src="midia/casal-sorrindo.jpg" width="934" height="1400" loading="lazy" alt="Casal abraçado e sorrindo"></button>
+        <button type="button"><img src="midia/casal-espelho.jpg" width="921" height="1400" loading="lazy" alt="Casal refletido no espelho"></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sand">
+    <div class="wrap">
+      <p class="eyebrow"><i></i>Próximo passo</p>
+      <h2>Quer esse tipo de conteúdo para o seu negócio?</h2>
+      <div class="btns">
+        <a class="btn primary" href="https://wa.me/5562993037223?text=Ol%C3%A1!%20Vi%20o%20portf%C3%B3lio%20da%20Martt%20e%20gostaria%20de%20saber%20mais." target="_blank" rel="noopener">Falar com o time →</a>
+        <a class="btn ghost" href="/horarios/">Agendar um horário</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Martt Co.</a>
+    <span>Estrutura gera crescimento.</span>
+    <span>© 2026 Martt Co.</span>
+  </div>
+</footer>
+
+<dialog id="zoom" aria-label="Foto ampliada">
+  <button class="close" type="button">Fechar ✕</button>
+  <div class="box"><img alt=""></div>
+</dialog>
+
+<script>
+  const dlg = document.getElementById('zoom');
+  const big = dlg.querySelector('img');
+  document.querySelectorAll('.grid button').forEach(b => b.addEventListener('click', () => {
+    const img = b.querySelector('img');
+    big.src = img.src; big.alt = img.alt;
+    dlg.showModal();
+  }));
+  dlg.addEventListener('click', e => { if (e.target !== big) dlg.close(); });
+  // pausa os outros vídeos quando um começa
+  const vids = document.querySelectorAll('.reels video');
+  vids.forEach(v => v.addEventListener('play', () => vids.forEach(o => { if (o !== v) o.pause(); })));
+</script>
+
+</body>
+</html>

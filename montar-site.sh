@@ -6,5 +6,6 @@ rm -rf .site
 mkdir -p .site/horarios
 cp index.html .site/
 cp horarios/index.html .site/horarios/index.html
+cp -r portfolio .site/portfolio
 cp -r ecossistema/dist .site/ecossistema
 bash analises-instagram/publicar-site.sh
