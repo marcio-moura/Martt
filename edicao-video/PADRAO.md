@@ -11,8 +11,7 @@ Fluxo: preparar → revisar → teste curto → render completo → conferir qua
 | Fonte | Montserrat (Black 900 nos títulos, ExtraBold 800 na legenda) |
 | Títulos | Atrás da pessoa, no topo (y 0.03), brancos, 1–2 linhas, a 2ª alinhada à direita da linha mais larga. Letras sobem uma a uma. Ex.: "Esquenta / Black", "Até / 60% OFF", "Dias / 13 e 14", "Acima de / R$ 250", "Presente / especial", "Corram!" |
 | Legenda | Uma palavra por vez, branca, a 79% da altura (abaixo da estampa da camisa). Palavras de destaque: laranja, maiores, pop + tremida curta |
-| Nome do produto | Preso ao produto (rastreado), palavra por palavra, em pílula marrom, enquanto ela fala o nome |
-| Preço | Etiqueta marrom presa ao produto: nome em caixa alta espaçada, "de R$ X" riscado em laranja no "por", "R$ Y" laranja com pop + zoom 1.08–1.1 |
+| Etiqueta do produto | Presa ao produto (rastreado). Entra quando ela começa a falar o nome, já com o **nome fixo** em caixa alta fina e espaçada (sem palavra por palavra). Depois: "de R$ X" no "de", riscado em laranja no "por", "R$ Y" laranja com pop + zoom 1.08–1.1. Preço único: "por apenas" + valor |
 | Etiqueta sem espaço ao lado | Vai para baixo do produto (nunca sobre o rosto) |
 | Sombra | `clientes/natura/sombra.png` (preto 0→69% da metade para baixo) |
 | Som | Voz com redutor de ruído (afftdn) e passa-alta 80 Hz; efeitos a 50% (whoosh nos títulos e cortes, ding no preço, pop nos destaques); final −14 LUFS |
@@ -26,6 +25,9 @@ Fluxo: preparar → revisar → teste curto → render completo → conferir qua
 4. **Rastreamento**: produto de cor forte (roxo, vermelho) → rastrear por cor (`"rastrear": {"cor": [[hmin,smin,vmin],[hmax,smax,vmax]]}`). Os outros → caixa inicial + CSRT (`{"t": s, "caixa": [x,y,w,h]}`).
 5. **Nomes e preços**: confirmar com a lista da loja (papel/foto). A transcrição erra nomes (Crisca→Kriska, Elia→Ilía, Noite→Nuit, Delpharfam→Deo Parfum).
 6. Nomes longos: a etiqueta diminui a letra sozinha. Mesmo assim, conferir se nada sai da tela.
+7. **A transcrição pode pular trechos inteiros** (Portal: Ekos Frescor e Óleo Sève sumiram). O `preparar.py` agora só corta pausa com áudio baixo e avisa "ATENÇÃO" quando há som sem palavras — transcrever esse trecho de novo à parte.
+8. Fundo claro: os títulos têm halo escuro; conferir legibilidade mesmo assim.
+9. Produto que ela mexe muito: usar várias marcas manuais (`"rastrear": {"chaves": [{"t":..,"caixa":[..]}, ...]}`) e conferir com a folha `conferir/rastreio.jpg`.
 
 ## Passo a passo
 
@@ -47,6 +49,6 @@ Saída em `<loja>/saida/` (não vai para o git). O vídeo bruto também não vai
 | Pasta | Loja | Situação |
 |---|---|---|
 | `trindade/` | Natura Trindade | entregue (v2) |
-| `senador-canedo/` | Natura Senador Canedo ("Canedo") | aguardando vídeo |
-| `portal-shopping/` | Natura Portal Shopping | aguardando vídeo |
-| `goianira/` | Natura Goianira | aguardando vídeo |
+| `senador-canedo/` | Natura Senador Canedo ("Canedo") | entregue |
+| `portal-shopping/` | Natura Portal Shopping | entregue (rev. 2: trecho dos perfumes) |
+| `goianira/` | Natura Goianira | entregue |

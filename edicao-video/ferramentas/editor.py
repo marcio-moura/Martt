@@ -281,7 +281,7 @@ def camada_preco(t, pr, cores, caixa):
         tl -= 2; fl = fonte(FT, tl, 600)
     cw = max(d.textlength(nome, font=fl), d.textlength(velho, font=fo), d.textlength(novo, font=fn)) + 64
     chh = 40 + 30 + 62 + 120
-    k = ease_out((t - pr["t_de"]) / 0.3); sai = max(0, min(1, (pr["ate"] - t) / 0.25))
+    k = ease_out((t - pr.get("t_nome", pr["t_de"])) / 0.3); sai = max(0, min(1, (pr["ate"] - t) / 0.25))
     alpha = min(1, k) * sai
     if alpha <= 0: return img
     x, y, (px, py), (ex, ey) = posicionar(caixa, cw, chh)
@@ -291,7 +291,8 @@ def camada_preco(t, pr, cores, caixa):
     d.ellipse((px - 9, py - 9, px + 9, py + 9), fill=A(cores["creme"]), outline=A(cores["laranja"]), width=3)
     d.rounded_rectangle((x, y, x + cw, y + chh), 28, fill=A(cores["marrom"], 238))
     d.text((x + 32, y + 26), nome, font=fl, fill=A(cores["creme"], 210))
-    d.text((x + 32, y + 66), velho, font=fo, fill=A(cores["creme"], 200))
+    kv = ease_out((t - pr["t_de"] + 0.05) / 0.25)
+    if kv > 0: d.text((x + 32, y + 66 + (1 - kv) * 12), velho, font=fo, fill=A(cores["creme"], int(200 * kv)))
     if pr.get("de") and t >= pr["t_risco"]:
         r = ease_out((t - pr["t_risco"]) / 0.25); vw = d.textlength(velho, font=fo)
         yy = y + 66 + 34; d.line((x + 28, yy, x + 32 + (vw + 8) * r, yy - 4), fill=A(cores["laranja"]), width=6)
@@ -385,13 +386,7 @@ def main(plano_path):
             base = Image.fromarray(a.astype(np.uint8), "RGBA")
         preco_ativo = False
         for pr in precos:
-            if "t_nome" in pr and pr["t_nome"] - 0.05 <= t < pr["t_de"]:
-                bx, by, bw, bh = caixa_em(pr["_trilha"], t)
-                bx, by = (bx - x0) * sx, (by - top) * sy; bw, bh = bw * sx, bh * sy
-                bx, by, bw, bh = (bx - zx0) * zs, (by - zy0) * zs, bw * zs, bh * zs
-                nomes = [w for w in palavras if pr["t_nome"] - 0.05 <= w["s"] < pr["t_de"] - 0.05]
-                base = Image.alpha_composite(base, camada_nome(t, pr, cores, (bx, by, bw, bh), nomes)); preco_ativo = True
-            if pr["t_de"] - 0.05 <= t < pr["ate"]:
+            if pr.get("t_nome", pr["t_de"]) - 0.05 <= t < pr["ate"]:
                 bx, by, bw, bh = caixa_em(pr["_trilha"], t)
                 bx, by = (bx - x0) * sx, (by - top) * sy; bw, bh = bw * sx, bh * sy
                 bx, by, bw, bh = (bx - zx0) * zs, (by - zy0) * zs, bw * zs, bh * zs
@@ -429,7 +424,7 @@ def main(plano_path):
     for tt in titulos:
         poe("whoosh", tt["de"] - 0.12, 0.55); poe("impacto_suave", tt["de"] + 0.05, 0.35)
     for pr in precos:
-        poe("whoosh_curto", pr["t_de"] - 0.08, 0.5); pr.get("de") and poe("tick", pr["t_risco"], 0.4); poe("ding", pr["t_por"], 0.45)
+        poe("whoosh_curto", pr.get("t_nome", pr["t_de"]) - 0.08, 0.5); pr.get("de") and poe("tick", pr["t_risco"], 0.4); poe("ding", pr["t_por"], 0.45)
     for z in zooms:
         poe("impacto_suave", z["de"], 0.3)
     for pg in pags:
@@ -437,8 +432,6 @@ def main(plano_path):
         poe("pop", pg[0]["s"] - 0.03, 0.28)
     for w in legenda:
         if texto_legenda(w) in destaques: poe("pop", w["s"] - 0.02, 0.45)
-    for pr in precos:
-        if "t_nome" in pr: poe("whoosh_curto", pr["t_nome"] - 0.08, 0.4)
     if P.get("musica"):
         mu = ler_wav(rel(P["musica"]))[:len(mix)]
         voz = np.convolve(np.abs(mix), np.ones(4800) / 4800, "same")
