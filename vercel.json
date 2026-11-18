@@ -23,6 +23,15 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/portfolio-video/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ]
 }
