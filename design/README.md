@@ -45,7 +45,7 @@ design/
 
 | Layout       | Campos | Referência |
 |--------------|--------|------------|
-| `foto-frase` | `imagem`, `titulo` (caixa alta; `**negrito**`), `assinatura`, `posicao` (`topo`/`base`), `foco`, `logo` | post da Golfinho |
+| `foto-frase` | `imagem`, `titulo` (`**negrito**`), `assinatura`, `posicao` (`topo`/`meio`/`base`), `alinhar` (`esquerda`/`centro`/`direita`), `estilo` (`caixa-alta`/`fino`/`espacado`), `arraste` (texto da seta), `fio` (false esconde), `foco`, `logo` | Golfinho, Skinlab, Garetti, Romana |
 | `bloco`      | `titulo` (frase curta, em serifa), `assinatura`, `tema` | "YOU CAN" |
 | `horario`    | `imagem`, `titulo` (ex.: `8:00`), `texto`, `foco` | um dia real |
 | `atos`       | `atos`: lista de `{imagem, texto, foco}` (2 a 4) | chegada, experiência, resultado |

@@ -1,0 +1,10 @@
+{
+  "titulo": "Variações de foto + frase (referências de clínicas)",
+  "formato": "feed",
+  "objetivo": "Mostruário: texto pequeno e espaçado (Romana), texto no espaço vazio (Skinlab) e capa com gancho (Garetti).",
+  "telas": [
+    { "layout": "foto-frase", "imagem": "../../../../../portfolio/midia/aliancas.jpg", "posicao": "meio", "alinhar": "centro", "estilo": "espacado", "logo": false, "titulo": "Antes de qualquer detalhe\n**EXISTE UM PLANO.**" },
+    { "layout": "foto-frase", "imagem": "../../../../../portfolio/midia/casal-espelho.jpg", "foco": "left center", "posicao": "meio", "alinhar": "direita", "estilo": "fino", "logo": false, "titulo": "Uma tarde\naqui dentro", "arraste": "ARRASTE PARA O LADO" },
+    { "layout": "foto-frase", "imagem": "../../../../../portfolio/midia/casal-sorrindo.jpg", "posicao": "base", "alinhar": "centro", "logo": false, "titulo": "O que ninguém\n**te conta**\nsobre casar no civil" }
+  ]
+}

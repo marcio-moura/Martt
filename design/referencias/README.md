@@ -37,13 +37,7 @@ Regra da casa, definida pelo Marcio: **o simples vence**. Toda peça, de qualque
 | `09-editorial-marrom-estrutura.jpg` | Editorial | Serifa condensada alta com inicial em script, fotos aconchegantes, marrom e branco. Tema "estrutura" igual ao da Martt. | **Perfil da Martt**, consultoria |
 | `10-unhas-chegada-experiencia-resultado.png` | Três atos | Três fotos empilhadas com "A chegada / A experiência / O resultado" em serifa itálica e fio fino. **Layout `atos`.** | Serviços: salão, clínica, eventos |
 | `11-` e `12-confeitaria-universo-rosa` | Universo de marca | Uma cor só domina tudo (embalagem, loja, arte). A tipografia display gigante é a assinatura. Funciona porque a marca é coerente. | Food, varejo com marca forte |
-
-## Formatos de conteúdo tirados das referências
-
-- **Um dia real**: a rotina em horários (stories ou reels).
-- **Chegada, experiência, resultado**: a jornada do cliente em 3 fotos.
-- **Antes e depois** lado a lado, sem enfeite.
-- **Mãos trabalhando**: o detalhe do serviço em close.
-- **Frase de marca**: bloco de cor no grid, a cada 6 a 9 posts.
-
-Novas referências: salvar em `imagens/` (gerais) ou em `clientes/<cliente>/marca/referencias/` (do cliente) e anotar aqui o que pegar.
+| `13-clinica-dahlia-neutro-bastidor.png` | Clínica neutra | Cinza e bege quentes, @ pequeno e espaçado no topo, serifa no nome. Muito bastidor: obra, espaço, equipe, datas (Dia do Médico). Teaser "Loading" antes da inauguração. | Clínicas, consultórios, inaugurações |
+| `14-clinica-skinlab-texto-no-vazio.png` | Texto no vazio | A pessoa num lado da foto e o texto fino na parede vazia do outro. Seta fina com "Arraste para o lado". **`foto-frase` com `alinhar: direita`, `estilo: fino`, `arraste`.** Pede foto feita já pensando no espaço do texto. | Abertura de carrossel |
+| `15-clinica-garetti-capas-de-reels.png` | Capas de reels | Grid quase todo de reels, com a profissional em ação. Gancho curto em caixa alta no terço de baixo, uma palavra em negrito ("FIZ **FIOS APTOS** E OLHA O QUE DEU"). **`foto-frase` com `posicao: base`.** | Capas de reels de qualquer cliente |
+| `16-clinica-romana-texto-pequeno.png` | Sussurro | Texto pequeno, espaçado e centralizado, com uma parte em negrito ("Antes de qualquer procedimento **existe um plano.**"). Fotos de textura e detalhe, placa e fachada. **`foto-frase` com `estilo: espacado`, `posicao: meio`.** | Marcas premium, saúde |

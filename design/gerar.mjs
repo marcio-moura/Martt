@@ -102,6 +102,19 @@ function css(marca, [w, h]) {
   .frase{font-family:'${f.texto}',sans-serif;font-weight:300;text-transform:uppercase;font-size:calc(66*var(--u));line-height:1.12;letter-spacing:.005em}
   .frase strong{font-family:'${f.titulo}',sans-serif;font-weight:800;letter-spacing:-.01em}
   .frase em{color:inherit}
+  .bloco-txt{display:flex;flex-direction:column;max-width:calc(860*var(--u))}
+  .al-centro{align-self:center;align-items:center;text-align:center}
+  .al-direita{align-self:flex-end;max-width:calc(440*var(--u))}
+  .frase.est-fino{text-transform:none;font-weight:300;font-size:calc(84*var(--u));line-height:1.08;letter-spacing:-.01em}
+  .frase.est-fino strong{font-weight:700}
+  .frase.est-espacado{font-weight:400;font-size:calc(40*var(--u));letter-spacing:.24em;line-height:1.5}
+  .frase.est-espacado strong{font-family:'${f.texto}',sans-serif;font-weight:700;letter-spacing:.24em}
+  .arraste{margin-top:calc(40*var(--u));font-size:calc(24*var(--u));font-weight:600;letter-spacing:.18em}
+  .seta-fio{display:block;height:calc(2*var(--u));background:currentColor;margin-bottom:calc(22*var(--u));position:relative;width:calc(300*var(--u))}
+  .seta-fio::after{content:'';position:absolute;right:0;top:calc(-6*var(--u));border:calc(7*var(--u)) solid transparent;border-left-color:currentColor;border-right:0}
+  .al-centro .seta-fio{margin-left:auto;margin-right:auto}
+  .layout-foto-frase .veu-meio{background:rgba(0,0,0,.28)}
+  .layout-foto-frase .veu-base{background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 50%,rgba(0,0,0,.65) 100%)}
   .marca-topo{height:calc(150*var(--u));object-fit:contain;align-self:flex-start;mix-blend-mode:lighten}
   .marca-txt{font-family:'${f.titulo}',sans-serif;font-weight:800;font-size:calc(40*var(--u))}
   .assinatura{font-family:'${f.titulo}',sans-serif;font-weight:700;font-style:italic;font-size:calc(52*var(--u));line-height:1.15}
@@ -152,12 +165,19 @@ function tela(t, i, total, ctx) {
         <div class="base">${rotulo}<h2 style="margin-bottom:calc(20*var(--u))">${rico(t.titulo || "")}</h2>${texto}</div>`;
       break;
     case "foto-frase": {
-      const topo = t.posicao !== "base";
+      // posicao: topo | meio | base · alinhar: esquerda | centro | direita · estilo: caixa-alta | fino | espacado
+      const pos = t.posicao || "topo";
+      const al = t.alinhar || "esquerda";
+      const est = t.estilo || "caixa-alta";
       const marcaTopo = t.logo === false ? "" : logos.escuro ? `<img class="marca-topo" src="${logos.escuro}">` : `<div class="marca-txt">${esc(marca.nome)}</div>`;
-      const bloco = `<div class="fio"></div><p class="frase">${rico(t.titulo)}</p>`;
-      const assin = t.assinatura ? `<div><div class="fio"></div><p class="assinatura">${rico(t.assinatura)}</p></div>` : "";
-      corpo = `<div class="foto-bg" style="background-image:url('${esc(t.imagem)}');background-position:${esc(t.foco || "center")}"></div><div class="foto-veu"></div>
-        ${marcaTopo}${topo ? bloco : ""}<div class="base">${topo ? "" : bloco}${assin}</div>`;
+      const fio = t.fio === false ? "" : `<div class="fio"></div>`;
+      const arraste = t.arraste ? `<div class="arraste"><span class="seta-fio"></span><span>${esc(t.arraste)}</span></div>` : "";
+      const bloco = `<div class="bloco-txt al-${al}">${est === "caixa-alta" ? fio : ""}<p class="frase est-${est}">${rico(t.titulo)}</p>${arraste}</div>`;
+      const assin = t.assinatura ? `<div class="bloco-txt al-${al}"><div class="fio"></div><p class="assinatura">${rico(t.assinatura)}</p></div>` : "";
+      corpo = `<div class="foto-bg" style="background-image:url('${esc(t.imagem)}');background-position:${esc(t.foco || "center")}"></div><div class="foto-veu veu-${pos}"></div>
+        ${marcaTopo}${pos === "topo" ? bloco : ""}
+        ${pos === "meio" ? `<div class="meio">${bloco}</div>` : ""}
+        ${pos === "base" || assin ? `<div class="base" style="${pos === "meio" ? "flex:0" : ""}">${pos === "base" ? bloco : ""}${assin}</div>` : ""}`;
       break;
     }
     case "bloco":
