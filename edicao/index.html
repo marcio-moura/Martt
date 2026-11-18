@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edição de vídeo | Martt Co.</title>
+<meta name="description" content="Mande o seu vídeo ou o link do Drive e diga o que quer. A Martt Co. edita e devolve pronto.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F8F7F2; --ink:#242522; --sand:#E8E3D8; --muted:#8D8B82;
+    --sage:#8FB5A3; --sage-dark:#6F9885; --card:#fff; --soft:#4a4a45; --warn:#A3672B;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,sans-serif;font-weight:400;line-height:1.5;padding:28px 16px 56px}
+  main{max-width:560px;margin:0 auto}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;white-space:nowrap}
+  .brand i{display:inline-block;width:27px;height:9px;background:var(--sage-dark)}
+  .back{font-weight:600;font-size:13px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--sage);white-space:nowrap}
+  h1{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;letter-spacing:-0.02em;font-size:30px;line-height:1.15;margin:28px 0 10px}
+  .lead{font-size:16px;color:var(--soft)}
+
+  .step{margin-top:30px}
+  .step h2{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:17px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .step h2 i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+  .step h2 small{font-family:'Manrope',sans-serif;font-weight:600;font-size:12px;color:var(--muted)}
+
+  label.f{display:block;font-weight:600;font-size:13px;margin:12px 0 6px}
+  input[type=text],input[type=url],textarea,select{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1.5px solid var(--sand);padding:12px 14px;border-radius:0;min-height:48px;-webkit-appearance:none;appearance:none}
+  select{background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 15px) 21px;background-size:5px 5px;background-repeat:no-repeat;padding-right:40px}
+  textarea{min-height:110px;resize:vertical}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--sage-dark)}
+
+  .tabs{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--ink)}
+  .tabs button{font:inherit;font-weight:600;font-size:15px;padding:13px 10px;min-height:48px;background:transparent;color:var(--ink);border:0;cursor:pointer}
+  .tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+  .pane{margin-top:12px}
+  .pane[hidden]{display:none}
+
+  .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;background:var(--card);border:1.5px dashed var(--sage-dark);padding:26px 16px;cursor:pointer;min-height:120px}
+  .drop strong{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px}
+  .drop span{font-size:13px;color:var(--muted)}
+  .drop.over{background:var(--sand)}
+  .file{display:none;margin-top:12px;background:var(--card);border:1.5px solid var(--sand);padding:12px}
+  .file.on{display:block}
+  .file video{width:100%;max-height:300px;background:#000;display:block}
+  .file .meta{display:flex;justify-content:space-between;gap:10px;margin-top:10px;font-size:13px}
+  .file .meta b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .file .meta button{font:inherit;font-size:13px;font-weight:600;background:none;border:0;color:var(--ink);border-bottom:2px solid var(--sage);cursor:pointer;flex:none}
+
+  .hint{font-size:13px;color:var(--muted);margin-top:8px}
+  .hint.warn{color:var(--warn)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips label{position:relative}
+  .chips input{position:absolute;opacity:0;inset:0;pointer-events:none}
+  .chips span{display:inline-block;background:var(--card);border:1.5px solid var(--sand);padding:10px 14px;font-weight:600;font-size:14px;min-height:44px;cursor:pointer;user-select:none}
+  .chips input:checked+span{background:var(--sage);border-color:var(--sage-dark)}
+  .chips input:focus-visible+span{outline:2px solid var(--ink);outline-offset:2px}
+
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:420px){ .row{grid-template-columns:1fr} }
+
+  .send{margin-top:34px}
+  .btn{display:block;width:100%;font:inherit;font-weight:600;font-size:16px;padding:16px 22px;min-height:54px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer;text-align:center}
+  .btn:hover{background:var(--sage-dark);border-color:var(--sage-dark)}
+  .err{display:none;margin-top:12px;font-size:14px;font-weight:600;color:var(--warn)}
+  .err.on{display:block}
+
+  .done{display:none;margin-top:18px;background:var(--sand);padding:18px}
+  .done.on{display:block}
+  .done h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;margin-bottom:6px}
+  .done p{font-size:14px;color:var(--soft)}
+  .done a{color:var(--ink);font-weight:600}
+
+  .how{margin-top:40px;padding-top:22px;border-top:1.5px solid var(--sand);font-size:14px;color:var(--soft)}
+  .how ol{padding-left:20px;display:grid;gap:6px;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <a class="brand" href="/"><i></i>Martt Co.</a>
+    <a class="back" href="/">Voltar ao site</a>
+  </div>
+
+  <h1>Edição de vídeo</h1>
+  <p class="lead">Mande o vídeo ou o link do Drive e diga o que você quer. A gente edita e devolve pronto para postar.</p>
+
+  <form id="form" novalidate>
+    <section class="step">
+      <h2><i></i>1. Seu vídeo</h2>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="t-drive" aria-selected="true" aria-controls="p-drive">Link do Drive</button>
+        <button type="button" role="tab" id="t-file" aria-selected="false" aria-controls="p-file">Arquivo</button>
+      </div>
+
+      <div class="pane" id="p-drive" role="tabpanel" aria-labelledby="t-drive">
+        <input type="url" id="link" inputmode="url" autocomplete="off" placeholder="Cole aqui o link do Drive (ou de outra nuvem)">
+        <p class="hint" id="link-hint">No Drive, em Compartilhar, deixe o acesso como "Qualquer pessoa com o link". Pode ser um vídeo ou uma pasta com vários.</p>
+      </div>
+
+      <div class="pane" id="p-file" role="tabpanel" aria-labelledby="t-file" hidden>
+        <label class="drop" id="drop" for="arquivo">
+          <strong>Escolher vídeo</strong>
+          <span>Da galeria ou dos arquivos do aparelho</span>
+        </label>
+        <input type="file" id="arquivo" accept="video/*" hidden>
+        <div class="file" id="file">
+          <video id="preview" controls playsinline muted></video>
+          <div class="meta"><b id="fname"></b><button type="button" id="trocar">Trocar</button></div>
+        </div>
+        <p class="hint" id="file-hint">No celular, o vídeo vai direto para o nosso WhatsApp. No computador, o WhatsApp abre com o pedido e você anexa o vídeo na conversa.</p>
+      </div>
+    </section>
+
+    <section class="step">
+      <h2><i></i>2. O que você quer</h2>
+      <div class="chips" id="servicos">
+        <label><input type="checkbox" value="Reels (vertical 9:16)" checked><span>Reels 9:16</span></label>
+        <label><input type="checkbox" value="Cortar as partes paradas"><span>Cortar partes paradas</span></label>
+        <label><input type="checkbox" value="Legendas"><span>Legendas</span></label>
+        <label><input type="checkbox" value="Música de fundo"><span>Música</span></label>
+        <label><input type="checkbox" value="Logo da marca"><span>Logo</span></label>
+        <label><input type="checkbox" value="Ajuste de cor e luz"><span>Cor e luz</span></label>
+        <label><input type="checkbox" value="Melhorar o áudio"><span>Áudio</span></label>
+        <label><input type="checkbox" value="Texto na tela / chamada"><span>Texto na tela</span></label>
+        <label><input type="checkbox" value="Vários cortes curtos"><span>Vários cortes</span></label>
+      </div>
+
+      <div class="row">
+        <div>
+          <label class="f" for="duracao">Duração final</label>
+          <select id="duracao">
+            <option>Até 15 segundos</option>
+            <option selected>Até 30 segundos</option>
+            <option>Até 60 segundos</option>
+            <option>Até 90 segundos</option>
+            <option>Do tamanho que ficar melhor</option>
+          </select>
+        </div>
+        <div>
+          <label class="f" for="prazo">Prazo</label>
+          <select id="prazo">
+            <option>Sem pressa</option>
+            <option selected>Em até 2 dias</option>
+            <option>Amanhã</option>
+            <option>Hoje (urgente)</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="f" for="obs">Detalhes <small style="font-weight:400;color:var(--muted)">(opcional)</small></label>
+      <textarea id="obs" placeholder="Ex.: começar pela fachada, usar a parte em que falo do preço, texto 'Black Friday até 50% off', música animada."></textarea>
+    </section>
+
+    <section class="step">
+      <h2><i></i>3. Quem está pedindo</h2>
+      <label class="f" for="nome">Seu nome</label>
+      <input type="text" id="nome" autocomplete="name" placeholder="Nome">
+      <label class="f" for="empresa">Empresa</label>
+      <input type="text" id="empresa" autocomplete="organization" placeholder="Nome do negócio">
+    </section>
+
+    <div class="send">
+      <button class="btn" type="submit" id="enviar">Enviar pelo WhatsApp →</button>
+      <p class="err" id="err" role="alert"></p>
+      <div class="done" id="done" aria-live="polite">
+        <h3 id="done-t">Pedido pronto</h3>
+        <p id="done-p"></p>
+      </div>
+    </div>
+  </form>
+
+  <div class="how">
+    <strong>Como funciona</strong>
+    <ol>
+      <li>Você envia o vídeo e o pedido por aqui.</li>
+      <li>A gente confirma pelo WhatsApp e começa a editar.</li>
+      <li>Você recebe uma prévia, pede ajustes se precisar, e recebe o arquivo final.</li>
+    </ol>
+  </div>
+</main>
+
+<script>
+(function(){
+  var NUMBER = "5562993037223";
+  var modo = "drive";
+  var arquivo = null;
+  var $ = function(id){ return document.getElementById(id); };
+
+  function wa(text){ return "https://wa.me/" + NUMBER + "?text=" + encodeURIComponent(text); }
+  function lembrar(k, v){ try { localStorage.setItem("martt-edicao-" + k, v); } catch(e){} }
+  function lido(k){ try { return localStorage.getItem("martt-edicao-" + k) || ""; } catch(e){ return ""; } }
+
+  // abas
+  function aba(m){
+    modo = m;
+    $("t-drive").setAttribute("aria-selected", m === "drive");
+    $("t-file").setAttribute("aria-selected", m === "file");
+    $("p-drive").hidden = m !== "drive";
+    $("p-file").hidden = m !== "file";
+    $("err").classList.remove("on");
+  }
+  $("t-drive").onclick = function(){ aba("drive"); };
+  $("t-file").onclick = function(){ aba("file"); };
+
+  // link
+  $("link").addEventListener("input", function(){
+    var v = this.value.trim(), h = $("link-hint");
+    if (v && !/^https?:\/\//i.test(v) && !/drive\.google|dropbox|wetransfer|onedrive|icloud/i.test(v)) {
+      h.textContent = "Isso não parece um link. Cole o endereço completo (começa com https://).";
+      h.className = "hint warn";
+    } else {
+      h.textContent = 'No Drive, em Compartilhar, deixe o acesso como "Qualquer pessoa com o link". Pode ser um vídeo ou uma pasta com vários.';
+      h.className = "hint";
+    }
+  });
+
+  // arquivo
+  function tamanho(b){ return b > 1073741824 ? (b/1073741824).toFixed(1).replace(".", ",") + " GB" : Math.max(1, Math.round(b/1048576)) + " MB"; }
+  function escolher(f){
+    if (!f) return;
+    if (f.type && f.type.indexOf("video/") !== 0) { erro("Esse arquivo não é um vídeo."); return; }
+    arquivo = f;
+    var v = $("preview");
+    if (v.dataset.url) URL.revokeObjectURL(v.dataset.url);
+    v.dataset.url = URL.createObjectURL(f);
+    v.src = v.dataset.url;
+    $("fname").textContent = f.name + " · " + tamanho(f.size);
+    $("file").classList.add("on");
+    $("drop").style.display = "none";
+    $("err").classList.remove("on");
+    var h = $("file-hint");
+    if (f.size > 2 * 1073741824) {
+      h.textContent = "Arquivo grande (" + tamanho(f.size) + "). O WhatsApp aceita até 2 GB: se não for, mande pelo Drive.";
+      h.className = "hint warn";
+    } else {
+      h.textContent = podeCompartilhar(f) ? "Ao enviar, escolha o WhatsApp e a conversa da Martt Co." : "O WhatsApp vai abrir com o pedido. Anexe este vídeo na conversa antes de enviar.";
+      h.className = "hint";
+    }
+  }
+  $("arquivo").addEventListener("change", function(){ escolher(this.files[0]); });
+  $("trocar").onclick = function(){ $("arquivo").value = ""; $("arquivo").click(); };
+  var drop = $("drop");
+  ["dragenter","dragover"].forEach(function(e){ drop.addEventListener(e, function(ev){ ev.preventDefault(); drop.classList.add("over"); }); });
+  ["dragleave","drop"].forEach(function(e){ drop.addEventListener(e, function(ev){ ev.preventDefault(); drop.classList.remove("over"); }); });
+  drop.addEventListener("drop", function(ev){ escolher(ev.dataTransfer.files[0]); });
+
+  function podeCompartilhar(f){
+    try { return !!(navigator.canShare && navigator.canShare({ files: [f] }) && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)); }
+    catch(e){ return false; }
+  }
+
+  // nome e empresa ficam lembrados neste aparelho
+  $("nome").value = lido("nome");
+  $("empresa").value = lido("empresa");
+
+  function erro(t){ var e = $("err"); e.textContent = t; e.classList.add("on"); }
+  function pronto(t, p){ $("done-t").textContent = t; $("done-p").innerHTML = p; $("done").classList.add("on"); }
+
+  function mensagem(){
+    var servicos = [].slice.call(document.querySelectorAll("#servicos input:checked")).map(function(i){ return i.value; });
+    var nome = $("nome").value.trim(), empresa = $("empresa").value.trim(), obs = $("obs").value.trim();
+    var l = ["*Pedido de edição de vídeo*", ""];
+    l.push("*Quem:* " + (nome || "-") + (empresa ? " (" + empresa + ")" : ""));
+    if (modo === "drive") l.push("*Vídeo:* " + $("link").value.trim());
+    else l.push("*Vídeo:* " + (arquivo ? arquivo.name + " (" + tamanho(arquivo.size) + ", anexado)" : "anexado"));
+    l.push("*Quero:* " + (servicos.length ? servicos.join(", ") : "o que ficar melhor"));
+    l.push("*Duração:* " + $("duracao").value);
+    l.push("*Prazo:* " + $("prazo").value);
+    if (obs) { l.push("", "*Detalhes:*", obs); }
+    return l.join("\n");
+  }
+
+  $("form").addEventListener("submit", function(ev){
+    ev.preventDefault();
+    $("err").classList.remove("on");
+    $("done").classList.remove("on");
+
+    if (modo === "drive") {
+      var link = $("link").value.trim();
+      if (!link) { erro("Cole o link do vídeo ou escolha um arquivo."); $("link").focus(); return; }
+      if (!/^https?:\/\/\S+$/i.test(link)) { erro("O link precisa começar com https://"); $("link").focus(); return; }
+    } else if (!arquivo) { erro("Escolha o vídeo."); return; }
+    if (!$("nome").value.trim()) { erro("Diga o seu nome."); $("nome").focus(); return; }
+
+    lembrar("nome", $("nome").value.trim());
+    lembrar("empresa", $("empresa").value.trim());
+    var texto = mensagem();
+    var url = wa(texto);
+
+    if (modo === "file" && podeCompartilhar(arquivo)) {
+      navigator.share({ files: [arquivo], text: texto }).then(function(){
+        pronto("Enviado", "Se ainda não escolheu, mande na conversa da Martt Co. A gente responde por lá.");
+      }).catch(function(e){
+        if (e && e.name === "AbortError") return;
+        window.open(url, "_blank", "noopener");
+        pronto("Falta anexar o vídeo", "O WhatsApp abriu com o pedido. Anexe o vídeo na conversa antes de enviar.");
+      });
+      return;
+    }
+
+    window.open(url, "_blank", "noopener");
+    if (modo === "file") {
+      pronto("Falta anexar o vídeo", 'O WhatsApp abriu com o pedido. Anexe o vídeo na conversa antes de enviar. Não abriu? <a href="' + url + '" target="_blank" rel="noopener">Toque aqui</a>.');
+    } else {
+      pronto("Pedido pronto", 'O WhatsApp abriu com tudo preenchido. É só tocar em enviar. Não abriu? <a href="' + url + '" target="_blank" rel="noopener">Toque aqui</a>.');
+    }
+  });
+})();
+</script>
+</body>
+</html>
