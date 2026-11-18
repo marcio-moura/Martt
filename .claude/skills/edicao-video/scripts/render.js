@@ -11,7 +11,7 @@ const { chromium } = require('playwright'); const fs = require('fs');
   let n = 0;
   for (let i = 0; i < ts.length; i++) {
     const vis = await p.evaluate(t => window.renderAt(t), ts[i]);
-    const name = `${out}/${String(lista ? i : i).padStart(5, '0')}.png`;
+    const name = `${out}/${String(i + (+process.env.OFFSET || 0)).padStart(5, '0')}.png`;
     if (!vis && !lista) { fs.copyFileSync(`${out}/../vazio.png`, name); continue; }
     const data = await p.evaluate(() => document.querySelector('canvas').toDataURL('image/png'));
     fs.writeFileSync(name, Buffer.from(data.split(',')[1], 'base64')); n++;

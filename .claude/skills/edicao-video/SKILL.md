@@ -14,7 +14,10 @@ Saída: o MP4 final, enviado com `SendUserFile` (`display: "attach"`), mais um r
 - **Legenda palavra por palavra**: uma palavra por vez, branca, sem contorno nem caixa, só sombra leve, com um "pop" curto. Gerar com `scripts/legendas_palavra.py <json> <saida.ass> <margemV>`. Fica sobre uma área escura e estável (roupa, peito; em vídeo sentado, margemV ~740), nunca sobre mãos ou mesa clara.
 - **Sem texto de gancho na tela**: o usuário põe o título direto no Instagram.
 - **Animações 3D realistas e sutis**, abaixo da legenda, apoiadas na mesa ou superfície do vídeo, com perspectiva e sombra reais. Modelo: `scripts/anim3d-realista-mesa.html` (dente molar, escova com tufos de cerdas e escova gasta, fio dental, vírus; `naMesa(x, y)` coloca o objeto sobre um pixel do vídeo, a faixa renderizada é y 1200–1920 e sobrepõe com `overlay=0:1200`). Renderizar com `PAGINA=anim3d-realista-mesa.html node render.js ...`. Evite a área das mãos e as bordas.
-- **Mandar prévia das animações para aprovação** antes do vídeo final.
+- **Mandar prévia das animações para aprovação** antes do vídeo final, **sempre em qualidade cheia** (1080x1920, mesma qualidade do final). O usuário reclamou de prévia em baixa resolução: nunca reduza.
+- **Elemento 3D centralizado** na horizontal (`naMesa(540, ...)`).
+- **Qualidade máxima**: 3D renderizado em 2x (`setPixelRatio(2)`, quadros 2160x1440, reduzidos com `scale=1080:720:flags=lanczos`; o `vazio.png` tem que ter o mesmo tamanho dos quadros). Exporte com `-preset slow -crf 15 -profile:v high -tune film -b:a 256k`.
+- Em `LatheGeometry`, o perfil vai de baixo para cima; ao contrário, as faces ficam invertidas e dá para ver o lado de dentro do objeto.
 - Sem logo, a menos que ele mande.
 
 ## Passo a passo

@@ -11,7 +11,7 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 // canvas cobre a faixa de baixo do vídeo: y 1200..1920
 const W = 1080, H = 720, Y0 = 1200;
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(1); renderer.setSize(W, H); renderer.setClearColor(0, 0);
+renderer.setPixelRatio(2); renderer.setSize(W, H); renderer.setClearColor(0, 0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -60,8 +60,8 @@ function contato(w, d, o = 0.35) {
 // ---------- dente (molar) ----------
 function dente() {
   const g = new THREE.Group();
-  const prof = [[0.001, 0.78], [0.2, 0.8], [0.42, 0.86], [0.58, 0.8], [0.66, 0.62], [0.68, 0.4], [0.64, 0.18], [0.55, 0.0], [0.47, -0.1], [0.001, -0.12]]
-    .map(([x, y]) => new THREE.Vector2(x, y));
+  const prof = [[0.001, 0.78], [0.2, 0.8], [0.42, 0.86], [0.58, 0.8], [0.66, 0.62], [0.68, 0.4], [0.64, 0.18], [0.56, 0.0], [0.5, -0.1], [0.36, -0.16], [0.001, -0.17]]
+    .reverse().map(([x, y]) => new THREE.Vector2(x, y));
   let geo = new THREE.LatheGeometry(new THREE.SplineCurve(prof).getPoints(60), 96);
   geo.deleteAttribute('uv'); geo.deleteAttribute('normal'); geo = mergeVertices(geo, 1e-4);
   const pos = geo.getAttribute('position'); const cores = [];
@@ -88,9 +88,9 @@ function dente() {
   const coroa = new THREE.Mesh(geo, esmalte); coroa.castShadow = true; g.add(coroa);
   const dentina = new THREE.MeshPhysicalMaterial({ color: 0xe3d2b2, roughness: 0.42, clearcoat: 0.2 });
   for (const s of [-1, 1]) {
-    const rp = [[0.001, -1.02], [0.07, -1.0], [0.14, -0.85], [0.2, -0.5], [0.25, -0.2], [0.28, 0.0], [0.001, 0.02]].map(([x, y]) => new THREE.Vector2(x, y));
+    const rp = [[0.001, -1.02], [0.07, -1.0], [0.14, -0.85], [0.2, -0.5], [0.23, -0.2], [0.2, -0.02], [0.001, 0.05]].map(([x, y]) => new THREE.Vector2(x, y));
     const r = new THREE.Mesh(new THREE.LatheGeometry(new THREE.SplineCurve(rp).getPoints(30), 48), dentina);
-    r.position.set(0.26 * s, -0.04, 0); r.rotation.z = 0.13 * s; r.scale.set(1, 1, 0.85); r.castShadow = true; g.add(r);
+    r.position.set(0.22 * s, -0.02, 0); r.rotation.z = 0.13 * s; r.scale.set(1, 1, 0.85); r.castShadow = true; g.add(r);
   }
   return g;
 }
@@ -185,7 +185,7 @@ function opac(obj, o) {
 }
 
 // ---------- cenas, apoiadas na mesa ----------
-const BASE = naMesa(790, 1700);   // centro do espaço livre na mesa
+const BASE = naMesa(540, 1715);   // centro horizontal, na mesa abaixo da legenda
 const ESC = 0.56;
 
 function cena() { const g = new THREE.Group(); g.position.copy(BASE); g.scale.setScalar(ESC); scene.add(g); return g; }
