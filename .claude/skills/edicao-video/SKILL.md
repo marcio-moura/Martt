@@ -71,7 +71,11 @@ Saída padrão (sempre no fim): `-c:v libx264 -preset medium -crf 20 -pix_fmt yu
 2. Ache o espaço livre: quadro com grade (`drawgrid=w=100:h=100`) nas primeiras ~800 linhas, em 2 ou 3 momentos. Anote onde fica o topo da cabeça.
 3. Copie `scripts/anim3d-exemplo-odontologia.html` para `$SCRATCH/anim3d/anim.html` (com `npm i three@0.160.0` na mesma pasta). Ele tem modelos prontos de dente, escova (nova, gasta), fio dental, vírus, seta circular, check e brilho, mais `ANCORA` (posição em px), `ESC` (escala) e a tabela `T` de tempos por cena. Troque as cenas para o assunto do vídeo, com o mesmo estilo de primitivas e materiais.
 4. Sirva a pasta (`python3 -m http.server 8765 --bind 127.0.0.1`), gere um `vazio.png` transparente 1080x720 e teste quadros soltos com `node render.js teste 30 0 "6,12,20"`, sobrepondo no vídeo para conferir tamanho e se nada encosta na cabeça.
-5. Renderize tudo com `node render.js quadros 30 <duração>` e sobreponha:
+5. **Mandar as animações para o usuário aprovar antes do vídeo final.** Ele prefere confirmar antes. Envie com `SendUserFile`:
+   - uma grade com 1 ou 2 quadros por cena, já sobre o vídeo, e
+   - uma prévia leve só da parte de cima com as animações (`scale=540:-1`, `-preset ultrafast -crf 30`, sem legenda),
+   e uma lista curta: tempo → fala → o que aparece. Pergunte o que mudar e só siga depois do ok.
+6. Renderize tudo com `node render.js quadros 30 <duração>` e sobreponha:
    `[0:v]fps=30,...[b];[b][1:v]overlay=0:0:eof_action=pass,subtitles=leg.ass:fontsdir=/usr/share/fonts/opentype/inter`, com `-framerate 30 -i quadros/%05d.png`.
 
 ## Regras
