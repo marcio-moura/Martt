@@ -9,6 +9,13 @@ Uso pessoal: o usuário manda o vídeo (anexado na conversa ou por link do Drive
 
 Saída: o MP4 final, enviado com `SendUserFile` (`display: "attach"`), mais um resumo curto do que foi feito.
 
+## Estilo padrão do usuário (vale para todo vídeo, salvo pedido diferente)
+
+- **Legenda simples**: frase em caixa normal, branca, sem contorno nem caixa, só uma sombra leve. Gerar com `scripts/legendas_simples.py <json> <saida.ass> <margemV>`. Posicionar sobre uma área escura e estável (roupa, peito), nunca sobre mãos ou mesa clara: confira num quadro e ajuste `margemV` (em vídeo sentado, ~740).
+- **Sem texto de gancho na tela**: o usuário põe o título direto no Instagram.
+- **Animações 3D sutis** ilustrando o que a pessoa fala, no espaço livre do quadro (em geral acima da cabeça). Leves, flutuando devagar, com sombra de contato para dar profundidade. Ver "Animações 3D" abaixo.
+- Sem logo, a menos que ele mande.
+
 ## Passo a passo
 
 1. **Perguntar o que o usuário quer, sempre**, antes de editar (é preferência dele), mesmo que a mensagem tenha só o link. Comece o download em segundo plano e, enquanto isso, use `AskUserQuestion` com perguntas curtas e opções prontas:
@@ -57,6 +64,15 @@ Saída padrão (sempre no fim): `-c:v libx264 -preset medium -crf 20 -pix_fmt yu
   Se a transcrição não puder rodar, diga isso e peça o texto; não invente fala.
 - **Cor e luz (leve):** `eq=contrast=1.05:saturation=1.08:brightness=0.02`. Não exagere: o padrão MARTT é natural.
 - **Vários cortes curtos:** gere cada corte como arquivo separado, numerados, e entregue todos juntos.
+
+## Animações 3D
+
+1. Transcreva (passo das legendas) e escolha de 3 a 4 momentos-chave com início e fim em segundos.
+2. Ache o espaço livre: quadro com grade (`drawgrid=w=100:h=100`) nas primeiras ~800 linhas, em 2 ou 3 momentos. Anote onde fica o topo da cabeça.
+3. Copie `scripts/anim3d-exemplo-odontologia.html` para `$SCRATCH/anim3d/anim.html` (com `npm i three@0.160.0` na mesma pasta). Ele tem modelos prontos de dente, escova (nova, gasta), fio dental, vírus, seta circular, check e brilho, mais `ANCORA` (posição em px), `ESC` (escala) e a tabela `T` de tempos por cena. Troque as cenas para o assunto do vídeo, com o mesmo estilo de primitivas e materiais.
+4. Sirva a pasta (`python3 -m http.server 8765 --bind 127.0.0.1`), gere um `vazio.png` transparente 1080x720 e teste quadros soltos com `node render.js teste 30 0 "6,12,20"`, sobrepondo no vídeo para conferir tamanho e se nada encosta na cabeça.
+5. Renderize tudo com `node render.js quadros 30 <duração>` e sobreponha:
+   `[0:v]fps=30,...[b];[b][1:v]overlay=0:0:eof_action=pass,subtitles=leg.ass:fontsdir=/usr/share/fonts/opentype/inter`, com `-framerate 30 -i quadros/%05d.png`.
 
 ## Regras
 

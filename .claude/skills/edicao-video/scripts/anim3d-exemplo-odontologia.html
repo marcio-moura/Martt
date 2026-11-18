@@ -1,0 +1,313 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from './node_modules/three/examples/jsm/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from './node_modules/three/examples/jsm/environments/RoomEnvironment.js';
+
+const W = 1080, H = 720;
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.setClearColor(0x000000, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+// câmera: 1 unidade de mundo ~ 100 px no plano z=0
+const camera = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
+const dist = (H / 100) / 2 / Math.tan(THREE.MathUtils.degToRad(15));
+camera.position.set(0, 0, dist);
+const px = (x, y) => new THREE.Vector3((x - W / 2) / 100, (H / 2 - y) / 100, 0);
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8a8f99, 0.7));
+const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(-3, 5, 6); scene.add(key);
+const rim = new THREE.DirectionalLight(0xdfe9ff, 0.8); rim.position.set(4, 2, -3); scene.add(rim);
+
+// ---------- materiais ----------
+const M = {
+  dente: () => new THREE.MeshPhysicalMaterial({ color: 0xfbf8f1, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.15, sheen: 0.3 }),
+  cabo: () => new THREE.MeshPhysicalMaterial({ color: 0x6f9885, roughness: 0.3, clearcoat: 0.8 }),
+  caboNovo: () => new THREE.MeshPhysicalMaterial({ color: 0x3f6fb5, roughness: 0.28, clearcoat: 0.9 }),
+  caboVelho: () => new THREE.MeshPhysicalMaterial({ color: 0x9aa39c, roughness: 0.55, clearcoat: 0.2 }),
+  cerda: () => new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 }),
+  cerdaPonta: () => new THREE.MeshStandardMaterial({ color: 0x8fd0e6, roughness: 0.45 }),
+  fio: () => new THREE.MeshPhysicalMaterial({ color: 0x7fd6c0, roughness: 0.3, clearcoat: 0.6, emissive: 0x4fb79c, emissiveIntensity: 0.12 }),
+  virus: () => new THREE.MeshPhysicalMaterial({ color: 0xe0806f, roughness: 0.45, clearcoat: 0.4 }),
+  virusPonta: () => new THREE.MeshStandardMaterial({ color: 0xf3b9a6, roughness: 0.4 }),
+  seta: () => new THREE.MeshPhysicalMaterial({ color: 0x8fb5a3, roughness: 0.3, clearcoat: 0.8 }),
+  check: () => new THREE.MeshPhysicalMaterial({ color: 0x5fae86, roughness: 0.28, clearcoat: 1 }),
+  brilho: () => new THREE.MeshBasicMaterial({ color: 0xffffff }),
+};
+
+// ---------- modelos ----------
+function dente() {
+  const g = new THREE.Group();
+  const mat = M.dente();
+  // perfil do dente (coroa larga, colo estreito), girado em torno do eixo Y
+  const prof = [[0.0,0.62],[0.18,0.64],[0.34,0.70],[0.5,0.66],[0.6,0.52],[0.63,0.3],[0.6,0.08],[0.5,-0.12],[0.4,-0.24],[0.0,-0.26]]
+    .map(([x,y]) => new THREE.Vector2(x, y));
+  const coroa = new THREE.Mesh(new THREE.LatheGeometry(new THREE.SplineCurve(prof).getPoints(40), 64), mat);
+  coroa.scale.set(1, 1, 0.88); g.add(coroa);
+  for (const s of [-1, 1]) {
+    const r = new THREE.Mesh(new THREE.ConeGeometry(0.27, 0.8, 32, 1, true), mat);
+    r.position.set(0.24 * s, -0.62, 0); r.rotation.z = Math.PI + 0.16 * s; g.add(r);
+    const pt = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), mat);
+    pt.position.set(0.24 * s + 0.065 * s, -1.0, 0); g.add(pt);
+  }
+  const base = new THREE.Mesh(new THREE.SphereGeometry(0.42, 32, 16, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2), mat);
+  base.position.y = -0.22; base.scale.set(1.05, 0.55, 0.9); g.add(base);
+  return g;
+}
+
+function escova({ tipo = 'normal', gasta = 0 } = {}) {
+  const g = new THREE.Group();
+  const mc = tipo === 'novo' ? M.caboNovo() : tipo === 'velho' ? M.caboVelho() : M.cabo();
+  const cabo = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 2.4, 8, 24), mc);
+  cabo.rotation.z = Math.PI / 2; cabo.scale.set(1, 1, 0.6); cabo.position.x = 0.55; g.add(cabo);
+  const pega = new THREE.Mesh(new THREE.CapsuleGeometry(0.18, 0.9, 8, 24), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.35, clearcoat: 0.6, transparent: false }));
+  pega.rotation.z = Math.PI / 2; pega.scale.set(1, 1, 0.7); pega.position.x = 1.15; g.add(pega);
+  const cabeca = new THREE.Mesh(new RoundedBoxGeometry(0.95, 0.12, 0.36, 4, 0.05), mc);
+  cabeca.position.set(-1.05, 0.04, 0); g.add(cabeca);
+  const cb = M.cerda(), cp = M.cerdaPonta();
+  const geo = new THREE.CylinderGeometry(0.035, 0.035, 0.34, 8);
+  let i = 0;
+  for (let cx = 0; cx < 8; cx++) for (let cz = 0; cz < 3; cz++) {
+    const m = new THREE.Mesh(geo, (cx + cz) % 3 === 0 ? cp : cb);
+    const x = -1.45 + cx * 0.115, z = -0.11 + cz * 0.11;
+    m.position.set(x, 0.27, z);
+    if (gasta) {
+      const a = Math.sin(i * 12.9898) * 43758.5453; const r = a - Math.floor(a);
+      m.rotation.z = (x + 1.05) * 1.1 * gasta + (r - 0.5) * 0.5 * gasta;
+      m.rotation.x = -z * 4 * gasta + (r - 0.5) * 0.4 * gasta;
+      m.position.y = 0.25;
+    }
+    g.add(m); i++;
+  }
+  return g;
+}
+
+function fioDental() {
+  const pts = [];
+  for (let i = 0; i <= 40; i++) { const t = i / 40; pts.push(new THREE.Vector3((t - 0.5) * 2.6, Math.sin(t * Math.PI * 2) * 0.12, Math.cos(t * Math.PI * 2) * 0.08)); }
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 120, 0.055, 12), M.fio()));
+  for (const s of [-1, 1]) {
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), M.fio());
+    p.position.set(1.3 * s, 0, 0.08); g.add(p);
+  }
+  return g;
+}
+
+function virus(seed = 0) {
+  const g = new THREE.Group();
+  const corpo = new THREE.Mesh(new THREE.IcosahedronGeometry(0.32, 3), M.virus());
+  g.add(corpo);
+  const dirs = new THREE.IcosahedronGeometry(1, 1).getAttribute('position');
+  const seen = new Set(), haste = new THREE.CylinderGeometry(0.025, 0.035, 0.18, 6), ponta = new THREE.SphereGeometry(0.06, 12, 8);
+  const mp = M.virusPonta(), mv = corpo.material;
+  for (let i = 0; i < dirs.count; i++) {
+    const v = new THREE.Vector3().fromBufferAttribute(dirs, i).normalize();
+    const k = v.toArray().map(n => n.toFixed(2)).join(); if (seen.has(k)) continue; seen.add(k);
+    const h = new THREE.Mesh(haste, mv); h.position.copy(v.clone().multiplyScalar(0.38));
+    h.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), v); g.add(h);
+    const p = new THREE.Mesh(ponta, mp); p.position.copy(v.clone().multiplyScalar(0.48)); g.add(p);
+  }
+  g.rotation.set(seed, seed * 2, seed * 3);
+  return g;
+}
+
+function setaCircular(raio = 1, arco = Math.PI * 1.55) {
+  const g = new THREE.Group();
+  const m = M.seta();
+  const toro = new THREE.Mesh(new THREE.TorusGeometry(raio, 0.06, 16, 80, arco), m); g.add(toro);
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.32, 24), m);
+  cone.position.set(raio * Math.cos(arco), raio * Math.sin(arco), 0);
+  cone.rotation.z = arco; g.add(cone);
+  return g;
+}
+
+function check() {
+  const pts = [new THREE.Vector3(-0.45, 0.02, 0), new THREE.Vector3(-0.12, -0.3, 0), new THREE.Vector3(0.5, 0.4, 0)];
+  const curve = new THREE.CurvePath(); curve.add(new THREE.LineCurve3(pts[0], pts[1])); curve.add(new THREE.LineCurve3(pts[1], pts[2]));
+  const g = new THREE.Group();
+  const m = M.check();
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 64, 0.1, 16), m));
+  for (const p of pts) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), m); s.position.copy(p); g.add(s); }
+  return g;
+}
+
+function brilho() {
+  const g = new THREE.Group();
+  const m = M.brilho();
+  for (let i = 0; i < 4; i++) {
+    const s = new THREE.Mesh(new THREE.OctahedronGeometry(0.09, 0), m);
+    s.scale.set(0.5, 1.6, 0.5); g.add(s);
+  }
+  return g;
+}
+
+// sombra de contato (dá profundidade contra a parede)
+function sombra(w = 2.4, h = 0.5) {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 64;
+  const x = c.getContext('2d'); const gr = x.createRadialGradient(64, 32, 2, 64, 32, 62);
+  gr.addColorStop(0, 'rgba(20,24,30,0.32)'); gr.addColorStop(1, 'rgba(20,24,30,0)');
+  x.fillStyle = gr; x.fillRect(0, 0, 128, 64);
+  const t = new THREE.CanvasTexture(c);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false }));
+  return m;
+}
+
+// ---------- utilidades de tempo ----------
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lin = (t, a, b) => clamp((t - a) / (b - a));
+const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const outBack = x => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+function janela(t, a, b, f = 0.5) { return ease(lin(t, a, a + f)) * (1 - ease(lin(t, b - f, b))); }
+
+function opacidade(obj, o) {
+  obj.traverse(n => { if (n.material) { n.material.transparent = true; n.material.opacity = n.material.userData.base == null ? (n.material.userData.base = n.material.opacity, o * n.material.opacity) : o * n.material.userData.base; } });
+  obj.visible = o > 0.002;
+}
+function aparecer(obj, k, base = 1) { opacidade(obj, k); obj.scale.setScalar(base * (0.82 + 0.18 * outBack(clamp(k)))); }
+
+function brilhar(g, t, t0, centro, r = 0.8) {
+  const k = lin(t, t0, t0 + 0.9);
+  g.visible = k > 0 && k < 1;
+  g.position.copy(centro);
+  g.children.forEach((s, i) => {
+    const a = i * Math.PI / 2 + 0.6; const d = r * (0.6 + 0.4 * k);
+    s.position.set(Math.cos(a) * d, Math.sin(a) * d, 0.3);
+    const sc = Math.sin(Math.PI * k) * (1 - 0.25 * i % 2);
+    s.scale.set(0.5 * sc, 1.6 * sc, 0.5 * sc); s.rotation.y = k * 3;
+  });
+}
+
+// ---------- cenas ----------
+const ANCORA = px(700, 195);   // espaço acima da cabeça
+const ESC = 1.25;              // escala geral (sutil)
+
+// A: fio dental x escovação, a ordem não importa
+const A = new THREE.Group(); scene.add(A);
+const aDente = dente(); aDente.scale.setScalar(0.85); A.add(aDente);
+const aEsc = escova(); aEsc.scale.setScalar(0.42); A.add(aEsc);
+const aFio = fioDental(); aFio.scale.setScalar(0.5); A.add(aFio);
+const aCheck = check(); aCheck.position.set(2.0, 0.25, 0.3); A.add(aCheck);
+const aSombra = sombra(2.2, 0.45); aSombra.position.set(0.15, -1.15, -0.6); A.add(aSombra);
+const aBrilho = brilho(); A.add(aBrilho);
+
+// B: depois da gripe, trocar a escova
+const B = new THREE.Group(); scene.add(B);
+const bVelha = escova({ tipo: 'normal' }); bVelha.scale.setScalar(0.7); B.add(bVelha);
+const bNova = escova({ tipo: 'novo' }); bNova.scale.setScalar(0.7); B.add(bNova);
+const bVirus = [0, 1, 2, 3].map(i => { const v = virus(i * 1.7); B.add(v); return v; });
+const bSombra = sombra(2.6, 0.45); bSombra.position.set(0, -0.75, -0.6); B.add(bSombra);
+const bBrilho = brilho(); B.add(bBrilho);
+
+// C: reinfecção, o vírus volta pela escova
+const C = new THREE.Group(); scene.add(C);
+const cEsc = escova(); cEsc.scale.setScalar(0.62); C.add(cEsc);
+const cSeta = setaCircular(1.05); const cSetaPai = new THREE.Group(); cSetaPai.scale.set(1.4, 0.5, 1); cSetaPai.add(cSeta); C.add(cSetaPai);
+const cVirus = [0, 1].map(i => { const v = virus(i * 2.3 + 0.5); v.scale.setScalar(0.55); C.add(v); return v; });
+const cSombra = sombra(2.6, 0.45); cSombra.position.set(0, -0.95, -0.6); C.add(cSombra);
+
+// D: não é só quando as cerdas gastam
+const D = new THREE.Group(); scene.add(D);
+const dVelha = escova({ tipo: 'velho', gasta: 1 }); dVelha.scale.setScalar(0.7); D.add(dVelha);
+const dNova = escova({ tipo: 'novo' }); dNova.scale.setScalar(0.7); D.add(dNova);
+const dVirus = virus(0.9); dVirus.scale.setScalar(0.6); D.add(dVirus);
+const dSombra = sombra(2.6, 0.45); dSombra.position.set(0, -0.75, -0.6); D.add(dSombra);
+const dBrilho = brilho(); D.add(dBrilho);
+
+for (const g of [A, B, C, D]) g.position.copy(ANCORA);
+
+const T = { A: [3.55, 13.95], B: [14.05, 23.6], C: [25.6, 34.75], D: [35.15, 43.1] };
+
+window.renderAt = function (t) {
+  const flut = (s = 1, f = 0.6) => Math.sin(t * f * Math.PI * 2 * 0.5) * 0.06 * s;
+
+  // A
+  {
+    const k = janela(t, ...T.A, 0.6); aparecer(A, k, ESC);
+    A.rotation.y = Math.sin(t * 0.6) * 0.12; A.position.y = ANCORA.y + flut();
+    aDente.rotation.y = t * 0.5; aDente.rotation.x = 0.15;
+    const giro = ease(lin(t, 5.2, 9.4)) * Math.PI + ease(lin(t, 10.1, 11.2)) * 0.0; // troca de lugar até 9,4 s
+    const r = 2.0;
+    const aE = Math.PI + giro, aF = giro;
+    aEsc.position.set(Math.cos(aE) * r, 0.15 + Math.sin(t * 1.2) * 0.05, Math.sin(aE) * r * 0.9);
+    aEsc.rotation.set(0, 0, -0.35 + Math.sin(t) * 0.05);
+    aFio.position.set(Math.cos(aF) * r, 0.1 + Math.cos(t * 1.1) * 0.05, Math.sin(aF) * r * 0.9);
+    aFio.rotation.set(0.3, t * 0.4, 1.2);
+    // "o que importa é não deixar de passar o fio": fio vem à frente, escova recua
+    const imp = ease(lin(t, 10.1, 11.0));
+    aEsc.position.lerp(new THREE.Vector3(-2.1, 0.2, -1.2), imp);
+    opacidade(aEsc, k * (1 - 0.55 * imp));
+    aFio.position.lerp(new THREE.Vector3(0, 0.0, 1.0), imp);
+    aFio.rotation.z = THREE.MathUtils.lerp(1.2, 0.0, imp); aFio.rotation.y = THREE.MathUtils.lerp(t * 0.4, 0, imp);
+    const kc = ease(lin(t, 11.2, 11.8)) * (1 - ease(lin(t, 13.4, 13.95)));
+    opacidade(aCheck, kc * k); aCheck.scale.setScalar(0.4 + 0.6 * outBack(kc)); aCheck.rotation.y = Math.sin(t * 1.5) * 0.3;
+    brilhar(aBrilho, t, 11.0, new THREE.Vector3(0, 0.4, 0.8), 0.95);
+  }
+
+  // B
+  {
+    const k = janela(t, ...T.B, 0.6); aparecer(B, k, ESC);
+    B.rotation.y = Math.sin(t * 0.55) * 0.18; B.position.y = ANCORA.y + flut();
+    const troca = ease(lin(t, 20.8, 21.9));
+    bVelha.position.set(-troca * 3.2, -troca * 0.6, 0); bVelha.rotation.set(0.25, 0, troca * 0.5);
+    opacidade(bVelha, k * (1 - troca));
+    bNova.position.set((1 - troca) * 3.4, 0, 0); bNova.rotation.set(0.25, 0, 0);
+    opacidade(bNova, k * troca);
+    const chegam = ease(lin(t, 14.8, 16.2)), somem = ease(lin(t, 20.9, 21.6));
+    bVirus.forEach((v, i) => {
+      const a = t * (0.55 + i * 0.07) + i * Math.PI / 2;
+      v.position.set(Math.cos(a) * (1.7 + i * 0.1), 0.15 + Math.sin(a * 1.3) * 0.5, Math.sin(a) * 1.0);
+      v.rotation.x += 0; v.rotation.y = t * 0.7 + i; v.rotation.z = t * 0.4;
+      const s = 0.58 * chegam * (1 - somem) + 0.0001; v.scale.setScalar(s);
+      opacidade(v, k * (s > 0.001 ? 1 : 0));
+    });
+    brilhar(bBrilho, t, 21.6, new THREE.Vector3(-0.6, 0.3, 0.6), 1.0);
+  }
+
+  // C
+  {
+    const k = janela(t, ...T.C, 0.6); aparecer(C, k, ESC);
+    C.rotation.y = Math.sin(t * 0.5) * 0.15; C.position.y = ANCORA.y + flut();
+    cEsc.rotation.set(0.3, 0, -0.05);
+    cSeta.rotation.z = -t * 1.1;
+    cVirus.forEach((v, i) => {
+      const a = -t * 1.1 + i * Math.PI + 0.4;
+      v.position.set(Math.cos(a) * 1.05 * 1.4, Math.sin(a) * 1.05 * 0.5, Math.sin(a) * 0.5 + 0.3);
+      v.rotation.y = t + i; v.rotation.x = t * 0.6;
+    });
+  }
+
+  // D
+  {
+    const k = janela(t, ...T.D, 0.6); aparecer(D, k, ESC);
+    D.rotation.y = Math.sin(t * 0.5) * 0.18; D.position.y = ANCORA.y + flut();
+    const troca = ease(lin(t, 41.0, 41.9));
+    dVelha.position.set(-troca * 3.2, -troca * 0.5, 0); dVelha.rotation.set(0.3, 0, troca * 0.5);
+    opacidade(dVelha, k * (1 - troca));
+    dNova.position.set((1 - troca) * 3.4, 0, 0); dNova.rotation.set(0.3, 0, 0);
+    opacidade(dNova, k * troca);
+    const kv = ease(lin(t, 40.2, 40.8)) * (1 - ease(lin(t, 41.2, 41.7)));
+    dVirus.position.set(1.9, 0.45 + Math.sin(t * 2) * 0.08, 0.4); dVirus.rotation.set(t * 0.5, t * 0.8, 0);
+    dVirus.scale.setScalar(0.6 * kv + 0.0001); opacidade(dVirus, k * (kv > 0.001 ? 1 : 0));
+    brilhar(dBrilho, t, 41.7, new THREE.Vector3(-0.6, 0.3, 0.6), 1.0);
+  }
+
+  renderer.render(scene, camera);
+  return [A, B, C, D].some(g => g.visible);
+};
+window.ready = true;
+</script>
+</body></html>
