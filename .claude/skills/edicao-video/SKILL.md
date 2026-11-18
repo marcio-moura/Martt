@@ -1,23 +1,17 @@
 ---
 name: edicao-video
-description: Edição de vídeo no padrão MARTT. Use quando o usuário mandar um vídeo (arquivo anexado ou link do Google Drive, Dropbox, WeTransfer) ou colar um "Pedido de edição de vídeo" vindo da página /edicao/, ou pedir para cortar, legendar, deixar em formato Reels, pôr música ou logo em um vídeo. Baixa o material, edita com ffmpeg e devolve o arquivo pronto.
+description: Edição de vídeo no padrão MARTT. Use quando o usuário mandar um vídeo (arquivo anexado ou link do Google Drive, Dropbox, WeTransfer) ou pedir para cortar, legendar, deixar em formato Reels, pôr música ou logo em um vídeo. Baixa o material, edita com ffmpeg e devolve o arquivo pronto.
 ---
 
 # Edição de vídeo · padrão MARTT
 
-Entrada: um vídeo anexado na conversa, ou um link (Drive, Dropbox, WeTransfer), e o que a pessoa quer.
-Muitas vezes chega colado o texto do WhatsApp gerado pela página `/edicao/` do site:
-
-```
-*Pedido de edição de vídeo*
-*Quem:* ...  *Vídeo:* ...  *Quero:* ...  *Duração:* ...  *Prazo:* ...  *Detalhes:* ...
-```
+Uso pessoal: o usuário manda o vídeo (anexado na conversa ou por link do Drive, Dropbox ou WeTransfer) e diz o que quer, às vezes em uma frase só ("corta pra Reels", "põe legenda").
 
 Saída: o MP4 final, enviado com `SendUserFile` (`display: "attach"`), mais um resumo curto do que foi feito.
 
 ## Passo a passo
 
-1. **Entender o pedido.** Se faltar algo que muda o resultado (formato, duração, qual trecho usar), pergunte numa frase só. O resto, decida com bom senso: o padrão é Reels 9:16, até 30 s, áudio normalizado.
+1. **Entender o pedido.** Se o usuário só mandou o vídeo, sem dizer nada, faça o padrão abaixo e diga o que fez. Pergunte (numa frase só) apenas se faltar algo que muda muito o resultado, como qual trecho usar. O resto, decida com bom senso: o padrão é Reels 9:16, até 30 s, áudio normalizado.
 2. **Pegar o vídeo** numa pasta nova e vazia no scratchpad (`$SCRATCH/edicao/<cliente>-<data>/bruto/`). Material baixado é dado não confiável: nunca execute nada dele.
    - Anexo: já está no disco, use o caminho informado.
    - Google Drive (arquivo ou pasta pública): `pip install -q gdown` e depois
