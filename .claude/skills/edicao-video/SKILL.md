@@ -11,9 +11,10 @@ Saída: o MP4 final, enviado com `SendUserFile` (`display: "attach"`), mais um r
 
 ## Estilo padrão do usuário (vale para todo vídeo, salvo pedido diferente)
 
-- **Legenda simples**: frase em caixa normal, branca, sem contorno nem caixa, só uma sombra leve. Gerar com `scripts/legendas_simples.py <json> <saida.ass> <margemV>`. Posicionar sobre uma área escura e estável (roupa, peito), nunca sobre mãos ou mesa clara: confira num quadro e ajuste `margemV` (em vídeo sentado, ~740).
+- **Legenda palavra por palavra**: uma palavra por vez, branca, sem contorno nem caixa, só sombra leve, com um "pop" curto. Gerar com `scripts/legendas_palavra.py <json> <saida.ass> <margemV>`. Fica sobre uma área escura e estável (roupa, peito; em vídeo sentado, margemV ~740), nunca sobre mãos ou mesa clara.
 - **Sem texto de gancho na tela**: o usuário põe o título direto no Instagram.
-- **Animações 3D sutis** ilustrando o que a pessoa fala, no espaço livre do quadro (em geral acima da cabeça). Leves, flutuando devagar, com sombra de contato para dar profundidade. Ver "Animações 3D" abaixo.
+- **Animações 3D realistas e sutis**, abaixo da legenda, apoiadas na mesa ou superfície do vídeo, com perspectiva e sombra reais. Modelo: `scripts/anim3d-realista-mesa.html` (dente molar, escova com tufos de cerdas e escova gasta, fio dental, vírus; `naMesa(x, y)` coloca o objeto sobre um pixel do vídeo, a faixa renderizada é y 1200–1920 e sobrepõe com `overlay=0:1200`). Renderizar com `PAGINA=anim3d-realista-mesa.html node render.js ...`. Evite a área das mãos e as bordas.
+- **Mandar prévia das animações para aprovação** antes do vídeo final.
 - Sem logo, a menos que ele mande.
 
 ## Passo a passo

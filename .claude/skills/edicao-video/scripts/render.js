@@ -6,7 +6,7 @@ const { chromium } = require('playwright'); const fs = require('fs');
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const p = await b.newPage({ viewport: { width: 1080, height: 720 } });
   p.on('pageerror', e => console.log('ERR', e.message)); p.on('console', m => m.type()==='error' && console.log('CONSOLE', m.text()));
-  await p.goto('http://127.0.0.1:8765/anim.html'); await p.waitForFunction('window.ready === true', null, { timeout: 60000 });
+  await p.goto('http://127.0.0.1:8765/' + (process.env.PAGINA || 'anim.html') + ''); await p.waitForFunction('window.ready === true', null, { timeout: 60000 });
   const ts = lista ? lista.split(',').map(Number) : [...Array(Math.round(fps * dur)).keys()].map(i => i / fps);
   let n = 0;
   for (let i = 0; i < ts.length; i++) {
