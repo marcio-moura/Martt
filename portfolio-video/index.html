@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Portfólio de vídeo | Martt Co.</title>
+<meta name="description" content="Trabalhos em vídeo da Martt Co.: roteiro, gravação e edição para Instagram e stories.">
+<meta property="og:title" content="Portfólio de vídeo | Martt Co.">
+<meta property="og:description" content="Roteiro, gravação e edição para Instagram e stories.">
+<meta property="og:image" content="/portfolio-video/midia/agro.jpg">
+<meta name="theme-color" content="#0B0C0B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  /* 60% grafite · 30% off-white/areia + sálvia · 10% âmbar (só botões de ação) */
+  :root{
+    --dark:#0B0C0B; --dark-2:#151614; --line:#262724;
+    --bg:#F8F7F2; --sand:#E8E3D8; --soft:#cfcdc5; --muted:#8D8B82;
+    --sage:#8FB5A3;
+    --action:#E9A23B; --action-hover:#F2B65A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--dark);color:var(--bg);font-family:'Manrope',system-ui,sans-serif;line-height:1.55;font-size:16px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:-0.02em}
+  .eyebrow{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:10px}
+  .eyebrow i{display:inline-block;width:18px;height:6px;background:var(--sage)}
+
+  /* botões: âmbar só para ação */
+  .btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+  .btn{display:inline-block;text-decoration:none;font-weight:600;font-size:15px;padding:15px 22px;min-height:50px;border:1.5px solid transparent;cursor:pointer}
+  .btn.action{background:var(--action);color:var(--dark)}
+  .btn.action:hover{background:var(--action-hover)}
+  .btn.ghost{border-color:var(--bg);color:var(--bg);background:transparent}
+  .btn.ghost:hover{background:var(--bg);color:var(--dark)}
+
+  /* topo */
+  .hero{padding:24px 0 64px}
+  .bar{display:flex;justify-content:space-between;align-items:center}
+  .mark{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;letter-spacing:.06em;color:var(--bg);text-decoration:none}
+  .mark span{color:var(--sage)}
+  .bar a.link{font-weight:600;font-size:13px;color:var(--bg);text-decoration:none;border-bottom:2px solid var(--sage)}
+  .hero-grid{display:grid;gap:32px;margin-top:40px;align-items:center}
+  @media (min-width:820px){ .hero-grid{grid-template-columns:1.15fr .85fr;gap:56px;margin-top:56px} }
+  .hero h1{font-weight:800;font-size:clamp(38px,9vw,64px);line-height:1.06;margin:16px 0 18px}
+  .hero h1 span{color:var(--sage)}
+  .hero p.lead{font-size:17px;color:var(--soft);max-width:470px}
+  .hero-video{max-width:340px;width:100%;justify-self:center}
+  .hero-video video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;background:var(--dark-2)}
+  .sig{display:flex;align-items:center;gap:12px;margin-top:24px;font-weight:600;font-size:11px;letter-spacing:.3em;color:var(--muted)}
+  .sig i{display:block;width:34px;height:1px;background:var(--sage)}
+  .facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+  .facts span{border:1px solid var(--line);color:var(--soft);font-size:13px;font-weight:600;padding:6px 10px}
+
+  /* seções de trabalhos */
+  .cat{padding:52px 0;border-top:1px solid var(--line)}
+  .cat-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 24px;margin-bottom:24px}
+  .cat h2{font-weight:800;font-size:clamp(26px,5.5vw,36px);line-height:1.12;margin-top:10px}
+  .cat p.sub{color:var(--soft);font-size:15px;max-width:440px}
+  .reels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  @media (min-width:820px){ .reels{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px} }
+  .reel{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
+  .reel .frame{position:relative;background:var(--dark-2)}
+  .reel video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+  .reel .tag{position:absolute;left:0;bottom:0;background:var(--bg);color:var(--dark);font-weight:600;font-size:12px;padding:6px 10px}
+  .reel h3{font-weight:700;font-size:15px;margin-top:10px;color:var(--bg)}
+  .reel p{font-size:13px;color:var(--muted);margin-top:2px}
+  .reel:hover h3{color:var(--sage)}
+  .reel:focus-visible{outline:3px solid var(--sage);outline-offset:4px}
+
+  /* faixa de método */
+  .how{background:var(--sand);color:var(--dark);padding:56px 0}
+  .how .eyebrow{color:#6b6a63}
+  .how h2{font-weight:800;font-size:clamp(26px,5.5vw,36px);line-height:1.12;margin:10px 0 22px}
+  .steps{display:grid;gap:12px}
+  @media (min-width:820px){ .steps{grid-template-columns:repeat(3,1fr);gap:16px} }
+  .step{background:var(--bg);padding:20px}
+  .step b{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:13px;color:#6F9885;margin-bottom:6px}
+  .step h3{font-weight:700;font-size:17px;margin-bottom:4px}
+  .step p{font-size:14px;color:#4a4a45}
+
+  /* chamada final */
+  .cta{padding:64px 0}
+  .cta h2{font-weight:800;font-size:clamp(28px,6vw,42px);line-height:1.1;margin:12px 0 10px}
+  .cta h2 span{color:var(--sage)}
+  .cta p{color:var(--soft);max-width:480px}
+  footer{color:var(--muted);font-size:13px;padding:0 0 40px}
+  footer .wrap{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* player com som */
+  dialog{border:0;padding:0;background:var(--dark);color:var(--bg);max-width:none;max-height:none;width:100vw;height:100vh;margin:0}
+  dialog::backdrop{background:rgba(11,12,11,.96)}
+  dialog .box{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:60px 16px 20px}
+  dialog video{max-width:100%;max-height:calc(100% - 80px);background:#000}
+  dialog .close{position:fixed;top:14px;right:16px;background:var(--bg);color:var(--dark);border:0;font:600 14px 'Manrope',sans-serif;padding:10px 14px;cursor:pointer}
+  dialog .title{position:fixed;top:22px;left:16px;font-weight:600;font-size:14px;color:var(--soft)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="bar">
+      <a class="mark" href="/"><span>M</span>ARTT</a>
+      <a class="link" href="#trabalhos">Ver trabalhos</a>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow"><i></i>Portfólio de vídeo</p>
+        <h1>Vídeo que coloca o seu negócio <span>em evidência.</span></h1>
+        <p class="lead">Roteiro, gravação e edição para Instagram e stories. Uma seleção de trabalhos da Martt Co. para negócios de diferentes áreas.</p>
+        <div class="btns">
+          <a class="btn action" data-wa="Olá! Vi o portfólio de vídeo da Martt e quero um vídeo para o meu negócio." href="#">Falar no WhatsApp</a>
+          <a class="btn ghost" href="#trabalhos">Ver trabalhos</a>
+        </div>
+        <div class="facts"><span>Roteiro</span><span>Gravação</span><span>Edição</span><span>Legenda dinâmica</span><span>Imagens aéreas</span></div>
+        <div class="sig"><i></i>CONSULTORIA EM MARKETING</div>
+      </div>
+      <div class="hero-video">
+        <video src="midia/loop-agro.mp4" poster="midia/agro.jpg" autoplay muted loop playsinline preload="auto" aria-label="Trecho de vídeo: operação no campo"></video>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="trabalhos"></main>
+
+<section class="how">
+  <div class="wrap">
+    <p class="eyebrow"><i></i>Como fazemos</p>
+    <h2>Do roteiro ao vídeo publicado.</h2>
+    <div class="steps">
+      <div class="step"><b>01</b><h3>Roteiro</h3><p>Definimos a mensagem e o objetivo antes de gravar.</p></div>
+      <div class="step"><b>02</b><h3>Gravação</h3><p>Captação no seu espaço, com direção de cena.</p></div>
+      <div class="step"><b>03</b><h3>Edição</h3><p>Cortes, legenda e ritmo pensados para o Instagram.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap">
+    <p class="eyebrow"><i></i>Próximo passo</p>
+    <h2>Quer um vídeo assim <span>para o seu negócio?</span></h2>
+    <p>Fale com o time e conte o que você precisa mostrar.</p>
+    <div class="btns">
+      <a class="btn action" data-wa="Olá! Vi o portfólio de vídeo da Martt e quero um vídeo para o meu negócio." href="#">Falar no WhatsApp</a>
+      <a class="btn ghost" href="/horarios/">Agendar um horário</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Crescimento não é sorte. É estrutura.</span>
+    <span>© 2026 Martt Co.</span>
+  </div>
+</footer>
+
+<dialog id="player" aria-label="Vídeo com som">
+  <span class="title"></span>
+  <button class="close" type="button">Fechar ✕</button>
+  <div class="box">
+    <video controls playsinline></video>
+    <a class="btn action" id="player-cta" href="#">Quero um vídeo assim</a>
+  </div>
+</dialog>
+
+<script>
+  var NUMBER = "5562993037223";
+  function wa(text){ return "https://wa.me/" + NUMBER + "?text=" + encodeURIComponent(text); }
+
+  // Trabalhos: cada item usa midia/<id>.mp4 (completo), midia/loop-<id>.mp4 (trecho) e midia/<id>.jpg (capa)
+  var CATS = [
+    { title: "Especialistas", sub: "Autoridade em vídeo: o profissional explica, com legenda dinâmica.", items: [
+      { id: "advocacia",   tag: "Advocacia",   text: "Especialista falando direto com o público." },
+      { id: "odontologia", tag: "Odontologia", text: "Dúvida do paciente respondida pela dentista." },
+      { id: "saude",       tag: "Saúde",       text: "Profissional de saúde em linguagem simples." }
+    ]},
+    { title: "Varejo e promoção", sub: "Roteiro com chamada clara para levar o cliente até a loja.", items: [
+      { id: "supermercado", tag: "Supermercado", text: "Dois jeitos de comprar, mostrados na prática." },
+      { id: "cosmeticos",   tag: "Cosméticos",   text: "Campanha com data e senso de urgência." }
+    ]},
+    { title: "Saúde e estrutura", sub: "Mostrar o cuidado e o espaço gera confiança antes da visita.", items: [
+      { id: "laboratorio",      tag: "Laboratório",      text: "Bastidores da coleta, com técnica e cuidado." },
+      { id: "clinica-infantil", tag: "Clínica infantil", text: "Tour pelo espaço e pela estrutura." }
+    ]},
+    { title: "Gastronomia e celebrações", sub: "Detalhe, textura e ritmo para despertar vontade.", items: [
+      { id: "confeitaria", tag: "Confeitaria",   text: "Doces e mesa em detalhe." },
+      { id: "mesa-doces",  tag: "Mesa e doces", text: "Close nos detalhes da mesa." },
+      { id: "decoracao",   tag: "Buffet e decoração", text: "Preparo, ambientação e detalhes." },
+      { id: "aniversario", tag: "Aniversário",   text: "O dia registrado com emoção." }
+    ]},
+    { title: "Institucional", sub: "Imagens amplas para mostrar operação, lugar e pessoas.", items: [
+      { id: "agro",   tag: "Agro",   text: "Operação no campo, com imagens aéreas." },
+      { id: "cidade", tag: "Cidade", text: "Lugar, cultura e movimento." }
+    ]}
+  ];
+
+  var main = document.getElementById("trabalhos");
+  CATS.forEach(function (c, i) {
+    var sec = document.createElement("section"); sec.className = "cat";
+    sec.innerHTML = '<div class="wrap"><div class="cat-head"><div><p class="eyebrow"><i></i>' +
+      String(i + 1).padStart(2, "0") + '</p><h2></h2></div><p class="sub"></p></div><div class="reels"></div></div>';
+    sec.querySelector("h2").textContent = c.title;
+    sec.querySelector(".sub").textContent = c.sub;
+    var grid = sec.querySelector(".reels");
+    c.items.forEach(function (it) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "reel";
+      b.innerHTML = '<div class="frame"><video muted loop playsinline preload="none" aria-hidden="true"></video><span class="tag">Assistir</span></div><h3></h3><p></p>';
+      var v = b.querySelector("video");
+      v.src = "midia/loop-" + it.id + ".mp4"; v.poster = "midia/" + it.id + ".jpg";
+      b.querySelector("h3").textContent = it.tag;
+      b.querySelector("p").textContent = it.text;
+      b.setAttribute("aria-label", "Assistir vídeo: " + it.tag);
+      b.addEventListener("click", function () { abrir(it); });
+      grid.appendChild(b);
+    });
+    main.appendChild(sec);
+  });
+
+  document.querySelectorAll("[data-wa]").forEach(function (a) {
+    a.href = wa(a.getAttribute("data-wa")); a.target = "_blank"; a.rel = "noopener";
+  });
+
+  // trechos sem som tocam só quando aparecem na tela
+  var loops = document.querySelectorAll(".reel video, .hero-video video");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting) { v.preload = "auto"; var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+        else v.pause();
+      });
+    }, { threshold: 0.25 });
+    loops.forEach(function (v) { io.observe(v); });
+  } else {
+    loops.forEach(function (v) { v.preload = "auto"; v.play(); });
+  }
+
+  // vídeo completo com som
+  var dlg = document.getElementById("player");
+  var full = dlg.querySelector("video");
+  var cta = document.getElementById("player-cta");
+  function abrir(it) {
+    full.src = "midia/" + it.id + ".mp4"; full.poster = "midia/" + it.id + ".jpg";
+    dlg.querySelector(".title").textContent = it.tag;
+    cta.href = wa("Olá! Vi o vídeo de " + it.tag.toLowerCase() + " no portfólio da Martt e quero um vídeo assim para o meu negócio.");
+    cta.target = "_blank"; cta.rel = "noopener";
+    loops.forEach(function (v) { v.pause(); });
+    dlg.showModal(); full.play();
+  }
+  function fechar() { full.pause(); full.removeAttribute("src"); full.load(); if (dlg.open) dlg.close(); }
+  dlg.querySelector(".close").addEventListener("click", fechar);
+  dlg.addEventListener("click", function (e) { if (e.target === dlg || e.target.classList.contains("box")) fechar(); });
+  dlg.addEventListener("cancel", function (e) { e.preventDefault(); fechar(); });
+</script>
+</body>
+</html>
