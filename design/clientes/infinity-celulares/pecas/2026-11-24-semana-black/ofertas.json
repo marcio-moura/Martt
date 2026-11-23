@@ -1,0 +1,7 @@
+{
+  "logo": "../../marca/logo-fundo-escuro.png",
+  "abertura": { "foto": "fotos/abertura-cena.jpg", "foco": "center" },
+  "ofertas": [
+    { "foto": "fotos/oferta-01.png", "modelo": "[MODELO + CAPACIDADE]", "preco": "[PREÇO]", "condicao": "[CONDIÇÃO DE PAGAMENTO]" }
+  ]
+}
