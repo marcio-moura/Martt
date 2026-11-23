@@ -28,6 +28,12 @@ Briefing permanente. Toda peça parte daqui. Atualize sempre que algo mudar.
 - **Tom de voz:**
 - **Proibido** (palavras, assuntos, concorrentes, preços...):
 - **Referências visuais** (perfis/marcas que o cliente admira):
+- **Referências Black Friday** (`marca/referencias/bf-*.jpg`, enviadas pelo Marcio em 23/11/2026):
+  - O destaque 3D é o **título** (cromado, anel, moldura neon), não um selo solto.
+  - Preço: "R$" pequeno, número enorme, centavos sobrescritos; condição logo abaixo ("à vista no Pix", "ou 12x de...").
+  - "De R$ X (riscado) / Por R$ Y" quando houver preço anterior real.
+  - Aparelho grande, de frente e de costas, com luz de contorno; pessoa usando o celular com borrão de movimento (abertura).
+  - Evitar: marca d'água de banco de template, excesso de ícones e corações, muitas cores.
 - **Print do perfil:** `marca/referencias/2026-11-perfil-instagram.png`. Grid de reels gravados na loja, capa com o produto em destaque, logo pequena no canto das artes.
 - **Quem aprova e em quanto tempo:**
 
