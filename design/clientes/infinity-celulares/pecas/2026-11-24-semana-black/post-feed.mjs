@@ -11,8 +11,8 @@ const html = `<!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 .p{width:1080px;height:1350px;position:relative;overflow:hidden;background:#0b0b0c;color:#fff;font-family:'Inter',sans-serif}
-.foto{position:absolute;left:0;right:0;bottom:0;height:1000px;background:url('${c.foto}') center ${c.foco || "60%"}/cover}
-.foto::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0b0b0c 0%,rgba(11,11,12,.6) 18%,rgba(11,11,12,0) 40%,rgba(11,11,12,0) 80%,rgba(11,11,12,.7) 100%)}
+.foto{position:absolute;left:119px;top:400px;width:842px;height:1053px;background:url('${c.foto}') center/cover;
+  -webkit-mask-image:radial-gradient(ellipse 50% 52% at 50% 46%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 50% 52% at 50% 46%,#000 55%,transparent 100%)}
 .logo{position:absolute;top:64px;left:50%;transform:translateX(-50%);height:84px}
 .titulo{position:absolute;top:190px;left:0;right:0;text-align:center;font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.84}
 .rot{font:600 26px 'Inter',sans-serif;letter-spacing:.42em;color:#cfcfd1;margin-bottom:22px;padding-left:.42em}
