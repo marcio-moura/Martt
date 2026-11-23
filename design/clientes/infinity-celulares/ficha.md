@@ -4,11 +4,11 @@ Briefing permanente. Toda peça parte daqui. Atualize sempre que algo mudar.
 
 ## Negócio
 - **Segmento e cidade:** loja de celulares e eletrônicos · Trindade
-- **Perfil(s):** @
-- **O que vende (carro-chefe):** celulares, caixas de som (JBL, Aiwa), tablets, TVs e acessórios
-- **Diferencial real** (o que o concorrente não tem):
+- **Perfil(s):** @infinitycelulares_2 · nome no perfil: INFINITY (IPHONE TRINDADE)
+- **O que vende (carro-chefe):** iPhone (carro-chefe), Xiaomi, peças e acessórios; também caixas de som (JBL, Aiwa), tablets e TVs
+- **Diferencial real** (o que o concorrente não tem): 15 anos no mercado; confiança e procedência; loja física em Trindade-GO
 - **Objetivo principal** (vender no WhatsApp, agenda, loja física, matrícula...): vender pelo WhatsApp e na loja
-- **Contato/CTA padrão** (link da bio, WhatsApp, endereço):
+- **Contato/CTA padrão** (link da bio, WhatsApp, endereço): WhatsApp do link da bio (wa.me/5562999551012) · loja física em Trindade-GO
 
 ## Público
 - **Quem compra:** adultos de 25 a 44 anos (67% do público), 56% homens (Insights de out/2026)
@@ -21,12 +21,14 @@ Briefing permanente. Toda peça parte daqui. Atualize sempre que algo mudar.
 - **Frequência:** feed __/semana · stories __/dia · reels __/semana
 - **Melhores horários:** 18h às 21h
 - **O que já funcionou** (link ou descrição): pessoa da loja apresentando o produto (tablet e caixa de som Aiwa foram os que mais trouxeram seguidores); conteúdo que orienta a decisão de compra e ensina antes de vender; vídeos gravados na própria loja
+- **Perfil em 23/11/2026** (print): 63 posts, 5.205 seguidores, 147,2 mil visualizações em 30 dias. Destaques do grid: "iPhone 18 chegou" (3.576 views), "JBL Boombox 4 vs 3" (2.708).
 - **O que não funcionou:**
 
 ## Marca e aprovação
 - **Tom de voz:**
 - **Proibido** (palavras, assuntos, concorrentes, preços...):
 - **Referências visuais** (perfis/marcas que o cliente admira):
+- **Print do perfil:** `marca/referencias/2026-11-perfil-instagram.png`. Grid de reels gravados na loja, capa com o produto em destaque, logo pequena no canto das artes.
 - **Quem aprova e em quanto tempo:**
 
 ## Datas do cliente
