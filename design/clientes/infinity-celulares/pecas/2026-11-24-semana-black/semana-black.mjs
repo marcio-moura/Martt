@@ -21,7 +21,7 @@ body{background:#000}
   background:radial-gradient(120% 70% at 100% 40%,#3a3b3d 0%,#1a1b1c 38%,#0a0a0a 70%,#000 100%)}
 .foto{position:absolute;inset:0;background-size:cover;background-position:center}
 .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.25) 34%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
-.logo{position:absolute;top:220px;left:90px;height:96px;max-width:420px;object-fit:contain}
+.logo{position:absolute;top:206px;left:90px;height:124px;max-width:420px;object-fit:contain}
 .logo-falta{border:3px dashed #F5C400;color:#F5C400;font:700 26px/1.25 'Inter',sans-serif;padding:14px 22px;height:auto;text-align:center}
 .logo-falta small{font-weight:400;font-size:18px}
 /* abertura */

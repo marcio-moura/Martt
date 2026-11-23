@@ -1,25 +1,26 @@
 {
   "nome": "Infinity Celulares",
   "arroba": "@perfil",
-  "pendente": "falta logo, cores e fontes do cliente",
+  "pendente": "falta confirmar o @ do Instagram",
   "logo_fundo_escuro": "marca/logo-fundo-escuro.png",
   "logo_fundo_claro": "marca/logo-fundo-claro.png",
   "cores": {
-    "escuro": "#0B0C0B",
-    "claro": "#F1EDE6",
-    "texto_escuro": "#242522",
-    "texto_claro": "#F1EDE6",
-    "destaque": "#8FB5A3",
-    "destaque_forte": "#6F9885",
-    "apoio": "#E8E3D8",
-    "suave": "#8D8B82"
+    "escuro": "#0A0A0A",
+    "claro": "#F2F2F2",
+    "texto_escuro": "#111111",
+    "texto_claro": "#FFFFFF",
+    "destaque": "#F5C400",
+    "destaque_forte": "#D9AD00",
+    "apoio": "#2A2B2D",
+    "suave": "#8A8B8D"
   },
   "fontes": {
-    "titulo": "Plus Jakarta Sans",
-    "titulo_peso": 800,
-    "texto": "Manrope",
+    "titulo": "Anton",
+    "titulo_peso": 400,
+    "texto": "Inter",
     "texto_peso": 400
   },
-  "tom": "",
-  "evitar": ""
+  "tom": "Direto e próximo, de vendedor que entende do produto. Orienta a compra antes de vender.",
+  "evitar": "",
+  "nota_cores": "Marca em preto e branco. Amarelo #F5C400 é a cor da campanha Semana Black (nov/2026); rever para o resto do ano."
 }
